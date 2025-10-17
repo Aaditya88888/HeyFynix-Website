@@ -125,7 +125,7 @@ const Work = () => {
   }, []);
 
   return (
-    <div className="bg-gray-100">
+    <div className="bg-black">
       {/* Heading Section */}
       <div className="text-center py-20 px-5 max-w-5xl mx-auto">
         <h2 className="text-5xl md:text-6xl font-bold mb-4">Work</h2>
@@ -140,7 +140,7 @@ const Work = () => {
             className="w-full h-full object-cover rounded-2xl shadow-lg"
           />
         </div>
-        <div className="h-[80vh] w-[45%] flex flex-col justify-center p-5 box-border content-section">
+        <div className="h-[80vh] w-[45%] flex flex-col justify-center p-5 box-border content-section text-white">
           <h2 className="text-3xl md:text-4xl font-bold mb-8 leading-tight">
             Stuff We’re Super Proud Of
           </h2>
