@@ -13,44 +13,26 @@ const InitialText = () => {
         start: "top top",
         end: "bottom bottom",
         scrub: true,
-        invalidateOnRefresh: true, // Ensures animation updates on resize
+        invalidateOnRefresh: true,
       },
     });
 
-    // Animation: Fade in and out to return to initial state
-    timeline
-      .to(".word .absolute", {
-        opacity: 0.3,
-        stagger: 0.5,
+    // Fade in the white text while scrolling
+    timeline.to(".word .text-foreground", {
+      opacity: 1,
+      stagger: 0.5,
+      ease: "none",
+    });
+
+    // Fade out the white text at the very end
+    timeline.to(
+      ".word .text-foreground",
+      {
+        opacity: 0,
         ease: "none",
-      })
-      .to(
-        ".word .text-foreground",
-        {
-          opacity: 1,
-          stagger: 0.5,
-          ease: "none",
-        },
-        "-=75%" // Start foreground fade-in 75% into background fade-in
-      )
-      .to(
-        ".word .text-foreground",
-        {
-          opacity: 0,
-          stagger: 0.5,
-          ease: "none",
-        },
-        ">" // Start fade-out after the last word is fully revealed
-      )
-      .to(
-        ".word .absolute",
-        {
-          opacity: 0.3,
-          stagger: 0.5,
-          ease: "none",
-        },
-        "-=75%" // Restore initial faint text state
-      );
+      },
+      ">" // starts after previous animation finishes
+    );
 
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
