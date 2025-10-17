@@ -18,7 +18,7 @@ const InitialText = () => {
       })
       .to(".word .text-foreground", {
         opacity: 1,
-        stagger: 0.05,
+        stagger: 0.5,
         ease: "none",
       });
   }, []);
@@ -28,7 +28,7 @@ const InitialText = () => {
       <div className="sticky top-0 mx-auto flex items-center py-20">
         <div className="flex flex-col justify-center">
           {/* First Line */}
-          <span className="text-white/20 flex flex-wrap text-2xl tracking-tighter md:text-3xl lg:text-5xl xl:text-7xl">
+          <span className="text-white/20 flex flex-wrap text-2xl tracking-tighter md:text-2xl lg:text-4xl xl:text-6xl">
             {[
               "Ever",
               "feel",
@@ -61,7 +61,7 @@ const InitialText = () => {
           </span>
 
           {/* Second Line */}
-          <span className="text-white/20 flex flex-wrap text-2xl tracking-tighter md:text-3xl lg:text-5xl xl:text-7xl mt-4">
+          <span className="text-white/20 flex flex-wrap text-2xl tracking-tighter md:text-2xl lg:text-4xl xl:text-6xl mt-4">
             {[
               "We",
               "believe",
