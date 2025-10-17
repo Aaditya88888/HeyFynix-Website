@@ -89,7 +89,7 @@ const WhoWeAre = () => {
           <style jsx>{`
             #top-panel::before,
             #bottom-panel::before {
-              content: "WHO WE ARE";
+              content: "Hey, Nice to Meet You!";
               position: absolute;
               width: 100%;
               text-align: center;
