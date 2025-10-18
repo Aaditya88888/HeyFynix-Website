@@ -1,0 +1,58 @@
+.create-button {
+  text-transform: uppercase;
+  background: #000000;
+  color: #fff;
+  transform: translate(12%);
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 0.8em;
+  font-size: 12px;
+  overflow: hidden;
+  &:focus,
+  &:active {
+    outline: none;
+  }
+  &:before,
+  &:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: auto;
+    width: auto;
+    z-index: -1;
+    border-radius: inherit;
+    background: inherit;
+  }
+  &:before {
+    background: linear-gradient(
+      90deg,
+      #729aff,
+      #142a39,
+      #1e142f,
+      #120d2a,
+      #0ebeff,
+      #1c193d,
+      #4e87f1,
+      #17103e
+    );
+    background-size: 200% 200%;
+  }
+  &:after {
+    margin: 3px;
+  }
+  &:hover:before,
+  &:focus:before {
+    animation: rainbow-border 3.5s linear infinite;
+  }
+}
+@keyframes rainbow-border {
+  0% {
+    background-position: 50% 0%;
+  }
+  100% {
+    background-position: -200% 50%;
+  }
+}

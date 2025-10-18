@@ -1,4 +1,5 @@
 import InitialText from "@/components/Home/InitialText/InitialText";
+import Navbar from "@/components/Home/Navbar/Navbar";
 import OurBeliefs from "@/components/Home/OurBeliefs/OurBeliefs";
 import SocialWork from "@/components/Home/SocialWork/SocialWork";
 import WhatWeDo from "@/components/Home/WhatWeDo/WhatWeDo";
@@ -8,6 +9,7 @@ import Work from "@/components/Home/Work/Work";
 export default function Home() {
   return (
     <>
+      <Navbar />
       <InitialText />
       <WhoWeAre />
       <WhatWeDo />
