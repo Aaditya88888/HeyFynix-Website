@@ -40,9 +40,9 @@ const InitialText = () => {
   }, []);
 
   return (
-    <div className="hidden w-full text-4xl leading-[0.6] tracking-[-0.02em] md:block lg:text-6xl lg:leading-[1.06]">
-      <div className="scroll-section relative z-0 h-[200vh] bg-black text-white">
-        <div className="sticky top-0 mx-auto flex items-center py-20">
+    <div className="w-full text-4xl leading-[0.6] tracking-[-0.02em] lg:text-6xl lg:leading-[1.06]">
+      <div className="scroll-section relative z-0 h-[200vh] sm:h-[220vh] md:h-[200vh] bg-black text-white">
+        <div className="sticky top-0 mx-auto flex items-center py-10 md:py-20">
           <div className="flex flex-col justify-center">
             {/* First Line */}
             <span className="text-white/20 flex flex-wrap text-2xl tracking-tighter md:text-2xl lg:text-4xl xl:text-6xl">

@@ -1,6 +1,8 @@
 import InitialText from "@/components/Home/InitialText/InitialText";
+import MobileBottomNavbar from "@/components/Home/Navbar/MobileBottomNavbar";
 import Navbar from "@/components/Home/Navbar/Navbar";
 import OurBeliefs from "@/components/Home/OurBeliefs/OurBeliefs";
+import Process from "@/components/Home/Process/Process";
 import SocialWork from "@/components/Home/SocialWork/SocialWork";
 import WhatWeDo from "@/components/Home/WhatWeDo/WhatWeDo";
 import WhoWeAre from "@/components/Home/WhoWeAre/WhoWeAre";
@@ -14,6 +16,7 @@ export default function Home() {
       <WhoWeAre />
       <WhatWeDo />
       <Work />
+      <Process />
       {/* <OurBeliefs /> */}
       <SocialWork />
     </>
