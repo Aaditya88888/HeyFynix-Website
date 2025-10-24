@@ -57,7 +57,7 @@ const Work = () => {
   }, []);
 
   return (
-    <div className="overflow-x-hidden bg-gray-200 m-0">
+    <div className="overflow-x-hidden bg-black m-0">
       <div className="image-container flex justify-center items-center gap-5 h-screen overflow-hidden">
         <img
           className="left flex-shrink-0 w-[30vw] h-[40vh] -translate-x-[100vw] opacity-0 rounded-lg object-cover"

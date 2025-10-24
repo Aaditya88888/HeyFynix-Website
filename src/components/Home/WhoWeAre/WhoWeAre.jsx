@@ -120,7 +120,7 @@ const WhoWeAre = () => {
               position: absolute;
               width: 100%;
               text-align: center;
-              font-size: clamp(1.5rem, 5vw, 3rem);
+              font-size: clamp(7rem, 5vw, 3rem);
               text-transform: uppercase;
               font-weight: 700;
               letter-spacing: 0.1em;

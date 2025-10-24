@@ -4,20 +4,19 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const Process = () => {
+const MakesUsDifferent = () => {
   const containerRef = useRef(null);
   const sliderRef = useRef(null);
   const lastScrollY = useRef(0);
-  const textRef = useRef(null);
   const overlayRefs = useRef([]);
+  const textRef = useRef(null);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
-
     const slider = sliderRef.current;
     const container = containerRef.current;
 
-    // ScrollTrigger horizontal scroll animation for slider
+    // ScrollTrigger animation for slider
     const scrollTween = gsap.to(slider, {
       x: () => -(slider.scrollWidth - container.clientWidth) + "px",
       ease: "none",
@@ -31,8 +30,8 @@ const Process = () => {
       },
     });
 
-    // Continuous auto-scroll for slider
-    let speed = 3;
+    // Continuous auto-scroll
+    let speed = -3;
     const ticker = gsap.ticker.add(() => {
       const currentX = gsap.getProperty(slider, "x");
       const maxX = -(slider.scrollWidth - container.clientWidth);
@@ -42,21 +41,21 @@ const Process = () => {
       }
     });
 
-    // Detect scroll direction for auto-scroll
+    // Detect scroll direction
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       speed =
         currentScrollY > lastScrollY.current
-          ? Math.abs(speed)
-          : -Math.abs(speed);
+          ? -Math.abs(speed)
+          : Math.abs(speed);
       lastScrollY.current = currentScrollY;
     };
     window.addEventListener("scroll", handleScroll);
 
-    // GSAP Text Animation: Top section
+    // GSAP Text Animation for top section
     gsap.from(textRef.current.children, {
       opacity: 0,
-      y: 100,
+      y: 50,
       scale: 0.8,
       color: "#ffffff",
       textShadow: "0px 0px 0px rgba(255,255,255,0)",
@@ -86,53 +85,33 @@ const Process = () => {
 
   const images = [
     "https://images.pexels.com/photos/34154499/pexels-photo-34154499.jpeg",
-    "https://images.pexels.com/photos/34229775/pexels-photo-34229775.jpeg",
     "https://images.pexels.com/photos/34087412/pexels-photo-34087412.jpeg",
     "https://images.pexels.com/photos/34183957/pexels-photo-34183957.jpeg",
     "https://images.pexels.com/photos/34137666/pexels-photo-34137666.jpeg",
   ];
 
-  const points = [
-    {
-      heading: "Discover",
-      content:
-        "We start by chatting, what's your goal, who’s your audience, and what keeps you up at night?",
-    },
-    {
-      heading: "Ideate",
-      content:
-        "Then we brainstorm like crazy, throwing ideas around until we find the perfect fit for you.",
-    },
-    {
-      heading: "Create",
-      content:
-        "Time to roll up our sleeves and build it with creativity and care.",
-    },
-    {
-      heading: "Refine",
-      content: "We loop you in for feedback – your input makes it shine!",
-    },
-    {
-      heading: "Launch",
-      content: "Boom! We deliver, celebrate, and watch the magic unfold.",
-    },
+  const texts = [
+    "Tell stories that move people",
+    "Design brand voices that are unforgettable",
+    "Create work that isn’t just trendy, but timeless",
+    "Partner with teams who care about meaning, not just metrics",
   ];
 
   return (
     <>
-      {/* Top Text Section */}
+      {/* Top Text Section Above Slider */}
       <div
         className="text-white bg-black text-section flex flex-col items-center justify-center text-center"
         ref={textRef}
       >
-        <h1 className="text-5xl font-bold mb-4">Process</h1>
+        <h1 className="text-5xl font-bold mb-4">Our why makes us different</h1>
         <h2 className="text-2xl font-semibold mb-4">
-          How We Work, It's All About You
+          We adapt. We evolve. We rise.
         </h2>
-        <p className="text-lg max-w-xl">
-          Wondering how we turn your vision into something tangible? It's
-          simple, collaborative, and a ton of fun. Here's the scoop:
+        <p className="text-lg max-w-xl mb-2">
+          We’re not here to be another content studio.
         </p>
+        <p className="text-lg max-w-xl">We’re here to:</p>
       </div>
 
       {/* Slider Section */}
@@ -141,14 +120,12 @@ const Process = () => {
           <div className="slider" ref={sliderRef}>
             {images.map((img, i) => (
               <div className="image-wrapper" key={i}>
-                <img src={img} alt={`Process ${i + 1}`} />
-                {/* Overlay Text on Each Image */}
+                <img src={img} alt={`Different ${i + 1}`} />
                 <div
                   className="image-text"
                   ref={(el) => (overlayRefs.current[i] = el)}
                 >
-                  <h3 className="image-heading">{points[i].heading}</h3>
-                  <p className="image-content">{points[i].content}</p>
+                  <h3 className="image-heading">{texts[i]}</h3>
                 </div>
               </div>
             ))}
@@ -200,7 +177,7 @@ const Process = () => {
           }
           .image-text {
             position: absolute;
-            top: 80%;
+            top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             color: white;
@@ -220,11 +197,6 @@ const Process = () => {
           .image-heading {
             font-size: 1.6rem;
             font-weight: 700;
-            margin-bottom: 0.5rem;
-          }
-          .image-content {
-            font-size: 1.2rem;
-            font-weight: 400;
           }
           @media screen and (max-width: 1024px) {
             .image-wrapper {
@@ -237,9 +209,6 @@ const Process = () => {
             }
             .image-heading {
               font-size: 1.4rem;
-            }
-            .image-content {
-              font-size: 1rem;
             }
           }
           @media screen and (max-width: 768px) {
@@ -254,9 +223,6 @@ const Process = () => {
             .image-heading {
               font-size: 1.2rem;
             }
-            .image-content {
-              font-size: 0.9rem;
-            }
           }
           @media screen and (max-width: 480px) {
             .image-wrapper {
@@ -270,9 +236,6 @@ const Process = () => {
             .image-heading {
               font-size: 1rem;
             }
-            .image-content {
-              font-size: 0.8rem;
-            }
           }
         `}</style>
       </section>
@@ -280,4 +243,4 @@ const Process = () => {
   );
 };
 
-export default Process;
+export default MakesUsDifferent;

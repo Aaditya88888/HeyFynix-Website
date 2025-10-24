@@ -1,4 +1,5 @@
 import InitialText from "@/components/Home/InitialText/InitialText";
+import MakesUsDifferent from "@/components/Home/MakesUsDifferent/MakesUsDifferent";
 import MobileBottomNavbar from "@/components/Home/Navbar/MobileBottomNavbar";
 import Navbar from "@/components/Home/Navbar/Navbar";
 import OurBeliefs from "@/components/Home/OurBeliefs/OurBeliefs";
@@ -17,6 +18,7 @@ export default function Home() {
       <WhatWeDo />
       <Work />
       <Process />
+      <MakesUsDifferent />
       {/* <OurBeliefs /> */}
       <SocialWork />
     </>
