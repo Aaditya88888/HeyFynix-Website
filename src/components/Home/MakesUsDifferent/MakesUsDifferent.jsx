@@ -2,84 +2,51 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const MakesUsDifferent = () => {
   const containerRef = useRef(null);
   const sliderRef = useRef(null);
-  const lastScrollY = useRef(0);
-  const overlayRefs = useRef([]);
-  const textRef = useRef(null);
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
     const slider = sliderRef.current;
     const container = containerRef.current;
+    const cards = slider.children;
+    const cardWidth = cards[0]?.offsetWidth || 0;
+    const gap = 20; // Matches the gap in your CSS
+    const totalCardWidth = cardWidth + gap;
+    const speed = 3; // Pixels per frame (adjust for faster/slower animation)
 
-    // ScrollTrigger animation for slider
-    const scrollTween = gsap.to(slider, {
-      x: () => -(slider.scrollWidth - container.clientWidth) + "px",
-      ease: "none",
-      scrollTrigger: {
-        trigger: container,
-        pin: true,
-        scrub: 1,
-        start: "top top",
-        end: () => "+=" + (slider.scrollWidth - container.clientWidth),
-        invalidateOnRefresh: true,
-      },
-    });
+    // Duplicate cards to ensure seamless looping
+    const originalCardCount = cards.length;
+    for (let i = 0; i < originalCardCount; i++) {
+      const clone = cards[i].cloneNode(true);
+      slider.appendChild(clone);
+    }
 
-    // Continuous auto-scroll
-    let speed = -3;
-    const ticker = gsap.ticker.add(() => {
+    // Set initial position
+    gsap.set(slider, { x: 0 });
+
+    // Infinite scroll animation
+    const animate = () => {
       const currentX = gsap.getProperty(slider, "x");
-      const maxX = -(slider.scrollWidth - container.clientWidth);
-      const minX = 0;
-      if (currentX > maxX && currentX < minX) {
-        gsap.set(slider, { x: currentX - speed });
+      let newX = currentX - speed;
+
+      // When the first card is fully out of view, move it to the end
+      if (Math.abs(newX) >= totalCardWidth) {
+        newX += totalCardWidth; // Adjust x position
+        slider.appendChild(slider.firstElementChild); // Move first card to end
+        gsap.set(slider, { x: newX }); // Update position to avoid jump
+      } else {
+        gsap.set(slider, { x: newX });
       }
-    });
-
-    // Detect scroll direction
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      speed =
-        currentScrollY > lastScrollY.current
-          ? -Math.abs(speed)
-          : Math.abs(speed);
-      lastScrollY.current = currentScrollY;
     };
-    window.addEventListener("scroll", handleScroll);
 
-    // GSAP Text Animation for top section
-    gsap.from(textRef.current.children, {
-      opacity: 0,
-      y: 50,
-      scale: 0.8,
-      color: "#ffffff",
-      textShadow: "0px 0px 0px rgba(255,255,255,0)",
-      stagger: 0.4,
-      duration: 1.5,
-      ease: "bounce.out",
-      scrollTrigger: {
-        trigger: textRef.current,
-        start: "top 80%",
-      },
-      onUpdate: function () {
-        gsap.to(textRef.current.children, {
-          textShadow: "0px 0px 15px rgba(255,255,255,0.8)",
-          duration: 0.5,
-          repeat: -1,
-          yoyo: true,
-        });
-      },
-    });
+    // Add animation to GSAP ticker for smooth frame-by-frame updates
+    gsap.ticker.add(animate);
 
+    // Cleanup
     return () => {
-      scrollTween.scrollTrigger.kill();
-      gsap.ticker.remove(ticker);
-      window.removeEventListener("scroll", handleScroll);
+      gsap.ticker.remove(animate);
     };
   }, []);
 
@@ -99,11 +66,8 @@ const MakesUsDifferent = () => {
 
   return (
     <>
-      {/* Top Text Section Above Slider */}
-      <div
-        className="text-white bg-black text-section flex flex-col items-center justify-center text-center"
-        ref={textRef}
-      >
+      {/* ✅ Simple Static Text Section (No Animations) */}
+      <div className="text-white bg-black text-section flex flex-col items-center justify-center text-center">
         <h1 className="text-5xl font-bold mb-4">Our why makes us different</h1>
         <h2 className="text-2xl font-semibold mb-4">
           We adapt. We evolve. We rise.
@@ -121,10 +85,7 @@ const MakesUsDifferent = () => {
             {images.map((img, i) => (
               <div className="image-wrapper" key={i}>
                 <img src={img} alt={`Different ${i + 1}`} />
-                <div
-                  className="image-text"
-                  ref={(el) => (overlayRefs.current[i] = el)}
-                >
+                <div className="image-text">
                   <h3 className="image-heading">{texts[i]}</h3>
                 </div>
               </div>
@@ -144,8 +105,6 @@ const MakesUsDifferent = () => {
             min-height: 50vh;
           }
           .slider-wrapper {
-            position: sticky;
-            top: 0;
             overflow: hidden;
             width: 100%;
             height: 100vh;
@@ -156,6 +115,8 @@ const MakesUsDifferent = () => {
             padding: 0 20px;
             align-items: center;
             height: 100%;
+            position: relative;
+            white-space: nowrap; /* Prevents wrapping */
           }
           .image-wrapper {
             flex: 0 0 auto;
@@ -177,27 +138,28 @@ const MakesUsDifferent = () => {
           }
           .image-text {
             position: absolute;
-            top: 80%;
+            bottom: 8%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translateX(-50%);
             color: white;
             text-align: center;
             font-weight: 500;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-          }
-          .image-wrapper:hover img {
-            opacity: 0.5;
-          }
-          .image-wrapper:hover .image-text {
             opacity: 1;
-            pointer-events: auto;
+            pointer-events: none;
+            padding: 1rem 1.2rem;
+            border-radius: 10px;
+            width: 85%;
+            word-wrap: break-word;
+            white-space: normal;
+            overflow: hidden;
+            box-sizing: border-box;
           }
+
           .image-heading {
             font-size: 1.6rem;
             font-weight: 700;
           }
+
           @media screen and (max-width: 1024px) {
             .image-wrapper {
               width: 45vw;
@@ -211,6 +173,7 @@ const MakesUsDifferent = () => {
               font-size: 1.4rem;
             }
           }
+
           @media screen and (max-width: 768px) {
             .image-wrapper {
               width: 65vw;
@@ -224,6 +187,7 @@ const MakesUsDifferent = () => {
               font-size: 1.2rem;
             }
           }
+
           @media screen and (max-width: 480px) {
             .image-wrapper {
               width: 85vw;

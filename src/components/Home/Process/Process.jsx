@@ -7,80 +7,54 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 const Process = () => {
   const containerRef = useRef(null);
   const sliderRef = useRef(null);
-  const lastScrollY = useRef(0);
-  const textRef = useRef(null);
-  const overlayRefs = useRef([]);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
+    // ✅ Smooth infinite horizontal scroll (no text animation)
     const slider = sliderRef.current;
     const container = containerRef.current;
+    const cards = slider.children;
+    const cardWidth = cards[0]?.offsetWidth || 0;
+    const gap = 20;
+    const totalCardWidth = cardWidth + gap;
+    const speed = 3;
+    const containerWidth = container.clientWidth;
 
-    // ScrollTrigger horizontal scroll animation for slider
-    const scrollTween = gsap.to(slider, {
-      x: () => -(slider.scrollWidth - container.clientWidth) + "px",
-      ease: "none",
-      scrollTrigger: {
-        trigger: container,
-        pin: true,
-        scrub: 1,
-        start: "top top",
-        end: () => "+=" + (slider.scrollWidth - container.clientWidth),
-        invalidateOnRefresh: true,
-      },
-    });
+    const cardsNeeded = Math.ceil(containerWidth / totalCardWidth) + 2;
+    const originalCardCount = cards.length;
+    for (let i = 0; i < originalCardCount * cardsNeeded; i++) {
+      const clone = cards[i % originalCardCount].cloneNode(true);
+      slider.appendChild(clone);
+    }
 
-    // Continuous auto-scroll for slider
-    let speed = 3;
-    const ticker = gsap.ticker.add(() => {
+    const totalCards = slider.children.length;
+    const totalSliderWidth = totalCards * totalCardWidth;
+    gsap.set(slider, { x: -totalCardWidth });
+
+    const animate = () => {
       const currentX = gsap.getProperty(slider, "x");
-      const maxX = -(slider.scrollWidth - container.clientWidth);
-      const minX = 0;
-      if (currentX > maxX && currentX < minX) {
-        gsap.set(slider, { x: currentX - speed });
+      let newX = currentX + speed;
+
+      if (newX >= 0) {
+        newX -= totalCardWidth * Math.ceil(cardsNeeded);
+        for (let i = 0; i < Math.ceil(cardsNeeded); i++) {
+          slider.insertBefore(
+            slider.lastElementChild,
+            slider.firstElementChild
+          );
+        }
+        gsap.set(slider, { x: newX });
+      } else {
+        gsap.set(slider, { x: newX });
       }
-    });
-
-    // Detect scroll direction for auto-scroll
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      speed =
-        currentScrollY > lastScrollY.current
-          ? Math.abs(speed)
-          : -Math.abs(speed);
-      lastScrollY.current = currentScrollY;
     };
-    window.addEventListener("scroll", handleScroll);
 
-    // GSAP Text Animation: Top section
-    gsap.from(textRef.current.children, {
-      opacity: 0,
-      y: 100,
-      scale: 0.8,
-      color: "#ffffff",
-      textShadow: "0px 0px 0px rgba(255,255,255,0)",
-      stagger: 0.4,
-      duration: 1.5,
-      ease: "bounce.out",
-      scrollTrigger: {
-        trigger: textRef.current,
-        start: "top 80%",
-      },
-      onUpdate: function () {
-        gsap.to(textRef.current.children, {
-          textShadow: "0px 0px 15px rgba(255,255,255,0.8)",
-          duration: 0.5,
-          repeat: -1,
-          yoyo: true,
-        });
-      },
-    });
+    gsap.ticker.add(animate);
 
     return () => {
-      scrollTween.scrollTrigger.kill();
-      gsap.ticker.remove(ticker);
-      window.removeEventListener("scroll", handleScroll);
+      gsap.ticker.remove(animate);
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, []);
 
@@ -120,11 +94,8 @@ const Process = () => {
 
   return (
     <>
-      {/* Top Text Section */}
-      <div
-        className="text-white bg-black text-section flex flex-col items-center justify-center text-center"
-        ref={textRef}
-      >
+      {/* ✅ Simple static text section (no animation) */}
+      <div className="text-white bg-black text-section flex flex-col items-center justify-center text-center">
         <h1 className="text-5xl font-bold mb-4">Process</h1>
         <h2 className="text-2xl font-semibold mb-4">
           How We Work, It's All About You
@@ -142,11 +113,7 @@ const Process = () => {
             {images.map((img, i) => (
               <div className="image-wrapper" key={i}>
                 <img src={img} alt={`Process ${i + 1}`} />
-                {/* Overlay Text on Each Image */}
-                <div
-                  className="image-text"
-                  ref={(el) => (overlayRefs.current[i] = el)}
-                >
+                <div className="image-text">
                   <h3 className="image-heading">{points[i].heading}</h3>
                   <p className="image-content">{points[i].content}</p>
                 </div>
@@ -167,8 +134,6 @@ const Process = () => {
             min-height: 50vh;
           }
           .slider-wrapper {
-            position: sticky;
-            top: 0;
             overflow: hidden;
             width: 100%;
             height: 100vh;
@@ -179,6 +144,8 @@ const Process = () => {
             padding: 0 20px;
             align-items: center;
             height: 100%;
+            position: relative;
+            white-space: nowrap;
           }
           .image-wrapper {
             flex: 0 0 auto;
@@ -200,22 +167,21 @@ const Process = () => {
           }
           .image-text {
             position: absolute;
-            top: 80%;
+            bottom: 8%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translateX(-50%);
             color: white;
             text-align: center;
             font-weight: 500;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-          }
-          .image-wrapper:hover img {
-            opacity: 0.5;
-          }
-          .image-wrapper:hover .image-text {
             opacity: 1;
-            pointer-events: auto;
+            pointer-events: none;
+            padding: 1rem 1.2rem;
+            border-radius: 10px;
+            width: 85%;
+            word-wrap: break-word;
+            white-space: normal;
+            overflow: hidden;
+            box-sizing: border-box;
           }
           .image-heading {
             font-size: 1.6rem;
@@ -226,6 +192,7 @@ const Process = () => {
             font-size: 1.2rem;
             font-weight: 400;
           }
+
           @media screen and (max-width: 1024px) {
             .image-wrapper {
               width: 45vw;
@@ -242,6 +209,7 @@ const Process = () => {
               font-size: 1rem;
             }
           }
+
           @media screen and (max-width: 768px) {
             .image-wrapper {
               width: 65vw;
@@ -251,6 +219,10 @@ const Process = () => {
               gap: 10px;
               padding: 0 10px;
             }
+            .image-text {
+              bottom: 8%;
+              padding: 0.8rem 1rem;
+            }
             .image-heading {
               font-size: 1.2rem;
             }
@@ -258,6 +230,7 @@ const Process = () => {
               font-size: 0.9rem;
             }
           }
+
           @media screen and (max-width: 480px) {
             .image-wrapper {
               width: 85vw;
@@ -266,6 +239,10 @@ const Process = () => {
             .slider {
               gap: 8px;
               padding: 0 8px;
+            }
+            .image-text {
+              bottom: 6%;
+              padding: 0.6rem 0.8rem;
             }
             .image-heading {
               font-size: 1rem;

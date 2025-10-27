@@ -69,13 +69,13 @@ const WhatWeDo = () => {
 
   return (
     <div className="font-poppins bg-black text-white overflow-x-hidden">
-      {/* Heading Section */}
-      <div className="text-center py-20 px-5 max-w-5xl mx-auto relative z-20">
-        <h2 className="text-5xl md:text-6xl font-bold mb-4">What We Do</h2>
-        <h3 className="text-3xl md:text-4xl font-semibold mb-6">
-          What Can We Do for You? Let's Dive In
-        </h3>
-        <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
+      {/* Centered Heading Section */}
+      {/* Centered Heading Section */}
+      <div className="flex flex-col items-center justify-center text-center min-h-[60vh] px-6 relative z-20">
+        <h1 className="text-4xl md:text-5xl font-semibold mb-6 max-w-4xl">
+          Let's Dive In
+        </h1>
+        <p className="text-2xl md:text-3xl text-gray-300 max-w-4xl leading-relaxed">
           Your challenges are our playground. Here’s how we can team up to make
           things happen (and we're pretty darn good at it).
         </p>
@@ -95,7 +95,7 @@ const WhatWeDo = () => {
         {sections.map((section, idx) => (
           <div
             key={idx}
-            className="relative flex items-end justify-center overflow-hidden cursor-pointer border border-white/5 group z-10"
+            className="relative flex items-center justify-center overflow-hidden cursor-pointer border border-white/5 group z-10"
             data-image={section.img}
             onMouseEnter={() => setHoveredIndex(idx)}
             onMouseLeave={() => setHoveredIndex(null)}
@@ -103,22 +103,22 @@ const WhatWeDo = () => {
             {/* Gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/25 to-transparent transition-all duration-500 group-hover:from-[#001446]/80 group-hover:to-transparent"></div>
 
-            {/* Text content container */}
+            {/* Centered Text content container */}
             <div
-              className={`absolute bottom-8 left-1/2 transform -translate-x-1/2 text-center p-8 z-10 w-full transition-all duration-500 ease-out ${
-                hoveredIndex === idx ? "-translate-y-10" : "translate-y-0"
+              className={`absolute inset-0 flex flex-col items-center justify-center text-center p-10 z-10 transition-all duration-500 ease-out ${
+                hoveredIndex === idx ? "-translate-y-6" : "translate-y-0"
               }`}
             >
-              <h3 className="text-2xl font-semibold mb-2 text-white transition-all duration-500">
+              <h3 className="text-3xl md:text-4xl font-semibold mb-4 text-white transition-all duration-500">
                 {section.title}
               </h3>
-              <p className="text-base leading-6 text-gray-300 max-w-[350px] mx-auto transition-all duration-500">
+              <p className="text-lg md:text-xl leading-8 text-gray-300 max-w-[450px] mx-auto transition-all duration-500">
                 {section.desc}
               </p>
 
-              {/* Extra text on hover with animation */}
+              {/* Extra text on hover */}
               <div
-                className={`text-sm leading-6 text-gray-400 max-w-[350px] mx-auto mt-3 transition-all duration-500 ease-out ${
+                className={`text-base md:text-lg leading-8 text-gray-400 max-w-[450px] mx-auto mt-4 transition-all duration-500 ease-out ${
                   hoveredIndex === idx
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-5"
