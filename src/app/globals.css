@@ -6,21 +6,34 @@ body {
   font-family: var(--font-neuehaas), sans-serif;
 }
 
-/* :root {
-  --background: #ffffff;
-  --foreground: #171717;
+h1 {
+  @apply text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* H2 – Section Headings */
+h2 {
+  @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold leading-snug;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-} */
+/* H3 – Subheadings */
+h3 {
+  @apply text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold leading-snug;
+}
+
+/* Paragraphs / Body text */
+p {
+  @apply text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 leading-relaxed;
+}
+
+/* Small text or captions */
+small {
+  @apply text-xs sm:text-sm text-gray-500;
+}
+
+/* Optional: consistent spacing between text elements */
+h1,
+h2,
+h3,
+p {
+  margin-bottom: 1rem;
+}
