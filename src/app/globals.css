@@ -22,7 +22,7 @@ h3 {
 
 /* Paragraphs / Body text */
 p {
-  @apply text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 leading-relaxed;
+  @apply text-sm sm:text-base md:text-lg lg:text-xl  leading-relaxed;
 }
 
 /* Small text or captions */
@@ -36,4 +36,8 @@ h2,
 h3,
 p {
   margin-bottom: 1rem;
+}
+
+* {
+  font-family: var(--font-neuehaas), sans-serif;
 }

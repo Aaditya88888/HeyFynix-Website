@@ -13,15 +13,16 @@ const WhoWeAre = () => {
         trigger: "#reveal-section",
         pin: true,
         start: "top top",
-        end: "+=200%",
+        end: "+=300%", // increased scroll distance for slower reveal
         scrub: 0.8,
         anticipatePin: 1,
         invalidateOnRefresh: true,
       },
     });
 
-    tl.to("#top-panel", { yPercent: -100, duration: 1, ease: "none" }, 0)
-      .to("#bottom-panel", { yPercent: 100, duration: 1, ease: "none" }, 0)
+    // increased duration for slower panel movement
+    tl.to("#top-panel", { yPercent: -100, duration: 3, ease: "none" }, 0)
+      .to("#bottom-panel", { yPercent: 100, duration: 3, ease: "none" }, 0)
       .to(
         "#content",
         {

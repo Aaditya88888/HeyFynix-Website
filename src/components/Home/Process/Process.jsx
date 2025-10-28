@@ -11,14 +11,14 @@ const Process = () => {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
-    // ✅ Smooth infinite horizontal scroll (no text animation)
+    // ✅ Smooth infinite horizontal scroll (reversed: right → left)
     const slider = sliderRef.current;
     const container = containerRef.current;
     const cards = slider.children;
     const cardWidth = cards[0]?.offsetWidth || 0;
     const gap = 20;
     const totalCardWidth = cardWidth + gap;
-    const speed = 3;
+    const speed = -3; // reversed direction
     const containerWidth = container.clientWidth;
 
     const cardsNeeded = Math.ceil(containerWidth / totalCardWidth) + 2;
@@ -36,13 +36,10 @@ const Process = () => {
       const currentX = gsap.getProperty(slider, "x");
       let newX = currentX + speed;
 
-      if (newX >= 0) {
-        newX -= totalCardWidth * Math.ceil(cardsNeeded);
+      if (newX <= -totalCardWidth * Math.ceil(cardsNeeded)) {
+        newX += totalCardWidth * Math.ceil(cardsNeeded);
         for (let i = 0; i < Math.ceil(cardsNeeded); i++) {
-          slider.insertBefore(
-            slider.lastElementChild,
-            slider.firstElementChild
-          );
+          slider.appendChild(slider.firstElementChild);
         }
         gsap.set(slider, { x: newX });
       } else {
@@ -59,11 +56,11 @@ const Process = () => {
   }, []);
 
   const images = [
-    "https://images.pexels.com/photos/34154499/pexels-photo-34154499.jpeg",
-    "https://images.pexels.com/photos/34229775/pexels-photo-34229775.jpeg",
-    "https://images.pexels.com/photos/34087412/pexels-photo-34087412.jpeg",
-    "https://images.pexels.com/photos/34183957/pexels-photo-34183957.jpeg",
-    "https://images.pexels.com/photos/34137666/pexels-photo-34137666.jpeg",
+    "/images/home/differentimage.jpg",
+    "/images/home/differentimage.jpg",
+    "/images/home/differentimage.jpg",
+    "/images/home/differentimage.jpg",
+    "/images/home/differentimage.jpg",
   ];
 
   const points = [
@@ -149,8 +146,8 @@ const Process = () => {
           }
           .image-wrapper {
             flex: 0 0 auto;
-            width: 30vw;
-            height: 70%;
+            width: 25vw;
+            height: 60%;
             display: flex;
             align-items: center;
             justify-content: center;
