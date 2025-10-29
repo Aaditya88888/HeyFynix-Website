@@ -18,7 +18,7 @@ const Process = () => {
     const cardWidth = cards[0]?.offsetWidth || 0;
     const gap = 20;
     const totalCardWidth = cardWidth + gap;
-    const speed = -3; // reversed direction
+    const speed = -2; // reversed direction
     const containerWidth = container.clientWidth;
 
     const cardsNeeded = Math.ceil(containerWidth / totalCardWidth) + 2;
@@ -28,8 +28,6 @@ const Process = () => {
       slider.appendChild(clone);
     }
 
-    const totalCards = slider.children.length;
-    const totalSliderWidth = totalCards * totalCardWidth;
     gsap.set(slider, { x: -totalCardWidth });
 
     const animate = () => {
@@ -56,11 +54,11 @@ const Process = () => {
   }, []);
 
   const images = [
-    "/images/home/differentimage.jpg",
-    "/images/home/differentimage.jpg",
-    "/images/home/differentimage.jpg",
-    "/images/home/differentimage.jpg",
-    "/images/home/differentimage.jpg",
+    "/images/home/process-1.jpg",
+    "/images/home/process-2.jpg",
+    "/images/home/process-3.jpg",
+    "/images/home/process-4.jpg",
+    "/images/home/process-5.jpg",
   ];
 
   const points = [
@@ -90,28 +88,36 @@ const Process = () => {
   ];
 
   return (
-    <>
-      {/* ✅ Simple static text section (no animation) */}
-      <div className="text-white bg-black text-section flex flex-col items-center justify-center text-center">
-        <h1 className="text-5xl font-bold mb-4">Process</h1>
-        <h2 className="text-2xl font-semibold mb-4">
-          How We Work, It's All About You
-        </h2>
-        <p className="text-lg max-w-xl">
-          Wondering how we turn your vision into something tangible? It's
-          simple, collaborative, and a ton of fun. Here's the scoop:
-        </p>
+    <main>
+      {/* ✅ Reduced bottom padding for tighter spacing */}
+      <div className="text-white bg-black text-section flex items-center justify-between px-[5%] pt-16 pb-6">
+        <div className="left text-left max-w-lg">
+          <h1 className="text-5xl font-bold italic leading-[1] mb-0 pb-0">
+            PROCESS
+          </h1>
+          <h4 className="text-2xl font-medium mt-[-15px]">
+            How We Work, It's All About You
+          </h4>
+        </div>
+
+        <div className="right text-right max-w-lg">
+          <p className="text-lg">
+            Wondering how we turn your vision into something tangible? It's
+            simple, collaborative, and a ton of fun. Here's the scoop:
+          </p>
+        </div>
       </div>
 
-      {/* Slider Section */}
-      <section className="horizontal-slider-container" ref={containerRef}>
+      {/* ✅ Reduced top gap for slider */}
+      <section className="horizontal-slider-container pl-16" ref={containerRef}>
         <div className="slider-wrapper">
           <div className="slider" ref={sliderRef}>
             {images.map((img, i) => (
               <div className="image-wrapper" key={i}>
                 <img src={img} alt={`Process ${i + 1}`} />
                 <div className="image-text">
-                  <h3 className="image-heading">{points[i].heading}</h3>
+                  <h3>Step {i + 1}</h3>
+                  <h2 className="image-heading italic">{points[i].heading}</h2>
                   <p className="image-content">{points[i].content}</p>
                 </div>
               </div>
@@ -124,17 +130,35 @@ const Process = () => {
             position: relative;
             background-color: black;
             overflow: hidden;
+            margin-top: -3rem;
           }
+
           .text-section {
-            padding: 6rem 10%;
+            min-height: 40vh;
+            background-color: black;
             color: white;
-            min-height: 50vh;
           }
+
+          @media screen and (max-width: 768px) {
+            .text-section {
+              flex-direction: column;
+              text-align: center;
+              gap: 2rem;
+              padding: 4rem 5%;
+            }
+
+            .left,
+            .right {
+              text-align: center !important;
+            }
+          }
+
           .slider-wrapper {
             overflow: hidden;
             width: 100%;
-            height: 100vh;
+            height: 80vh; /* ✅ reduced height from 100vh */
           }
+
           .slider {
             display: flex;
             gap: 20px;
@@ -144,27 +168,42 @@ const Process = () => {
             position: relative;
             white-space: nowrap;
           }
+
           .image-wrapper {
             flex: 0 0 auto;
             width: 25vw;
-            height: 60%;
+            height: 75%;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
             overflow: hidden;
-            border-radius: 10px;
+            border: 2px solid transparent;
+            transition: border-color 0.3s ease;
           }
+
+          .image-wrapper:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
+          }
+
           .image-wrapper img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             object-position: center;
-            transition: opacity 0.3s ease;
+            transition: transform 0.5s ease;
+            // transition: transform 0.5s ease, opacity 0.3s ease; /* ✅ added transform */
+            opacity: 0.7;
           }
+
+          .image-wrapper:hover img {
+            transform: scale(1.1); /* ✅ smooth zoom-in on hover */
+          }
+
           .image-text {
             position: absolute;
-            bottom: 8%;
+            bottom: 20%;
             left: 50%;
             transform: translateX(-50%);
             color: white;
@@ -180,14 +219,26 @@ const Process = () => {
             overflow: hidden;
             box-sizing: border-box;
           }
+
           .image-heading {
-            font-size: 1.6rem;
+            font-size: 4.5rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
           }
+
           .image-content {
             font-size: 1.2rem;
             font-weight: 400;
+            opacity: 0; /* hidden by default */
+            max-height: 0;
+            overflow: hidden;
+            transition: opacity 0.4s ease, max-height 0.4s ease;
+          }
+
+          /* 👇 when user hovers the image, show the content */
+          .image-wrapper:hover .image-content {
+            opacity: 1;
+            max-height: 200px; /* enough height to reveal text smoothly */
           }
 
           @media screen and (max-width: 1024px) {
@@ -250,7 +301,7 @@ const Process = () => {
           }
         `}</style>
       </section>
-    </>
+    </main>
   );
 };
 
