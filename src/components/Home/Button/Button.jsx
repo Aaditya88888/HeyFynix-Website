@@ -1,13 +1,11 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import gsap from "gsap";
 
-const Button = () => {
-  const btnRef = useRef(null);
-
+export default function Button() {
   useEffect(() => {
-    gsap.from(btnRef.current, {
+    gsap.from("#home-featured-cta", {
       y: 40,
       opacity: 0,
       duration: 1,
@@ -16,94 +14,87 @@ const Button = () => {
   }, []);
 
   return (
-    <a
-      ref={btnRef}
-      id="home-featured-cta"
-      href="/projects"
-      target="_blank"
-      className="cta-button"
-    >
-      <span id="home-featured-cta-dot"></span>
-      <span id="home-featured-cta-text">About Us</span>
-      <span id="home-featured-cta-arrow">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          fill="none"
-          viewBox="0 0 16 16"
+    <>
+      <a
+        id="home-featured-cta"
+        href="/projects"
+        target="_blank"
+        className="inline-flex items-center justify-center text-white border-2 border-white px-7 py-3 rounded-full overflow-hidden relative cursor-pointer transition-colors duration-[350ms] ease-linear shadow-[0_0_20px_rgba(255,255,255,0.5)]"
+      >
+        <span
+          id="home-featured-cta-dot"
+          className="w-2 h-2 rounded-full bg-white opacity-100 scale-100 mr-2 transition-all duration-300 ease-in-out"
+        ></span>
+
+        <span
+          id="home-featured-cta-text"
+          className="font-medium text-[15px] tracking-[0.5px] relative z-[1] transition-colors duration-300"
         >
-          <path
-            stroke="#fff"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M2.343 8h11.314m0 0L8.673 3.016M13.657 8l-4.984 4.984"
-          />
-        </svg>
-      </span>
+          About Us
+        </span>
+
+        <span
+          id="home-featured-cta-arrow"
+          className="inline-flex items-center justify-center opacity-0 -translate-x-2 w-0 overflow-hidden transition-all duration-300 ease-in-out"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 16 16"
+            fill="none"
+            className="w-4 h-4 stroke-current"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M2.343 8h11.314m0 0L8.673 3.016M13.657 8l-4.984 4.984"
+            />
+          </svg>
+        </span>
+      </a>
 
       <style jsx>{`
-        .cta-button {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          gap: 10px;
-          text-decoration: none;
-          color: #fff;
-          border: 2px solid #fff;
-          padding: 12px 24px;
+        a#home-featured-cta::before {
+          content: "";
+          position: absolute;
+          inset: -2px;
+          background: #fff;
+          transform: scaleX(0);
+          transform-origin: left center;
           border-radius: 40px;
-          overflow: hidden;
-          position: relative;
-          cursor: pointer;
-          transition: all 0.3s ease;
+          z-index: 0;
+          transition: transform 0.25s ease;
         }
 
-        .cta-button:hover {
-          background: #fff;
-          color: #000;
+        a#home-featured-cta:hover::before {
+          transform: scaleX(1);
         }
 
-        #home-featured-cta-dot {
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-          background: #fff;
-          transform: scale(1);
-          transition: all 0.3s ease;
+        a#home-featured-cta:hover {
+          border-color: transparent;
+          box-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
         }
 
-        .cta-button:hover #home-featured-cta-dot {
-          transform: scale(1.5);
-          background: #000;
+        /* ✅ Text and arrow both turn black on hover */
+        a#home-featured-cta:hover #home-featured-cta-text,
+        a#home-featured-cta:hover #home-featured-cta-arrow svg {
+          color: black !important;
+          stroke: black !important;
         }
 
-        #home-featured-cta-text {
-          font-weight: 500;
-          font-size: 15px;
-          letter-spacing: 0.5px;
-          position: relative;
+        a#home-featured-cta:hover #home-featured-cta-dot {
+          opacity: 0;
+          transform: scale(0);
+          margin-right: 0;
         }
 
-        #home-featured-cta-arrow {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: transform 0.3s ease;
-        }
-
-        .cta-button:hover #home-featured-cta-arrow {
-          transform: translateX(6px);
-        }
-
-        #home-featured-cta-arrow svg {
+        a#home-featured-cta:hover #home-featured-cta-arrow {
+          opacity: 1;
+          transform: translateX(0);
           width: 16px;
-          height: 16px;
+          margin-left: 13px;
         }
       `}</style>
-    </a>
+    </>
   );
-};
-
-export default Button;
+}

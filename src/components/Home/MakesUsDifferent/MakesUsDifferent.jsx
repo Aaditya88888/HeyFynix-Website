@@ -151,15 +151,16 @@ const MakesUsDifferent = () => {
   }, []);
 
   const images = [
-    "/images/home/process-2.jpg",
-    "/images/home/process-2.jpg",
-    "/images/home/process-2.jpg",
-    "/images/home/process-2.jpg",
-    "/images/home/process-2.jpg",
-    "/images/home/process-2.jpg",
-    "/images/home/process-2.jpg",
-    "/images/home/process-2.jpg",
-    "/images/home/process-2.jpg",
+    "/images/home/makeUsDifferent-1.jpg",
+    "/images/home/makeUsDifferent-2.jpg",
+    "/images/home/makeUsDifferent-3.jpg",
+    "/images/home/makeUsDifferent-4.jpg",
+    "/images/home/makeUsDifferent-5.jpg",
+    "/images/home/makeUsDifferent-6.jpg",
+    "/images/home/makeUsDifferent-7.jpg",
+    "/images/home/makeUsDifferent-8.jpg",
+    "/images/home/makeUsDifferent-9.jpg",
+    "/images/home/makeUsDifferent-10.jpg",
   ];
 
   const texts = [
@@ -171,6 +172,7 @@ const MakesUsDifferent = () => {
     "We inspire innovation through bold creativity.",
     "We build lasting connections with every audience.",
     "We deliver solutions that align with your vision.",
+    "We embrace challenges to drive meaningful impact.",
     "We embrace challenges to drive meaningful impact.",
   ];
 
