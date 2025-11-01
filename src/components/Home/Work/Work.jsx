@@ -8,9 +8,11 @@ import Button from "../Button/Button";
 
 const Work = () => {
   const [imgs, setImgs] = useState([
-    "https://images.pexels.com/photos/34154499/pexels-photo-34154499.jpeg", // left
-    "https://images.pexels.com/photos/1591447/pexels-photo-1591447.jpeg", // center
-    "https://images.pexels.com/photos/357756/pexels-photo-357756.jpeg", // right
+    "https://images.pexels.com/photos/34154499/pexels-photo-34154499.jpeg", // 1
+    "https://images.pexels.com/photos/1591447/pexels-photo-1591447.jpeg", // 2
+    "https://images.pexels.com/photos/357756/pexels-photo-357756.jpeg", // 3
+    "https://images.pexels.com/photos/34410855/pexels-photo-34410855.jpeg", // 4
+    "https://images.pexels.com/photos/33430991/pexels-photo-33430991.jpeg", // 5
   ]);
 
   const containerRef = useRef(null);
@@ -63,56 +65,41 @@ const Work = () => {
     });
   }, []);
 
-  // ✅ Fixed sliding logic (direction-accurate, smooth, infinite)
+  // ✅ Smooth animation for all three images
   const slide = (direction) => {
     if (isAnimating.current) return;
     isAnimating.current = true;
 
-    const slides = containerRef.current.querySelectorAll("img");
+    const slides = containerRef.current.querySelectorAll(".slide"); // all 3 images
+    const moveX = direction === "right" ? -100 : 100;
+
+    // Create GSAP timeline
     const tl = gsap.timeline({
       defaults: { duration: 0.8, ease: "power2.inOut" },
       onComplete: () => {
+        setImgs((prev) => {
+          const updated = [...prev];
+          if (direction === "right") {
+            const first = updated.shift();
+            updated.push(first);
+          } else {
+            const last = updated.pop();
+            updated.unshift(last);
+          }
+          return updated;
+        });
+
+        gsap.set(slides, { xPercent: 0 });
         isAnimating.current = false;
       },
     });
 
-    if (direction === "right") {
-      // ✅ Right button → move images LEFT visually
-      tl.to(slides, {
-        xPercent: -100,
-        stagger: 0,
-        onComplete: () => {
-          // rotate array left → right
-          setImgs((prev) => {
-            const updated = [...prev];
-            const first = updated.shift();
-            updated.push(first);
-            return updated;
-          });
-          gsap.set(slides, { xPercent: 0 });
-        },
-      });
-    } else {
-      // ✅ Left button → move images RIGHT visually
-      tl.to(slides, {
-        xPercent: 100,
-        stagger: 0,
-        onComplete: () => {
-          // rotate array right → left
-          setImgs((prev) => {
-            const updated = [...prev];
-            const last = updated.pop();
-            updated.unshift(last);
-            return updated;
-          });
-          gsap.set(slides, { xPercent: 0 });
-        },
-      });
-    }
+    // Animate all 3 together
+    tl.to(slides, { xPercent: moveX });
   };
 
-  const handleNext = () => slide("right"); // Right arrow click
-  const handlePrev = () => slide("left"); // Left arrow click
+  const handleNext = () => slide("right");
+  const handlePrev = () => slide("left");
 
   return (
     <div className="overflow-x-hidden bg-black m-0 text-white">
@@ -136,13 +123,15 @@ const Work = () => {
         ref={containerRef}
         className="image-container flex justify-center items-center gap-5 h-screen overflow-hidden relative"
       >
+        {/* Left image */}
         <img
-          className="left flex-shrink-0 w-[30vw] h-[40vh] -translate-x-[100vw] opacity-0 object-cover"
+          className="slide left flex-shrink-0 w-[30vw] h-[40vh] -translate-x-[100vw] opacity-0 object-cover"
           src={imgs[0]}
           alt="Image 1"
         />
 
-        <div className="center flex-shrink-0 w-[90vw] h-[90vh] opacity-100 relative overflow-hidden">
+        {/* Center image */}
+        <div className="slide center flex-shrink-0 w-[90vw] h-[90vh] opacity-100 relative overflow-hidden">
           <img
             className="w-full h-full object-cover"
             src={imgs[1]}
@@ -164,8 +153,9 @@ const Work = () => {
           </button>
         </div>
 
+        {/* Right image */}
         <img
-          className="right flex-shrink-0 w-[30vw] h-[40vh] translate-x-[100vw] opacity-0 object-cover"
+          className="slide right flex-shrink-0 w-[30vw] h-[40vh] translate-x-[100vw] opacity-0 object-cover"
           src={imgs[2]}
           alt="Image 3"
         />
