@@ -234,7 +234,6 @@
 import { Poppins, Inter } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
-import HoverEffect from "@/components/HoverEffect/HoverEffect";
 import CursorEffect from "@/components/CursorEffect/CursorEffect";
 
 // Google Font (Poppins)

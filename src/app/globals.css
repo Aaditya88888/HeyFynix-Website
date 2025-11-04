@@ -56,6 +56,10 @@ p {
   margin-bottom: 1rem;
 }
 
-* {
+/* * {
   font-family: var(--font-neuehaas), sans-serif;
+} */
+
+* {
+  font-family: var(--font-inter), sans-serif;
 }
