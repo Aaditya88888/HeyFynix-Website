@@ -2331,7 +2331,7 @@ export default function CursorEffect() {
           size: { value: 0.05 },
           minSize: { value: 1.2 },
           speed: { value: 0.1 },
-          fadeSpeed: { value: 9.0 },
+          fadeSpeed: { value: 7.0 },
           shortRangeFadeSpeed: { value: 1.8 },
           minFlashingSpeed: { value: 0.2 },
           blur: { value: 1.4 },
