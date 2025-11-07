@@ -13,7 +13,7 @@ export default function Home() {
     <>
       <Navbar />
       <InitialText />
-      {/* <InfiniteCreativity /> */}
+      <InfiniteCreativity />
       <WhoWeAre />
       <WhatWeDo />
       <Work />

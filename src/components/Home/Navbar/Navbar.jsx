@@ -128,9 +128,9 @@ export default function Navbar() {
     <>
       {/* LEFT SIDE VERTICAL LOGO */}
       <div className="fixed left-16 top-12 z-50">
-        <h1 className="text-white text-[22px] font-bold leading-none rotate-0">
+        <h3 className="text-white text-[22px] font-bold leading-none rotate-0">
           HEYFYNIX
-        </h1>
+        </h3>
       </div>
 
       {/* RIGHT SIDE BUTTON GROUP */}
