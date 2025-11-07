@@ -1,54 +1,54 @@
-"use client";
+// "use client";
 
-import React from "react";
+// import React from "react";
 
-const InfiniteCreativity = () => {
-  return (
-    <>
-      <section className="px-16 py-10 bg-black text-white">
-        <div className="heading-container mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold ml-50">
-            Beyond Boundary
-          </h1>
-          <h1 className="text-4xl md:text-5xl font-bold">
-            Infinite Creativity
-          </h1>
-        </div>
+// const InfiniteCreativity = () => {
+//   return (
+//     <>
+//       <section className="px-16 py-10 bg-black text-white">
+//         <div className="heading-container mb-8">
+//           <h1 className="text-4xl md:text-5xl font-bold ml-50">
+//             Beyond Boundary
+//           </h1>
+//           <h1 className="text-4xl md:text-5xl font-bold">
+//             Infinite Creativity
+//           </h1>
+//         </div>
 
-        <div className="main-container flex flex-col md:flex-row gap-8">
-          {/* Video Container - 50% width */}
-          <div className="video-container md:w-[50%] flex flex-col">
-            <video
-              src="https://www.w3schools.com/html/mov_bbb.mp4"
-              className="w-full h-auto object-cover rounded-lg z-50"
-              autoPlay
-              muted
-              loop
-              playsInline
-            />
-            <p className="mt-4 text-lg font-medium">Check Out our Showreel</p>
-          </div>
+//         <div className="main-container flex flex-col md:flex-row gap-8">
+//           {/* Video Container - 50% width */}
+//           <div className="video-container md:w-[50%] flex flex-col">
+//             <video
+//               src="https://www.w3schools.com/html/mov_bbb.mp4"
+//               className="w-full h-auto object-cover rounded-lg z-50"
+//               autoPlay
+//               muted
+//               loop
+//               playsInline
+//             />
+//             <p className="mt-4 text-lg font-medium">Check Out our Showreel</p>
+//           </div>
 
-          {/* Text Container - 60% width */}
-          <div className="text-container md:w-[60%] flex justify-center gap-5">
-            <h4 className="text-2xl md:w-[45%] md:text-3xl font-semibold mb-4">
-              Creativity is the Foundation of what we do
-            </h4>
-            <p className="text-lg md:w-[55%] leading-relaxed flex items-end">
-              Heyfynix is a digital production studio that brings your ideas to
-              life through visually captivating designs and interactive
-              experiences. With our talented team, we push boundaries by solving
-              complex problems, delivering tailored solutions that exceed
-              expectations and engage audiences.
-            </p>
-          </div>
-        </div>
-      </section>
-    </>
-  );
-};
+//           {/* Text Container - 60% width */}
+//           <div className="text-container md:w-[60%] flex justify-center gap-5">
+//             <h4 className="text-2xl md:w-[45%] md:text-3xl font-semibold mb-4">
+//               Creativity is the Foundation of what we do
+//             </h4>
+//             <p className="text-lg md:w-[55%] leading-relaxed flex items-end">
+//               Heyfynix is a digital production studio that brings your ideas to
+//               life through visually captivating designs and interactive
+//               experiences. With our talented team, we push boundaries by solving
+//               complex problems, delivering tailored solutions that exceed
+//               expectations and engage audiences.
+//             </p>
+//           </div>
+//         </div>
+//       </section>
+//     </>
+//   );
+// };
 
-export default InfiniteCreativity;
+// export default InfiniteCreativity;
 
 // ******************************************************
 
@@ -234,136 +234,152 @@ export default InfiniteCreativity;
 
 // *********************************************************
 
-// "use client";
+"use client";
 
-// import React, { useEffect, useRef } from "react";
-// import { gsap } from "gsap";
-// import { ScrollTrigger } from "gsap/ScrollTrigger";
+import React, { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-// gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger);
 
-// const InfiniteCreativity = () => {
-//   const sectionRef = useRef(null);
-//   const videoContainer = useRef(null);
-//   const textContainer = useRef(null);
+const InfiniteCreativity = () => {
+  const sectionRef = useRef(null);
+  const videoContainerRef = useRef(null);
+  const textContainerRef = useRef(null);
+  const videoRef = useRef(null);
 
-//   useEffect(() => {
-//     const section = sectionRef.current;
-//     const video = videoContainer.current;
-//     const text = textContainer.current;
+  useEffect(() => {
+    const section = sectionRef.current;
+    const videoContainer = videoContainerRef.current;
+    const textContainer = textContainerRef.current;
+    const video = videoRef.current;
 
-//     // Initial state
-//     gsap.set(video, {
-//       position: "relative",
-//       width: "50%",
-//       height: "auto",
-//       yPercent: 0,
-//       zIndex: 2,
-//     });
-//     gsap.set(text, { y: 0, opacity: 1 });
+    // Pin the whole section and drive the animation with scroll
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: "top top", // pin when top of section hits top of viewport
+        end: "+=180%", // long enough for a smooth “reveal”
+        scrub: 1, // buttery-smooth scroll-linked animation
+        pin: true,
+        anticipatePin: 1,
+        // markers: true,          // uncomment for debugging
+      },
+    });
 
-//     // Timeline for scroll animation
-//     const tl = gsap.timeline({
-//       scrollTrigger: {
-//         trigger: section,
-//         start: "center center", // when video center hits screen center
-//         end: "+=600", // scroll distance for animation
-//         scrub: true,
-//         // markers: true, // uncomment to debug
-//       },
-//     });
+    /* ---------- ANIMATION SEQUENCE (Lusion style) ---------- */
 
-//     // Video expands and moves down
-//     tl.to(video, {
-//       position: "fixed",
-//       top: "50%",
-//       left: "50%",
-//       xPercent: -50,
-//       yPercent: -50,
-//       width: "80vw",
-//       height: "80vh",
-//       ease: "power2.out",
-//     });
+    // 1. Text moves up and fades out
+    tl.to(textContainer, {
+      y: -400,
+      opacity: 0,
+      duration: 1,
+      ease: "power2.inOut",
+    })
 
-//     // Text moves upward and fades
-//     tl.to(
-//       text,
-//       {
-//         y: -150,
-//         opacity: 0.3,
-//         ease: "power2.out",
-//       },
-//       "<" // run at same time
-//     );
+      // 2. Video container slides down a bit (helps the transition)
+      .to(
+        videoContainer,
+        {
+          y: 180,
+          duration: 1,
+          ease: "power2.inOut",
+        },
+        0
+      )
 
-//     // Return video to normal flow when scrolling past the section
-//     tl.to(video, {
-//       position: "relative",
-//       width: "50%",
-//       height: "auto",
-//       clearProps: "all",
-//       ease: "none",
-//     });
+      // 3. Video scales + centers perfectly (the hero moment)
+      .to(
+        video,
+        {
+          width: "80vw",
+          height: "80vh",
+          maxWidth: "90vw",
+          borderRadius: "2rem",
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          xPercent: -50,
+          yPercent: -50,
+          zIndex: 200,
+          boxShadow: "0 30px 60px -12px rgba(0,0,0,0.6)",
+          duration: 1.4,
+          ease: "power3.out",
+        },
+        0.4
+      )
 
-//     return () => {
-//       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-//     };
-//   }, []);
+      // 4. Fade the original container away (so only the animated video remains)
+      .to(
+        videoContainer,
+        {
+          opacity: 0,
+          duration: 0.6,
+        },
+        0.9
+      );
 
-//   return (
-//     <>
-//       <section
-//         ref={sectionRef}
-//         className="px-16 py-10 bg-black text-white relative overflow-hidden min-h-screen flex flex-col justify-center"
-//       >
-//         <div className="heading-container mb-8 text-center md:text-left">
-//           <h1 className="text-4xl md:text-5xl font-bold ml-50">
-//             Beyond Boundary
-//           </h1>
-//           <h1 className="text-4xl md:text-5xl font-bold">
-//             Infinite Creativity
-//           </h1>
-//         </div>
+    // Cleanup on unmount
+    return () => {
+      ScrollTrigger.getAll().forEach((t) => t.kill());
+    };
+  }, []);
 
-//         <div className="main-container flex flex-col md:flex-row gap-8 items-center justify-center">
-//           {/* Video Container - 50% width */}
-//           <div
-//             ref={videoContainer}
-//             className="video-container md:w-[50%] flex flex-col origin-center z-50"
-//           >
-//             <video
-//               src="https://www.w3schools.com/html/mov_bbb.mp4"
-//               className="w-full h-auto object-cover rounded-lg"
-//               autoPlay
-//               muted
-//               loop
-//               playsInline
-//             />
-//             <p className="mt-4 text-lg font-medium text-center md:text-left">
-//               Check Out our Showreel
-//             </p>
-//           </div>
+  return (
+    <>
+      <section
+        ref={sectionRef}
+        className="relative px-16 py-10 bg-black text-white overflow-hidden"
+      >
+        {/* ---------- HEADINGS ---------- */}
+        <div className="heading-container mb-8">
+          <h1 className="text-4xl md:text-5xl font-bold ml-50">
+            Beyond Boundary
+          </h1>
+          <h1 className="text-4xl md:text-5xl font-bold">
+            Infinite Creativity
+          </h1>
+        </div>
 
-//           {/* Text Container - 60% width */}
-//           <div
-//             ref={textContainer}
-//             className="text-container md:w-[60%] flex justify-center gap-5 flex-wrap"
-//           >
-//             <h4 className="text-2xl md:w-[45%] md:text-3xl font-semibold mb-4">
-//               Creativity is the Foundation of what we do
-//             </h4>
-//             <p className="text-lg md:w-[55%] leading-relaxed flex items-end">
-//               Heyfynix is a digital production studio that brings your ideas to
-//               life through visually captivating designs and interactive
-//               experiences. With our talented team, we push boundaries by solving
-//               complex problems, delivering tailored solutions that exceed
-//               expectations and engage audiences.
-//             </p>
-//           </div>
-//         </div>
-//       </section>
-//     </>
-//   );
-// };
+        {/* ---------- MAIN CONTENT ---------- */}
+        <div className="main-container flex flex-col md:flex-row gap-8 relative z-10">
+          {/* VIDEO CONTAINER */}
+          <div
+            ref={videoContainerRef}
+            className="video-container md:w-[50%] flex flex-col"
+          >
+            <video
+              ref={videoRef}
+              src="https://www.w3schools.com/html/mov_bbb.mp4"
+              className="w-full h-auto object-cover rounded-lg z-50"
+              autoPlay
+              muted
+              loop
+              playsInline
+            />
+            <p className="mt-4 text-lg font-medium">Check Out our Showreel</p>
+          </div>
 
-// export default InfiniteCreativity;
+          {/* TEXT CONTAINER */}
+          <div
+            ref={textContainerRef}
+            className="text-container md:w-[60%] flex justify-center gap-5"
+          >
+            <h4 className="text-2xl md:w-[45%] md:text-3xl font-semibold mb-4">
+              Creativity is the Foundation of what we do
+            </h4>
+            <p className="text-lg md:w-[55%] leading-relaxed flex items-end">
+              Heyfynix is a digital production studio that brings your ideas to
+              life through visually captivating designs and interactive
+              experiences. With our talented team, we push boundaries by solving
+              complex problems, delivering tailored solutions that exceed
+              expectations and engage audiences.
+            </p>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+};
+
+export default InfiniteCreativity;

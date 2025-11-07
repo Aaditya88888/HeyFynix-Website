@@ -349,7 +349,7 @@ export default function RootLayout({ children }) {
         className={`${inter.variable} ${neueHaas.variable} ${poppins.variable}  antialiased`}
       >
         {/* 👇 This makes the hover canvas global (on all pages) */}
-        {/* <CursorEffect /> */}
+        <CursorEffect />
 
         {/* 👇 Your actual website content */}
         {children}
