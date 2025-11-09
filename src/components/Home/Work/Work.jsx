@@ -20,6 +20,13 @@ const Work = () => {
   const lastX = useRef(0);
   const mouseOverCenter = useRef(false);
 
+  // GSAP Context for safe cleanup
+  useEffect(() => {
+    const ctx = gsap.context(() => {}, containerRef);
+    return () => ctx.revert();
+  }, []);
+
+  // ScrollTrigger + Shrink Animation
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
@@ -31,10 +38,10 @@ const Work = () => {
       end: `+=${duration}`,
       pin: true,
       scrub: 1.5,
+      pinSpacing: true,
       anticipatePin: 1,
     });
 
-    // ✅ Animate all slides on scroll
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: ".image-container",
@@ -44,7 +51,6 @@ const Work = () => {
       },
     });
 
-    // ✅ All slides shrink together
     tl.fromTo(
       ".slide",
       { width: "95vw", height: "95vh" },
@@ -57,23 +63,26 @@ const Work = () => {
     );
   }, []);
 
-  // ✅ Slide Function
+  // Slide Function (GSAP + React Sync)
   const slide = (direction) => {
     if (isAnimating.current) return;
     isAnimating.current = true;
 
     const slides = containerRef.current.querySelectorAll(".slide");
-    const moveX = direction === "right" ? -107.1 : 107.1;
 
-    // Animate slides movement
+    // get current slide width (in px)
+    const slideWidth = slides[0].offsetWidth;
+    const moveX = direction === "right" ? -slideWidth - 20 : slideWidth + 20;
+    // 20px -> small gap adjustment
+
     gsap.to(slides, {
-      xPercent: moveX,
+      x: moveX,
       duration: 1.2,
       ease: "power2.inOut",
       onComplete: () => {
-        // ✅ Update images only AFTER animation ends (no overlap)
-        setImgs((prevImgs) => {
-          const updated = [...prevImgs];
+        // Update images
+        setImgs((prev) => {
+          const updated = [...prev];
           if (direction === "right") {
             const first = updated.shift();
             updated.push(first);
@@ -84,19 +93,21 @@ const Work = () => {
           return updated;
         });
 
-        // ✅ Wait for React to finish re-render, then reset instantly
+        // Reset to new slight offset after re-render
         requestAnimationFrame(() => {
-          gsap.set(slides, { xPercent: 0 });
+          const newSlides = containerRef.current.querySelectorAll(".slide");
+
+          gsap.set(newSlides, {
+            x: direction === "right" ? 14 : -14,
+          });
+
           isAnimating.current = false;
         });
       },
     });
   };
 
-  const handleNext = () => slide("right");
-  const handlePrev = () => slide("left");
-
-  // ✅ Mouse-based slide trigger (center only)
+  // Mouse Drag on Center Slide
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -115,23 +126,22 @@ const Work = () => {
     const handleMouseMove = (e) => {
       if (!mouseOverCenter.current || isAnimating.current) return;
       const deltaX = e.clientX - lastX.current;
-      if (Math.abs(deltaX) > 80) {
-        if (deltaX > 0) slide("left");
-        else slide("right");
+      if (Math.abs(deltaX) > 100) {
+        slide(deltaX > 0 ? "left" : "right");
         lastX.current = e.clientX;
       }
     };
 
-    centerSlide.addEventListener("mouseenter", handleMouseEnter);
-    centerSlide.addEventListener("mouseleave", handleMouseLeave);
-    centerSlide.addEventListener("mousemove", handleMouseMove);
+    centerSlide?.addEventListener("mouseenter", handleMouseEnter);
+    centerSlide?.addEventListener("mouseleave", handleMouseLeave);
+    centerSlide?.addEventListener("mousemove", handleMouseMove);
 
     return () => {
-      centerSlide.removeEventListener("mouseenter", handleMouseEnter);
-      centerSlide.removeEventListener("mouseleave", handleMouseLeave);
-      centerSlide.removeEventListener("mousemove", handleMouseMove);
+      centerSlide?.removeEventListener("mouseenter", handleMouseEnter);
+      centerSlide?.removeEventListener("mouseleave", handleMouseLeave);
+      centerSlide?.removeEventListener("mousemove", handleMouseMove);
     };
-  }, []);
+  }, [imgs]); // Re-attach on imgs change
 
   return (
     <div className="overflow-x-hidden bg-black m-0 text-white">
@@ -151,24 +161,24 @@ const Work = () => {
         </p>
       </div>
 
-      {/* ✅ Image Container */}
+      {/* Image Container */}
       <div
         ref={containerRef}
-        className="image-container flex justify-center items-center gap-8.5 h-screen overflow-hidden relative will-change-transform"
+        className="image-container flex justify-center items-center gap-8.5 h-screen overflow-hidden relative"
         style={{
-          transform: "translateZ(0)",
+          contain: "layout",
           backfaceVisibility: "hidden",
           perspective: "1000px",
+          willChange: "transform",
         }}
       >
         {imgs.map((src, i) => (
           <div
-            key={i}
+            key={src} // Stable key → no DOM destroy
             className={`slide ${
               i === 2 ? "center cursor-pointer" : ""
             } flex-shrink-0 w-[95vw] h-[95vh] relative overflow-hidden`}
             style={{
-              opacity: i < 5 ? 1 : 0,
               transform: "translateZ(0)",
               backfaceVisibility: "hidden",
             }}
@@ -176,20 +186,25 @@ const Work = () => {
             <img
               src={src}
               alt={`Slide ${i}`}
-              className="w-full h-full object-cover select-none pointer-events-none [backface-visibility:hidden] [transform:translateZ(0)]"
+              className="w-full h-full object-cover select-none pointer-events-none"
+              style={{
+                backfaceVisibility: "hidden",
+                transform: "translateZ(0)",
+              }}
+              loading="lazy"
             />
 
             {i === 2 && (
               <>
                 <button
                   onClick={() => slide("left")}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 p-3 rounded-full hover:bg-black/70 transition"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 p-3 rounded-full hover:bg-black/70 transition z-10"
                 >
                   <ChevronLeft size={28} />
                 </button>
                 <button
                   onClick={() => slide("right")}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 p-3 rounded-full hover:bg-black/70 transition"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 p-3 rounded-full hover:bg-black/70 transition z-10"
                 >
                   <ChevronRight size={28} />
                 </button>
@@ -199,100 +214,7 @@ const Work = () => {
         ))}
       </div>
 
-      {/* ✅ Button Section */}
-      <div className="button-container flex justify-center items-center py-16">
-        <Button />
-      </div>
-    </div>
-  );
-};
-
-export default Work;      if (direction === "right") {
-        gsap.set(newSlides[2], { xPercent: 100, opacity: 0 });
-        gsap.to(newSlides[2], {
-          xPercent: 0,
-          opacity: 1,
-          duration: 0.8,
-          ease: "power2.inOut",
-          onComplete: () => (isAnimating.current = false),
-        });
-      } else {
-        gsap.set(newSlides[0], { xPercent: -100, opacity: 0 });
-        gsap.to(newSlides[0], {
-          xPercent: 0,
-          opacity: 1,
-          duration: 0.8,
-          ease: "power2.inOut",
-          onComplete: () => (isAnimating.current = false),
-        });
-      }
-    });
-  };
-
-  const handleNext = () => slide("right");
-  const handlePrev = () => slide("left");
-
-  return (
-    <div className="overflow-x-hidden bg-black m-0 text-white">
-      <div className="text-center py-16 px-6 md:px-12">
-        <h1 className="text-[4vw] sm:text-[3vw] md:text-[2.5vw] font-bold mb-4">
-          Work
-        </h1>
-        <h2 className="text-[2.5vw] sm:text-[2vw] md:text-[1.8vw] font-semibold mb-4">
-          Stuff We’re Super Proud Of
-        </h2>
-        <p className="text-[1.3vw] sm:text-[1.1vw] md:text-[1vw] text-gray-300 max-w-4xl mx-auto leading-relaxed">
-          We’re proud of the problems we’ve solved and the stories we’ve told.
-          From bold branding to immersive films for established brands, our
-          portfolio reflects our commitment to excellence. Here's a peek at what
-          we’ve been up to:
-        </p>
-      </div>
-
-      {/* ✅ Image Section */}
-      <div
-        ref={containerRef}
-        className="image-container flex justify-center items-center gap-5 h-screen overflow-hidden relative"
-      >
-        {/* Left image */}
-        <img
-          className="slide left flex-shrink-0 w-[30vw] h-[40vh] -translate-x-[100vw] opacity-0 object-cover"
-          src={imgs[0]}
-          alt="Image 1"
-        />
-
-        {/* Center image */}
-        <div className="slide center flex-shrink-0 w-[90vw] h-[90vh] opacity-100 relative overflow-hidden">
-          <img
-            className="w-full h-full object-cover"
-            src={imgs[1]}
-            alt="Image 2"
-          />
-
-          {/* Navigation Buttons */}
-          <button
-            onClick={handlePrev}
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 p-3 rounded-full hover:bg-black/70 transition"
-          >
-            <ChevronLeft size={28} />
-          </button>
-          <button
-            onClick={handleNext}
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 p-3 rounded-full hover:bg-black/70 transition"
-          >
-            <ChevronRight size={28} />
-          </button>
-        </div>
-
-        {/* Right image */}
-        <img
-          className="slide right flex-shrink-0 w-[30vw] h-[40vh] translate-x-[100vw] opacity-0 object-cover"
-          src={imgs[2]}
-          alt="Image 3"
-        />
-      </div>
-
-      {/* ✅ Button Section */}
+      {/* Button Section */}
       <div className="button-container flex justify-center items-center py-16">
         <Button />
       </div>
