@@ -1,0 +1,289 @@
+@font-face {
+  font-family: "NeueHaasDisplay";
+  src: url("/neue-haas-grotesk-display-pro-cufonfonts/NeueHaasDisplaymediu.ttf")
+    format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: "NeueHaasDisplay1";
+  src: url("/neue-haas-grotesk-display-pro-cufonfonts/NeueHaasDisplayLight.ttf")
+    format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+:root {
+  --font-inter: "Inter", Arial, sans-serif;
+}
+:root {
+  --bg: #000;
+}
+:root {
+  --bg: #000;
+}
+* {
+  box-sizing: border-box;
+}
+body,
+html,
+#root {
+  margin: 0;
+  padding: 0;
+}
+#loader {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 10000;
+  background: black;
+}
+#loaderCanvas {
+  width: 300px !important;
+  height: 300px !important;
+}
+#loading-bar-container {
+  width: 200px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  margin-top: 20px;
+  overflow: hidden;
+}
+#loading-bar {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #ffaa00, #ffd700);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+#topText {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: "Inter", Arial, sans-serif !important;
+  font-size: clamp(12px, 6vw, 120px);
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -5px;
+  z-index: 9600 !important;
+  pointer-events: auto !important;
+  user-select: none;
+  white-space: nowrap;
+  cursor: pointer;
+  opacity: 1;
+  text-align: center;
+  line-height: 1;
+  -webkit-user-drag: none;
+
+  /* Softer shadow */
+  filter: drop-shadow(0 0 0 #bfbfbf) drop-shadow(0 0 0 #bfbfbf)
+    drop-shadow(0 0 0 #bfbfbf);
+  transition: filter 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Hover for "Hey" → subtle left shift */
+#topText.hover-hey {
+  filter: drop-shadow(1 0 0 #bfbfbf) drop-shadow(3 0 0 #bfbfbf)
+    drop-shadow(5 0 0 #bfbfbf);
+}
+
+/* Hover for "Fynix" → subtle right shift */
+#topText.hover-fynix {
+  filter: drop-shadow(1 0 0 #bfbfbf) drop-shadow(3 0 0 #bfbfbf)
+    drop-shadow(5 0 0 #bfbfbf);
+}
+.bgVideo {
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+#topText span,
+#weAreSpan span,
+#solarText span {
+  will-change: transform, opacity;
+  display: inline-block;
+  backface-visibility: hidden;
+}
+#solarText {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-family: "Inter", Arial, sans-serif !important;
+  font-size: clamp(12px, 4vw, 80px);
+  font-weight: 900;
+  z-index: 9000;
+  pointer-events: none;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  text-align: center;
+  line-height: 1.1;
+}
+.corner-text {
+  position: fixed;
+  font-weight: 200; /* thinner text */
+  color: rgba(226, 223, 223, 0.7); /* slightly lighter color */
+  z-index: 9999;
+  font-family: "Inter", Arial, sans-serif !important;
+  pointer-events: none;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  font-size: clamp(11px, 1.8vw, 20px);
+  text-shadow: none;
+}
+
+/* position */
+.corner-text.left {
+  top: 20vh;
+  left: 3vw;
+  transform: translateY(20px);
+}
+.corner-text.right {
+  top: 20vh;
+  right: 5vw;
+  transform: translateY(20px);
+}
+
+/* Base box */
+.corner-box {
+  position: relative;
+  display: inline-block;
+  border: 2px solid rgba(167, 165, 165, 0.25);
+  border-radius: 25px;
+  padding: 24px 24px;
+  /* background: rgb(17, 17, 17); */
+  box-shadow: none;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+  z-index: 999999; /* 🔝 above stars */
+}
+
+/* Tilt directions */
+.corner-box.left {
+  transform: skew(-25deg);
+}
+.corner-box.right {
+  transform: skew(25deg);
+}
+
+/* Inner wrapper keeps text straight */
+.corner-content {
+  display: inline-block;
+  transform: skew(25deg);
+}
+.corner-box.right .corner-content {
+  transform: skew(-25deg);
+}
+
+/* Black circular background behind quote */
+.corner-box::before {
+  content: "";
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 42px;
+  height: 42px;
+  background: black;
+  border-radius: 50%;
+  box-shadow: none;
+  z-index: 1;
+}
+
+/* White quote image */
+.corner-box.left::after,
+.corner-box.right::after {
+  content: "";
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 35px;
+  background: url("/quates.png") no-repeat center/contain;
+  filter: brightness(0) invert(0.3);
+  z-index: 2;
+}
+
+/* Flip horizontally for right corner */
+.corner-box.left::after {
+  transform: translateX(-50%) scaleX(-1);
+}
+
+/* Hover effect — subtle only */
+.corner-box:hover {
+  transform: translateY(-3px) scale(1.03);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: none;
+}
+
+/* Animated spans */
+.corner-text span {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(20px);
+  will-change: transform, opacity;
+  z-index: 100;
+}
+
+#videoSection {
+  position: fixed;
+  inset: 0;
+  z-index: 8000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: black;
+  pointer-events: none;
+  visibility: visible;
+}
+#astronautVideo {
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  display: block;
+  opacity: 0;
+  visibility: visible;
+  transition: opacity 0.6s linear;
+}
+canvas,
+.three-canvas {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  z-index: 9000; /* pehle 7000 tha */
+  pointer-events: auto;
+  width: 100% !important;
+  height: 100% !important;
+  opacity: 0;
+  transition: opacity 0.3s linear;
+}
+.planet-label {
+  color: white;
+  font-family: NeueHaasDisplay, Arial, sans-serif;
+  font-size: clamp(10px, 1.2vw, 16px);
+  font-weight: bold;
+  pointer-events: none;
+  text-shadow: 0 0 5px black;
+}
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar {
+  display: none;
+}
+@media (max-width: 768px) {
+  #scrollContainer {
+    height: 1200vh;
+  }
+  #solarText {
+    font-size: clamp(10px, 3.5vw, 60px);
+  }
+}
