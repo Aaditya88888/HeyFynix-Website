@@ -76,11 +76,6 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      // <div className="relative">
-      //   <HomeLanding />
-      //   <div className="mt-[1200vh]">
-          {" "}
-          {/* Adjust based on HomeLanding height */}
           <InitialText />
           <InfiniteCreativity />
           <WhoWeAre />
@@ -89,8 +84,6 @@ export default function Home() {
           <Process />
           <MakesUsDifferent />
           <SocialWork />
-      //   </div>
-      // </div>
     </>
   );
 }
