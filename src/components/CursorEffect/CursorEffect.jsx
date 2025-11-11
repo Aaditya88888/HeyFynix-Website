@@ -652,7 +652,12 @@ export default function CursorEffect() {
         vPositionZ = position.z;
 
         gl_Position = projectionMatrix * modelViewMatrix * vec4(curPos, 1.0);
-        gl_PointSize = max(curPos.z * size * diff * pixelRatio, minSize * (pixelRatio > 1.0 ? 1.3 : 1.0));
+        // gl_PointSize = max(curPos.z * size * diff * pixelRatio, minSize * (pixelRatio > 1.0 ? 1.3 : 1.0));
+        float tipScale = mix(0.2, 1.0, vProgress); 
+gl_PointSize = max(
+  curPos.z * size * diff * pixelRatio * tipScale,
+  minSize * (pixelRatio > 1.0 ? 1.3 : 1.0)
+);
       }
     `;
 
@@ -705,7 +710,7 @@ export default function CursorEffect() {
 
     // ---------- Optimized ShootingStar with Reduced Spread ----------
     class ShootingStar {
-      PER_MOUSE = 800;
+      PER_MOUSE = 1200;
       COUNT = this.PER_MOUSE * 300;
       MOUSE_ATTRIBUTE_COUNT = 4;
       FRONT_ATTRIBUTE_COUNT = 2;
@@ -770,8 +775,10 @@ export default function CursorEffect() {
           },
           pixelRatio: { value: window.devicePixelRatio },
           timestamp: { value: 0 },
-          size: { value: 0.05 },
-          minSize: { value: 1.2 },
+          // size: { value: 0.05 },
+          // minSize: { value: 1.2 },
+          size: { value: 0.03 },
+          minSize: { value: 0.4 },
           speed: { value: 0.1 },
           fadeSpeed: { value: 7.0 },
           shortRangeFadeSpeed: { value: 1.8 },

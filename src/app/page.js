@@ -1,3 +1,4 @@
+import StarsBackground from "@/components/StarsBackground/StarsBackground";
 import InfiniteCreativity from "@/components/Home/InfiniteCreativity/InfiniteCreativity";
 import InitialText from "@/components/Home/InitialText/InitialText";
 import MakesUsDifferent from "@/components/Home/MakesUsDifferent/MakesUsDifferent";
@@ -11,6 +12,7 @@ import Work from "@/components/Home/Work/Work";
 export default function Home() {
   return (
     <>
+      <StarsBackground />
       <Navbar />
       <InitialText />
       <InfiniteCreativity />
