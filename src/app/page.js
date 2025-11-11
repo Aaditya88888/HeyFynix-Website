@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import StarsBackground from "@/components/StarsBackground/StarsBackground";
 import InfiniteCreativity from "@/components/Home/InfiniteCreativity/InfiniteCreativity";
 import InitialText from "@/components/Home/InitialText/InitialText";
 import MakesUsDifferent from "@/components/Home/MakesUsDifferent/MakesUsDifferent";
