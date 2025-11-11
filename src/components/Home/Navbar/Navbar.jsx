@@ -45,7 +45,7 @@ export default function LusionNavbar() {
       {/* LEFT SIDE VERTICAL LOGO */}
       <div className="fixed left-16 top-12 z-50">
         <p
-          className="text-white text-4xl font-bold italic leading-none"
+          className="text-white text-3xl md:text-4xl lg:text-5xl font-bold italic leading-none tracking-tight"
           style={{ fontFamily: "'Montserrat', sans-serif" }}
         >
           HEYFYNIX
