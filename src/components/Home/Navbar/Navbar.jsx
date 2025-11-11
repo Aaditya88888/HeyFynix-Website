@@ -46,7 +46,7 @@ export default function LusionNavbar() {
 <div className="fixed left-16 top-12 z-50">
   <p
     className="
-      text-white text-xs font-extrabold italic
+      text-white text-sm font-extrabold italic
       tracking-widest leading-none uppercase
     "
     style={{ fontFamily: "'Montserrat', sans-serif" }}
