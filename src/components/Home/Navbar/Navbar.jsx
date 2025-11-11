@@ -38,44 +38,50 @@ export default function LusionNavbar() {
     <>
       {/* Google Fonts: Montserrat ExtraBold Italic */}
       <link
-  href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Montserrat:ital,wght@1,800&display=swap"
-  rel="stylesheet"
-/>
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Montserrat:ital,wght@1,800&display=swap"
+        rel="stylesheet"
+      />
 
-{/* LEFT SIDE VERTICAL LOGO */}
-<div className="fixed left-16 top-12 z-50">
-  <p
-    className="
-      text-white text-lg font-extrabold italic
-      tracking-widest leading-none uppercase
-    "
-    style={{ fontFamily: "'Montserrat', sans-serif" }}
-  >
-    Heyfynix
-  </p>
-</div>
+      {/* LEFT SIDE VERTICAL LOGO */}
+      <div className="fixed left-16 top-12 z-50">
+        <h2
+          className="text-white text-3xl font-semibold italic leading-none"
+          style={{ fontFamily: "'Montserrat', sans-serif" }}
+        >
+          HEYFYNIX
+        </h2>
+      </div>
 
       {/* RIGHT SIDE BUTTON GROUP */}
-      <div className="fixed right-10 top-10 z-50 flex flex-row items-center space-x-6">
+      <div className="fixed right-10 top-10 z-50 flex flex-row items-center space-x-5">
         {/* SOUND BUTTON */}
- <button
+<button
   onClick={() => setSoundOn(p => !p)}
+  onMouseMove={(e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    e.currentTarget.style.setProperty('--mouse-x', `${x}%`);
+    e.currentTarget.style.setProperty('--mouse-y', `${y}%`);
+  }}
   className="
     group relative flex items-center justify-center
-    w-10 h-10 rounded-full
+    w-11 h-11 rounded-full
     bg-gray-200 backdrop-blur-md 
     overflow-hidden cursor-pointer
   "
   aria-label={soundOn ? 'Mute' : 'Unmute'}
 >
-  {/* ----- BLUE CIRCLE (grows from a dot) ----- */}
+  {/* ----- BLUE CIRCLE (grows from cursor position) ----- */}
   <span
     className="
-      absolute inset-0 rounded-full bg-blue-500
+      absolute inset-0 rounded-full bg-[#F23737]
       scale-0 group-hover:scale-150
       transition-transform duration-400 ease-out
-      origin-left
     "
+    style={{
+      transformOrigin: 'var(--mouse-x, 50%) var(--mouse-y, 50%)'
+    }}
   />
 
   {/* ----- ICON (always on top) ----- */}
@@ -134,7 +140,7 @@ export default function LusionNavbar() {
   className="group flex items-center justify-center 
              px-3 py-3 rounded-full bg-white/20 backdrop-blur-md 
              text-white font-semibold text-sm tracking-tighter
-             hover:bg-blue-500 transition-all duration-300
+             hover:bg-[#F23737] transition-all duration-300
              min-w-[120px] overflow-hidden"
 >
   {/* Reserved space for arrow */}
@@ -146,12 +152,12 @@ export default function LusionNavbar() {
       height={16}
       className="transition-all duration-300
                  opacity-0 group-hover:opacity-100 
-                 -translate-x-1 group-hover:translate-x-0"
+                 -translate-x-4 group-hover:translate-x-0"
     />
   </div>
 
   {/* Text */}
-  <span className="transition-transform duration-300 group-hover:translate-x-0.5">
+  <span className="transition-transform duration-300 -translate-x-2 group-hover:translate-x-2.5">
     LET'S TALK
   </span>
 
@@ -159,38 +165,38 @@ export default function LusionNavbar() {
   <span
     className="w-1 h-1 rounded-full bg-white transition-all duration-300
                opacity-100 group-hover:opacity-0 scale-100 group-hover:scale-0
-               ml-2"
+               ml-2 -translate-x-1 group-hover:translate-x-0"
   />
 </button>
 
         {/* MENU BUTTON */}
-        <button
+       <button
   onClick={() => setMenuOpen(prev => !prev)}
   className={`
     group relative px-2 py-2 rounded-full bg-gray-200 backdrop-blur-md 
-    border border-white text-black font-semibold tracking-wider 
+    border border-white text-black font-semibold tracking-tighter 
     flex items-center justify-center gap-2 transition-all duration-200
     ${menuOpen ? 'bg-white' : 'hover:bg-white'}
-    min-w-[120px]  <!-- Lock minimum width -->
+    min-w-[100px]
   `}
 >
-  {/* Fixed-width text container */}
-  <span className="w-16 text-center">
+  {/* Fixed-width text */}
+  <span className="w-12 text-center">
     {menuOpen ? 'CLOSE' : 'MENU'}
   </span>
 
-  {/* Dots: always w-4, smooth direction change */}
+  {/* Dots container with rotation on hover */}
   <span
     className={`
-      flex gap-1 w-4 justify-center items-center transition-all duration-200
-      ${menuOpen ? 'flex-col' : 'flex-row'}
-      group-hover:flex-col
+      flex gap-1 w-5 justify-center items-center transition-all duration-300 ease-in-out
+      group-hover:rotate-90
+      ${menuOpen ? 'rotate-90' : 'rotate-0'}
     `}
   >
-    <span className="w-1.5 h-1.5 bg-black rounded-full transition-all duration-200"></span>
-    <span className="w-1.5 h-1.5 bg-black rounded-full transition-all duration-200"></span>
+    <span className="w-1 h-1 bg-black rounded-full transition-all duration-200"></span>
+    <span className="w-1 h-1 bg-black rounded-full transition-all duration-200"></span>
   </span>
-        </button>
+</button>
       </div>
 
       {/* MENU OVERLAY */}
@@ -200,3 +206,4 @@ export default function LusionNavbar() {
     </>
   );
 }
+
