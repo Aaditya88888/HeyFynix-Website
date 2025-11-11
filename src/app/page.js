@@ -10,7 +10,7 @@ import SocialWork from "@/components/Home/SocialWork/SocialWork";
 import WhatWeDo from "@/components/Home/WhatWeDo/WhatWeDo";
 import WhoWeAre from "@/components/Home/WhoWeAre/WhoWeAre";
 import Work from "@/components/Home/Work/Work";
-import HomeLanding from "@/components/Solar/HomeLanding";
+// import HomeLanding from "@/components/Solar/HomeLanding";
 
 // import Process from "@/components/Home/Process/Process";
 // import SocialWork from "@/components/Home/SocialWork/SocialWork";
@@ -76,9 +76,9 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <div className="relative">
-        <HomeLanding />
-        <div className="mt-[1200vh]">
+      // <div className="relative">
+      //   <HomeLanding />
+      //   <div className="mt-[1200vh]">
           {" "}
           {/* Adjust based on HomeLanding height */}
           <InitialText />
@@ -89,8 +89,8 @@ export default function Home() {
           <Process />
           <MakesUsDifferent />
           <SocialWork />
-        </div>
-      </div>
+      //   </div>
+      // </div>
     </>
   );
 }
