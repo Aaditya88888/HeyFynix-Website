@@ -44,12 +44,12 @@ export default function LusionNavbar() {
 
       {/* LEFT SIDE VERTICAL LOGO */}
       <div className="fixed left-16 top-12 z-50">
-        <h2
-          className="text-white text-xl font-semibold italic leading-none"
+        <p
+          className="text-white text-2xl font-bold italic leading-none"
           style={{ fontFamily: "'Montserrat', sans-serif" }}
         >
           HEYFYNIX
-        </h2>
+        </p>
       </div>
 
       {/* RIGHT SIDE BUTTON GROUP */}
