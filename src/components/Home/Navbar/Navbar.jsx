@@ -45,7 +45,7 @@ export default function LusionNavbar() {
       {/* LEFT SIDE VERTICAL LOGO */}
       <div className="fixed left-16 top-12 z-50">
         <p
-          className="text-white text-2xl font-bold italic leading-none"
+          className="text-white text-4xl font-bold italic leading-none"
           style={{ fontFamily: "'Montserrat', sans-serif" }}
         >
           HEYFYNIX
@@ -75,7 +75,7 @@ export default function LusionNavbar() {
   {/* ----- BLUE CIRCLE (grows from cursor position) ----- */}
   <span
     className="
-      absolute inset-0 rounded-full bg-[#F23737]
+      absolute inset-0 rounded-full bg-[#FD6001]
       scale-0 group-hover:scale-150
       transition-transform duration-400 ease-out
     "
@@ -140,7 +140,7 @@ export default function LusionNavbar() {
   className="group flex items-center justify-center 
              px-3 py-3 rounded-full bg-white/20 backdrop-blur-md 
              text-white font-semibold text-sm tracking-tighter
-             hover:bg-[#F23737] transition-all duration-300
+             hover:bg-[#FD6001] transition-all duration-300
              min-w-[120px] overflow-hidden"
 >
   {/* Reserved space for arrow */}
@@ -174,8 +174,8 @@ export default function LusionNavbar() {
   onClick={() => setMenuOpen(prev => !prev)}
   className={`
     group relative px-2 py-2 rounded-full bg-gray-200 backdrop-blur-md 
-    border border-white text-black font-semibold tracking-tighter 
-    flex items-center justify-center gap-2 transition-all duration-200
+    border border-white text-sm text-black font-semibold tracking-tighter 
+    flex items-center justify-center gap-2 transition-all duration-300
     ${menuOpen ? 'bg-white' : 'hover:bg-white'}
     min-w-[100px]
   `}
