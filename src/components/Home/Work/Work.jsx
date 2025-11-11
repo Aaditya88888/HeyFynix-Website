@@ -27,18 +27,25 @@ const Work = () => {
     "https://images.pexels.com/photos/257360/pexels-photo-257360.jpeg",
   ]);
 
-  const [showButtons, setShowButtons] = useState(true);
   const containerRef = useRef(null);
   const slidesRef = useRef([]);
+  const leftBtnRef = useRef(null);
+  const rightBtnRef = useRef(null);
   const isAnimating = useRef(false);
   const dragStartX = useRef(0);
   const dragOffset = useRef(0);
 
-  // 🔹 GSAP Scroll + Shrink Animation
   useEffect(() => {
     const ctx = gsap.context(() => {
       const duration = 2500;
 
+      // Prevent jhatka on pin
+      gsap.set(containerRef.current, { y: 0 });
+
+      // Kill any existing triggers
+      ScrollTrigger.getAll().forEach((t) => t.kill());
+
+      // 🟢 Smooth Pin Setup
       ScrollTrigger.create({
         trigger: containerRef.current,
         start: "top top",
@@ -46,15 +53,16 @@ const Work = () => {
         pin: true,
         scrub: 1.5,
         pinSpacing: true,
-        anticipatePin: 1,
+        anticipatePin: 1, // 👈 prevents jump!
       });
 
+      // 🟢 Image shrink on scroll
       gsap.fromTo(
         slidesRef.current,
         { width: "95vw", height: "95vh" },
         {
-          width: "30vw",
-          height: "40vh",
+          width: "33.33vw",
+          height: "35vh",
           ease: "power2.inOut",
           scrollTrigger: {
             trigger: containerRef.current,
@@ -64,16 +72,41 @@ const Work = () => {
           },
         }
       );
+
+      // 🟢 Buttons move closer + scale down
+      gsap.fromTo(
+        [leftBtnRef.current, rightBtnRef.current],
+        {
+          x: (i) => (i === 0 ? "-40vw" : "40vw"),
+          scale: 1,
+        },
+        {
+          x: (i) => (i === 0 ? "-10vw" : "10vw"),
+          scale: 0.7,
+          ease: "power2.inOut",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top top",
+            end: `+=${duration}`,
+            scrub: 1.5,
+          },
+        }
+      );
+
+      // 🟢 Slight delay for layout stabilization
+      requestAnimationFrame(() => ScrollTrigger.refresh());
     });
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      ScrollTrigger.getAll().forEach((t) => t.kill());
+    };
   }, [imgs]);
 
-  // 🔹 Drag + Slide Logic
+  // 🔹 Drag to Slide
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
-
     let isDragging = false;
 
     const handleStart = (e) => {
@@ -96,7 +129,6 @@ const Work = () => {
       if (!isDragging) return;
       isDragging = false;
       container.style.cursor = "grab";
-
       const threshold = window.innerWidth * 0.2;
       const slideWidth = slidesRef.current[0]?.offsetWidth || 0;
       const gap = 34;
@@ -118,7 +150,6 @@ const Work = () => {
               else updated.unshift(updated.pop());
               return updated;
             });
-
             requestAnimationFrame(() => {
               gsap.set(slidesRef.current, { x: 0 });
               isAnimating.current = false;
@@ -149,11 +180,10 @@ const Work = () => {
     };
   }, []);
 
-  // 🔹 Slide via Buttons
+  // 🔹 Manual Button Slide
   const slide = (direction) => {
     if (isAnimating.current) return;
     isAnimating.current = true;
-
     const slideWidth = slidesRef.current[0]?.offsetWidth || 0;
     const gap = 34;
     const moveX =
@@ -170,7 +200,6 @@ const Work = () => {
           else updated.unshift(updated.pop());
           return updated;
         });
-
         requestAnimationFrame(() => {
           gsap.set(slidesRef.current, { x: 0 });
           isAnimating.current = false;
@@ -179,97 +208,99 @@ const Work = () => {
     });
   };
 
-  // 🔹 Buttons Centered on Center Image
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    const updateButtonVisibility = () => {
-      const centerSlide = container.querySelector(".slide.center");
-      if (!centerSlide) return;
-      const rect = centerSlide.getBoundingClientRect();
-      const x = rect.left + rect.width / 2;
-      const y = rect.top + rect.height / 2;
-
-      setShowButtons(true); // Always show buttons on center slide
-    };
-
-    updateButtonVisibility();
-    window.addEventListener("resize", updateButtonVisibility);
-    return () => window.removeEventListener("resize", updateButtonVisibility);
-  }, [imgs]);
-
   return (
     <div className="overflow-x-hidden bg-black text-white">
       {/* Header */}
       <div className="text-center py-16 px-6 md:px-12">
-        <h1 className="text-[4vw] sm:text-[3vw] md:text-[2.5vw] font-bold mb-4">
-          Work
-        </h1>
-        <h2 className="text-[2.5vw] sm:text-[2vw] md:text-[1.8vw] font-semibold mb-4">
+        <h1 className="text-[4vw] font-bold mb-4">Work</h1>
+        <h2 className="text-[2.5vw] font-semibold mb-4">
           Stuff We’re Super Proud Of
         </h2>
-        <p className="text-[1.3vw] sm:text-[1.1vw] md:text-[1vw] text-gray-300 max-w-4xl mx-auto leading-relaxed">
+        <p className="text-[1vw] text-gray-300 max-w-4xl mx-auto leading-relaxed">
           We’re proud of the problems we’ve solved and the stories we’ve told.
-          From bold branding to immersive films for established brands, our
-          portfolio reflects our commitment to excellence.
+          From bold branding to immersive films, our portfolio reflects our
+          commitment to excellence.
         </p>
       </div>
 
-      {/* Image Container */}
+      {/* Images */}
       <div
         ref={containerRef}
-        className="image-container flex justify-center items-center gap-8.5 h-screen overflow-hidden relative"
+        className="relative flex justify-center items-center gap-8 h-screen overflow-hidden"
         style={{
           contain: "layout",
           backfaceVisibility: "hidden",
           perspective: "1000px",
-          willChange: "transform",
           cursor: "grab",
-          touchAction: "none",
         }}
       >
-        {imgs.map((src, i) => (
-          <div
-            key={src}
-            ref={(el) => (slidesRef.current[i] = el)}
-            className={`slide ${
-              i === 2 ? "center" : ""
-            } flex-shrink-0 w-[95vw] h-[95vh] relative overflow-hidden`}
-            style={{ transform: "translateZ(0)", backfaceVisibility: "hidden" }}
-          >
-            <img
-              src={src}
-              alt={`Slide ${i}`}
-              className="w-full h-full object-cover select-none pointer-events-none"
-              style={{
-                backfaceVisibility: "hidden",
-                transform: "translateZ(0)",
-              }}
-              loading="lazy"
-            />
-          </div>
-        ))}
+        {imgs.map((src, i) => {
+          const centerIndex = Math.floor(imgs.length / 2);
 
-        {/* Navigation Buttons */}
-        {showButtons && (
-          <div className="absolute inset-0 flex justify-center items-center pointer-events-none z-20">
-            <div className="relative w-[30vw] h-[40vh] flex justify-between items-center px-8 pointer-events-auto">
-              <button
-                onClick={() => slide("left")}
-                className="bg-black/20 p-3 rounded-full shadow-2xl border border-white/10"
-              >
-                <ChevronLeft size={28} className="text-white" />
-              </button>
-              <button
-                onClick={() => slide("right")}
-                className="bg-black/20 p-3 rounded-full shadow-2xl border border-white/10"
-              >
-                <ChevronRight size={28} className="text-white" />
-              </button>
+          const handleEnter = () => {
+            if (i === centerIndex) {
+              gsap.to([leftBtnRef.current, rightBtnRef.current], {
+                opacity: 1,
+                duration: 0.3,
+                ease: "power2.out",
+                pointerEvents: "auto",
+              });
+            }
+          };
+
+          const handleLeave = (e) => {
+            const related = e.relatedTarget;
+            if (
+              related === leftBtnRef.current ||
+              related === rightBtnRef.current ||
+              leftBtnRef.current.contains(related) ||
+              rightBtnRef.current.contains(related)
+            )
+              return;
+            gsap.to([leftBtnRef.current, rightBtnRef.current], {
+              opacity: 0,
+              duration: 0.3,
+              ease: "power2.out",
+              pointerEvents: "none",
+            });
+          };
+
+          return (
+            <div
+              key={src}
+              ref={(el) => (slidesRef.current[i] = el)}
+              className="slide flex-shrink-0 w-[95vw] h-[95vh] relative overflow-hidden"
+              onMouseEnter={handleEnter}
+              onMouseLeave={handleLeave}
+            >
+              <img
+                src={src}
+                alt={`Slide ${i}`}
+                className="w-full h-full object-cover select-none pointer-events-none"
+                loading="lazy"
+              />
             </div>
-          </div>
-        )}
+          );
+        })}
+
+        {/* Buttons */}
+        <div className="absolute inset-0 flex items-center justify-center z-50 pointer-events-none">
+          <button
+            ref={leftBtnRef}
+            onClick={() => slide("left")}
+            className="pointer-events-auto p-0 m-0 bg-transparent border-none outline-none opacity-0 transition-opacity duration-300"
+          >
+            <ChevronLeft size={48} className="text-white" />
+          </button>
+
+          <button
+            ref={rightBtnRef}
+            onClick={() => slide("right")}
+            className="pointer-events-auto p-0 m-0 bg-transparent border-none outline-none opacity-0 transition-opacity duration-300"
+          >
+            <ChevronRight size={48} className="text-white" />
+          </button>
+        </div>
       </div>
 
       {/* Bottom Button */}
