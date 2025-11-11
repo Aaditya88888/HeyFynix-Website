@@ -38,19 +38,22 @@ export default function LusionNavbar() {
     <>
       {/* Google Fonts: Montserrat ExtraBold Italic */}
       <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Montserrat:ital,wght@1,800&display=swap"
-        rel="stylesheet"
-      />
+  href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Montserrat:ital,wght@1,800&display=swap"
+  rel="stylesheet"
+/>
 
-      {/* LEFT SIDE VERTICAL LOGO */}
-      <div className="fixed left-16 top-12 z-50">
-        <h1
-          className="text-white text-sm font-extrabold italic leading-none"
-          style={{ fontFamily: "'Montserrat', sans-serif" }}
-        >
-          HEYFYNIX
-        </h1>
-      </div>
+{/* LEFT SIDE VERTICAL LOGO */}
+<div className="fixed left-16 top-12 z-50">
+  <p
+    className="
+      text-white text-xs font-extrabold italic
+      tracking-widest leading-none uppercase
+    "
+    style={{ fontFamily: "'Montserrat', sans-serif" }}
+  >
+    Heyfynix
+  </p>
+</div>
 
       {/* RIGHT SIDE BUTTON GROUP */}
       <div className="fixed right-10 top-10 z-50 flex flex-row items-center space-x-6">
