@@ -18,8 +18,8 @@ const Work = () => {
     "https://images.pexels.com/photos/33430991/pexels-photo-33430991.jpeg",
     "https://images.pexels.com/photos/357756/pexels-photo-357756.jpeg",
     "https://images.pexels.com/photos/1591447/pexels-photo-1591447.jpeg",
-    "https://images.pexels.com/photos/34154499/pexels-photo-34154499.jpeg",
     "https://images.pexels.com/photos/34410855/pexels-photo-34410855.jpeg",
+    "https://images.pexels.com/photos/34154499/pexels-photo-34154499.jpeg",
     "https://images.pexels.com/photos/6195951/pexels-photo-6195951.jpeg",
     "https://images.pexels.com/photos/4000376/pexels-photo-4000376.jpeg",
     "https://images.pexels.com/photos/2739141/pexels-photo-2739141.jpeg",
@@ -77,12 +77,12 @@ const Work = () => {
       gsap.fromTo(
         [leftBtnRef.current, rightBtnRef.current],
         {
-          x: (i) => (i === 0 ? "-40vw" : "40vw"),
+          x: (i) => (i === 0 ? "-42vw" : "42vw"),
           scale: 1,
         },
         {
-          x: (i) => (i === 0 ? "-10vw" : "10vw"),
-          scale: 0.7,
+          x: (i) => (i === 0 ? "-12vw" : "12vw"),
+          scale: 0.5,
           ease: "power2.inOut",
           scrollTrigger: {
             trigger: containerRef.current,
