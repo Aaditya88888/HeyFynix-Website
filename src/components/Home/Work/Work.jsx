@@ -35,28 +35,39 @@ const Work = () => {
   const dragStartX = useRef(0);
   const dragOffset = useRef(0);
 
+  // 🧭 Pin + Scroll Animations
   useEffect(() => {
     const ctx = gsap.context(() => {
       const duration = 2500;
 
-      // Prevent jhatka on pin
-      gsap.set(containerRef.current, { y: 0 });
-
-      // Kill any existing triggers
+      // cleanup before setup
       ScrollTrigger.getAll().forEach((t) => t.kill());
+      gsap.set(containerRef.current, { clearProps: "all" });
 
-      // 🟢 Smooth Pin Setup
-      ScrollTrigger.create({
+      // 👇 stabilize layout before pinning
+      gsap.set(containerRef.current, {
+        y: 0,
+        force3D: true,
+        transformOrigin: "center center",
+        willChange: "transform",
+      });
+
+      // ⛔ prevent flicker by pre-forcing scroll refresh
+      ScrollTrigger.refresh(true);
+
+      // 🟢 pin section
+      const trigger = ScrollTrigger.create({
         trigger: containerRef.current,
         start: "top top",
         end: `+=${duration}`,
         pin: true,
-        scrub: 1.5,
+        scrub: 1.2,
         pinSpacing: true,
-        anticipatePin: 1, // 👈 prevents jump!
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
       });
 
-      // 🟢 Image shrink on scroll
+      // 🟢 image resize on scroll
       gsap.fromTo(
         slidesRef.current,
         { width: "95vw", height: "95vh" },
@@ -68,12 +79,12 @@ const Work = () => {
             trigger: containerRef.current,
             start: "top top",
             end: `+=${duration}`,
-            scrub: 1.5,
+            scrub: 1.2,
           },
         }
       );
 
-      // 🟢 Buttons move closer + scale down
+      // 🟢 buttons inward motion
       gsap.fromTo(
         [leftBtnRef.current, rightBtnRef.current],
         {
@@ -88,13 +99,15 @@ const Work = () => {
             trigger: containerRef.current,
             start: "top top",
             end: `+=${duration}`,
-            scrub: 1.5,
+            scrub: 1.2,
           },
         }
       );
 
-      // 🟢 Slight delay for layout stabilization
-      requestAnimationFrame(() => ScrollTrigger.refresh());
+      // ✅ Final flicker-free refresh
+      setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 100);
     });
 
     return () => {
@@ -103,7 +116,7 @@ const Work = () => {
     };
   }, [imgs]);
 
-  // 🔹 Drag to Slide
+  // 🖱️ Drag to slide
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -180,7 +193,7 @@ const Work = () => {
     };
   }, []);
 
-  // 🔹 Manual Button Slide
+  // ▶️ Manual Button Slide
   const slide = (direction) => {
     if (isAnimating.current) return;
     isAnimating.current = true;
@@ -230,6 +243,7 @@ const Work = () => {
         style={{
           contain: "layout",
           backfaceVisibility: "hidden",
+          transformStyle: "preserve-3d",
           perspective: "1000px",
           cursor: "grab",
         }}
