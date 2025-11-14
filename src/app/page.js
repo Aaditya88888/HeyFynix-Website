@@ -9,7 +9,7 @@ import InfiniteCreativity from "@/components/Home/InfiniteCreativity/InfiniteCre
 import WhoWeAre from "@/components/Home/WhoWeAre/WhoWeAre";
 import WhatWeDo from "@/components/Home/WhatWeDo/WhatWeDo";
 import Work from "@/components/Home/Work/Work";
-import Process from "@/components/Home/Process/Proces
+import Process from "@/components/Home/Process/Process";
 import MakesUsDifferent from "@/components/Home/MakesUsDifferent/MakesUsDifferent";
 import SocialWork from "@/components/Home/SocialWork/SocialWork";
 
