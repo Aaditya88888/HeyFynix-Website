@@ -4,7 +4,7 @@ import { useRef } from "react";
 import Navbar from "@/components/Home/Navbar/Navbar";
 import HomeLanding from "@/components/Solar/HomeLanding";
 import CreativeText from "@/components/Solar/CreativeText";
-import InitialText from "@/components/Home/InitialText/InitialText";
+// All Next Sections
 import InfiniteCreativity from "@/components/Home/InfiniteCreativity/InfiniteCreativity";
 import WhoWeAre from "@/components/Home/WhoWeAre/WhoWeAre";
 import WhatWeDo from "@/components/Home/WhatWeDo/WhatWeDo";
@@ -18,10 +18,36 @@ export default function Home() {
 
   return (
     <>
+      {/* NAVBAR */}
       <Navbar />
+
+      {/* SOLAR SYSTEM / HERO SECTION */}
+      {/* <div
+        ref={rootRef}
+        style={{
+          position: "relative",
+          width: "100%",
+          minHeight: "100vh",
+          overflow: "visible",
+        }}
+      > */}
       <HomeLanding />
+      {/* </div> */}
+
+      {/* NEXT SECTIONS - Solar System ke Baad
+      <div
+        id="next-sections"
+        style={{
+          position: "relative",
+          width: "100%",
+          background: "#000",
+          color: "#fff",
+          fontFamily: "var(--font-inter), sans-serif",
+          paddingTop: "10vh",
+          zIndex: 20,
+        }}
+      > */}
       <CreativeText startOffset={0.8} />
-    <InitialText/>
       <InfiniteCreativity />
       <WhoWeAre />
       <WhatWeDo />
