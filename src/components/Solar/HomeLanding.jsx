@@ -1,85 +1,52 @@
 "use client";
-import React, { useEffect, useRef, useCallback } from "react";
-import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import {
-  CSS2DRenderer,
-  CSS2DObject,
-} from "three/examples/jsm/renderers/CSS2DRenderer";
+import React, { useEffect, useRef } from "react";
+import CursorEffect from "../CursorEffect/CursorEffect";
 import { gsap } from "gsap";
-import { Inter } from 'next/font/google';
-import '../Solar/HomeLanding.css';
+import { Inter } from "next/font/google";
+import * as THREE from "three";
+import "../Solar/HomeLanding.css";
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ["latin"] });
 
 export default function MyMainCode() {
   const rootRef = useRef(null);
-  const rendererRef = useRef(null);
-  const labelRendererRef = useRef(null);
-  const animRef = useRef(null);
-  const mouseMoveHandlerGlobalRef = useRef(null);
+  const cursorContainerRef = useRef(null);
+  const starsRendererRef = useRef(null);
+  const starsSceneRef = useRef(null);
+  const starsCameraRef = useRef(null);
+  const starsBgRef = useRef(null);
 
   useEffect(() => {
+    // === DISABLE BROWSER SCROLL RESTORATION ===
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+
     const root = rootRef.current;
     if (!root) return;
 
-    // --- build DOM (same structure as your HTML version) ---
+    // === DOM ===
     root.innerHTML = `
       <div id="loader">
         <canvas id="loaderCanvas" width="300" height="300"></canvas>
         <div id="loading-bar-container"><div id="loading-bar"></div></div>
       </div>
       <div id="topText"></div>
-      <div id="solarText"></div>
-      <div id="welcomeText" class="corner-text left">
-  <div class="corner-box left">
-    <div class="corner-content"></div>
-  </div>
-</div>
-
-<div id="solarIntroText" class="corner-text right">
-  <div class="corner-box right">
-    <div class="corner-content"></div>
-  </div>
-</div>
-
-
       <div id="videoSection">
         <video class="bgVideo" id="astronautVideo" src="/textures/models/video.mp4" type="video/mp4"
-        muted
-        playsinline
-        webkit-playsinline
-        preload="auto"
-        crossorigin="anonymous"
-        loop></video>
+          muted playsinline webkit-playsinline preload="auto" crossorigin="anonymous" loop></video>
       </div>
       <div id="scrollContainer"></div>
     `;
 
-    // Add Inter font to document head
-    const style = document.createElement('style');
-    style.textContent = `
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-      body, #topText, #solarText, .corner-text, #welcomeText, #solarIntroText, #loader {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      }
-    `;
-    document.head.appendChild(style);
-
-    // elements
     const loaderDiv = root.querySelector("#loader");
-    const loaderCanvas = root.querySelector("#loaderCanvas");
-    const loaderCtx = loaderCanvas.getContext("2d");
     const loadingBar = root.querySelector("#loading-bar");
     const topText = root.querySelector("#topText");
-    const solarText = root.querySelector("#solarText");
     const astronautVideo = root.querySelector("#astronautVideo");
     const videoSection = root.querySelector("#videoSection");
     const scrollContainer = root.querySelector("#scrollContainer");
-    
 
-    // scroll container sizing (match HTML)
+    // Scroll container
     scrollContainer.style.height =
       window.innerWidth <= 768 ? "1200vh" : "800vh";
     scrollContainer.style.width = "100%";
@@ -87,80 +54,10 @@ export default function MyMainCode() {
     scrollContainer.style.zIndex = "10";
     scrollContainer.style.background = "transparent";
 
-    // --- THREE setup closely matching your HTML file ---
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      10000
-    );
-    camera.position.set(0, 50, 350);
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.outputEncoding = THREE.sRGBEncoding;
-    // --- Simple environment reflection setup ---
-
-    renderer.domElement.classList.add("three-canvas");
-    renderer.domElement.style.opacity = 0;
-    renderer.domElement.style.visibility = "hidden";
-    rendererRef.current = renderer;
-
-    // label renderer
-    const labelRenderer = new CSS2DRenderer();
-    labelRenderer.setSize(window.innerWidth, window.innerHeight);
-    labelRenderer.domElement.style.position = "absolute";
-    labelRenderer.domElement.style.top = "0px";
-    labelRenderer.domElement.style.pointerEvents = "none";
-    labelRenderer.domElement.style.zIndex = "9999";
-    labelRenderer.domElement.style.opacity = 0;
-    labelRenderer.domElement.style.visibility = "visible";
-    labelRendererRef.current = labelRenderer;
-
-    root.appendChild(renderer.domElement);
-    root.appendChild(labelRenderer.domElement);
-
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
-    controls.enableZoom = false;
-    controls.enablePan = false;
-
-    // lighting
-    // --- LIGHTING (updated: brighter + sun light) ---
-    scene.add(new THREE.AmbientLight(0xffffff, 0.22)); // slightly brighter ambient
-
-    const fillLight1 = new THREE.PointLight(0xffffff, 0.45, 2500);
-    fillLight1.position.set(500, 200, 500);
-    scene.add(fillLight1);
-
-    const fillLight2 = new THREE.PointLight(0xffffff, 0.35, 2000);
-    fillLight2.position.set(-400, -200, -300);
-    scene.add(fillLight2);
-
-    // Stronger hemisphere for overall visibility
-    scene.add(new THREE.HemisphereLight(0xffffff, 0x404040, 0.6)); // brighter soft fill
-
-    // Rim / key light from camera direction (gives visible highlights)
-    const rimLight = new THREE.DirectionalLight(0xffffff, 0.9);
-    rimLight.position.set(0, 200, 400);
-    rimLight.castShadow = false;
-    scene.add(rimLight);
-
-    // Small fill light behind camera
-    const backLight = new THREE.PointLight(0xffffff, 0.45, 1500);
-    backLight.position.set(0, -200, -500);
-    scene.add(backLight);
-
-    // Slightly increase renderer exposure
-    renderer.toneMappingExposure = 1.1;
-
-    // === NEW STARS: SEPARATE SCENE + RENDERER (LIKE CompleteNext) ===
+    // === STARS BACKGROUND (Three.js) ===
     const starsScene = new THREE.Scene();
+    starsSceneRef.current = starsScene;
+
     const starsCamera = new THREE.PerspectiveCamera(
       75,
       window.innerWidth / window.innerHeight,
@@ -168,6 +65,7 @@ export default function MyMainCode() {
       10000
     );
     starsCamera.position.z = 400;
+    starsCameraRef.current = starsCamera;
 
     const starsRenderer = new THREE.WebGLRenderer({
       antialias: true,
@@ -178,10 +76,11 @@ export default function MyMainCode() {
     starsRenderer.domElement.style.position = "fixed";
     starsRenderer.domElement.style.top = "0";
     starsRenderer.domElement.style.left = "0";
-    starsRenderer.domElement.style.zIndex = "8001";
-    starsRenderer.domElement.style.pointerEvents = "none";
+    starsRenderer.domElement.style.zIndex = "800";
     starsRenderer.domElement.style.opacity = "0";
-    starsRenderer.domElement.classList.add("three-canvas");
+    starsRenderer.domElement.style.pointerEvents = "none";
+    starsRendererRef.current = starsRenderer;
+
     root.appendChild(starsRenderer.domElement);
 
     const starGeometry = new THREE.BufferGeometry();
@@ -219,112 +118,17 @@ export default function MyMainCode() {
 
     const starsBg = new THREE.Points(starGeometry, starMaterial);
     starsScene.add(starsBg);
-    // === END NEW STARS ===
+    starsBgRef.current = starsBg;
 
-    const gltfLoader = new GLTFLoader();
-
-    // Solar system group
-    const solarSystem = new THREE.Group();
-    solarSystem.scale.set(0.01, 0.01, 0.01);
-    solarSystem.userData.visible = false;
-    scene.add(solarSystem);
-
-    const planets = [
-      {
-        name: "Sun",
-        radius: 46,
-        distance: 0,
-        speed: 0,
-        rotation: 0.001,
-        file: "the_star_sun.glb",
-        info: "The Sun, star at center.",
-      },
-      {
-        name: "Mercury",
-        radius: 6,
-        distance: 40,
-        speed: 0.008,
-        rotation: 0.004,
-        file: "mercury.glb",
-        info: "Closest planet to Sun.",
-      },
-      {
-        name: "Venus",
-        radius: 9,
-        distance: 60,
-        speed: 0.006,
-        rotation: 0.002,
-        file: "venus.glb",
-        info: "Very hot planet.",
-      },
-      {
-        name: "Earth",
-        radius: 11,
-        distance: 80,
-        speed: 0.004,
-        rotation: 0.01,
-        file: "earth.glb",
-        info: "Our home planet.",
-      },
-      {
-        name: "Mars",
-        radius: 13,
-        distance: 100,
-        speed: 0.003,
-        rotation: 0.008,
-        file: "mars.glb",
-        info: "Red planet.",
-      },
-      {
-        name: "Jupiter",
-        radius: 17,
-        distance: 130,
-        speed: 0.0015,
-        rotation: 0.005,
-        file: "jupiter.glb",
-        info: "Largest planet.",
-      },
-      {
-        name: "Saturn",
-        radius: 16,
-        distance: 155,
-        speed: 0.0012,
-        rotation: 0.008,
-        file: "saturn.glb",
-        info: "Has rings.",
-      },
-      {
-        name: "Uranus",
-        radius: 13,
-        distance: 180,
-        speed: 0.0009,
-        rotation: 0.003,
-        file: "uranus.glb",
-        info: "Rotates on side.",
-      },
-      {
-        name: "Neptune",
-        radius: 10,
-        distance: 200,
-        speed: 0.0009,
-        rotation: 0.003,
-        file: "neptune.glb",
-        info: "Far gas giant.",
-      },
-    ];
-
-    const planetMeshes = [];
-    const orbitMeshes = [];
+    // === VIDEO LOADING ===
     let loadedAssets = 0;
-    let deferredLoaded = 0;
-    const totalAssets = 1 + planets.length; // Video + 9 planets = 10
+    const totalAssets = 1;
 
     function updateProgress() {
-      const totalLoaded = loadedAssets + deferredLoaded;
-      const loadingProgress = Math.floor((totalLoaded / totalAssets) * 100);
-      loadingBar.style.width = `${loadingProgress}%`;
+      const progress = Math.floor((loadedAssets / totalAssets) * 100);
+      loadingBar.style.width = `${progress}%`;
 
-      if (totalLoaded === totalAssets) {
+      if (loadedAssets === totalAssets) {
         gsap.to(loaderDiv, {
           opacity: 0,
           duration: 0.5,
@@ -338,13 +142,9 @@ export default function MyMainCode() {
             videoSection.style.display = "flex";
             document.body.style.overflowY = "auto";
 
-            renderer.render(scene, camera);
-            labelRenderer.render(scene, camera);
-
             showTextAnimation();
-            initSolarText();
-            initCornerTexts();
             initScrollControl();
+            requestAnimationFrame(mainLoop);
           },
         });
       }
@@ -355,161 +155,104 @@ export default function MyMainCode() {
       updateProgress();
     });
 
-   
+    // === TEXT ANIMATION ===
+    function showTextAnimation() {
+      const text = "Hey,we are Fynix";
+      topText.style.fontFamily = "'Inter', sans-serif";
+      topText.style.letterSpacing = "-0.02em";
+      topText.innerHTML = "";
 
-let topSpans = [];
-let weAreSpans = [];
-let currentProgress = 0; // Global for text parallax
-
-function showTextAnimation() {
-  const text = "Hey,we are Fynix";
-  const solarText = document.getElementById("solarText");
-  if (solarText) {
-    solarText.style.fontFamily = "'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
-  }
-  const bgVideo = document.querySelector(".bgVideo"); // video class selector
-
-  topText.style.fontFamily = "'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
-  topText.style.letterSpacing = '-4px';
-  topText.innerHTML = "";
       const parts = text.split(",we are");
       const before = parts[0];
       const after = ",we are ";
       const last = parts[1];
 
-      // Create a container for the text to ensure proper centering
       const textContainer = document.createElement("div");
-      textContainer.style.display = 'flex';
-      textContainer.style.justifyContent = 'center';
-      textContainer.style.alignItems = 'center';
-      textContainer.style.width = '100%';
-      textContainer.style.position = 'relative';
-      textContainer.style.fontSize = 'clamp(2.5rem, 10vw, 8rem)'; // Responsive font size
-      textContainer.style.fontWeight = '700';
-      textContainer.style.letterSpacing = '-0.02em';
+      textContainer.style.display = "flex";
+      textContainer.style.justifyContent = "center";
+      textContainer.style.alignItems = "center";
+      textContainer.style.width = "100%";
+      textContainer.style.position = "relative";
+      textContainer.style.fontSize = "clamp(2.5rem, 10vw, 8rem)";
+      textContainer.style.fontWeight = "700";
+      textContainer.style.letterSpacing = "-0.02em"; // FIXED
 
-  // Create text elements with proper styling for movement
-  const heySpan = document.createElement("span");
-  heySpan.id = "heySpan";
-  heySpan.style.display = "inline-block";
-  heySpan.style.transition = "transform 0.5s ease-out";
-  heySpan.style.fontSize = '1em';
-  heySpan.style.lineHeight = '1';
-  heySpan.textContent = before;
+      const heySpan = document.createElement("span");
+      heySpan.id = "heySpan";
+      heySpan.style.display = "inline-block";
+      heySpan.style.transition = "transform 0.5s ease-out";
+      heySpan.textContent = before;
 
-  const weAreSpan = document.createElement("span");
-  weAreSpan.id = "weAreSpan";
-  weAreSpan.style.display = "inline-block";
-  weAreSpan.style.transition = 'opacity 0.3s ease-out';
-  weAreSpan.style.fontSize = '1em';
-  weAreSpan.style.opacity = '0.9';
-  weAreSpan.style.fontWeight = '700';
-  // weAreSpan.style.margin = '0 0.15em';
-  weAreSpan.style.lineHeight = '1';
-  weAreSpan.textContent = after;
-  weAreSpan.style.marginRight = '0.4em'
+      const weAreSpan = document.createElement("span");
+      weAreSpan.id = "weAreSpan";
+      weAreSpan.style.display = "inline-block";
+      weAreSpan.style.transition = "opacity 0.3s ease-out";
+      weAreSpan.style.opacity = "0.9";
+      weAreSpan.style.fontWeight = "700";
+      weAreSpan.style.marginRight = "0.3em";
+      weAreSpan.textContent = after;
 
-  const fynixSpan = document.createElement("span");
-  fynixSpan.id = "fynixSpan";
-  fynixSpan.style.display = "inline-block";
-  fynixSpan.style.transition = "transform 0.5s ease-out";
-  fynixSpan.style.fontSize = '1em';
-  fynixSpan.style.lineHeight = '1';
-  fynixSpan.textContent = last;
-  fynixSpan.style.marginLeft = '-0.3em'
+      const fynixSpan = document.createElement("span");
+      fynixSpan.id = "fynixSpan";
+      fynixSpan.style.display = "inline-block";
+      fynixSpan.style.transition = "transform 0.5s ease-out";
+      fynixSpan.textContent = last;
+      fynixSpan.style.marginLeft = "-0.2em";
 
-  // Add to DOM
-  textContainer.append(heySpan, weAreSpan, fynixSpan);
-  topText.appendChild(textContainer);
+      textContainer.append(heySpan, weAreSpan, fynixSpan);
+      topText.appendChild(textContainer);
 
-      // Animate text appearance with movement
       gsap.fromTo(
         [heySpan, fynixSpan],
         { x: 0, opacity: 0 },
         { x: 0, opacity: 1, duration: 0.5, ease: "power2.out" }
       );
-     
 
-      // Add scroll-based movement and opacity
-      let isCombined = false;
       const handleScroll = () => {
         const scrollY = window.scrollY;
-        const scrollMax = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollMax =
+          document.documentElement.scrollHeight - window.innerHeight;
         const scrollPercent = Math.min(scrollY / scrollMax, 1);
-        
-        // Phase 1: Move Hey and Fynix towards each other (0% to ~12%)
+
         const movePhaseEnd = 0.12;
         const moveProgress = Math.min(scrollPercent / movePhaseEnd, 1);
-        
-        // Calculate the width of "we are" to know when Hey and Fynix meet
-        const weAreWidth = weAreSpan.offsetWidth;
-        
-        // They move until they meet (covering half the "we are" width each)
-        const moveAmount = (weAreWidth / 2) * moveProgress;
-        
-        // Phase 1: Move text together and fade out "we are"
+
+        const weAreWidth = weAreSpan.offsetWidth || 100;
+        const eased = Math.pow(moveProgress, 0.7);
+        const moveAmount = (weAreWidth / 2) * eased;
+
         if (scrollPercent <= movePhaseEnd) {
           heySpan.style.transform = `translateX(${moveAmount}px)`;
           fynixSpan.style.transform = `translateX(-${moveAmount}px)`;
           weAreSpan.style.opacity = `${1 - moveProgress}`;
-          
-          // When they meet, combine the text
-          if (moveProgress >= 0.95 && !isCombined) {
-            isCombined = true;
-            // Remove the space between hey and fynix
-            textContainer.style.justifyContent = 'center';
-            textContainer.style.letterSpacing = '-0.09em'; // Adjust as needed
-          }
-        } 
-        // Phase 2: Scale down and fade out the combined text
-        else {
-          // Get video progress (0 to 1)
-          const videoProgress = bgVideo ? (bgVideo.currentTime / bgVideo.duration) : 0;
-          
-          // Phase 2a: Scale down (first 50% of scroll after combining)
-          const scalePhaseEnd = movePhaseEnd + (0.6 - movePhaseEnd) * 0.5;
-          if (scrollPercent <= scalePhaseEnd) {
-            const scaleProgress = (scrollPercent - movePhaseEnd) / (scalePhaseEnd - movePhaseEnd);
-            const scale = 1 - (scaleProgress * 0.7); // Scale down to 30%
+        } else {
+          const fadeEnd = 0.3;
+          if (scrollPercent <= fadeEnd) {
+            const fadeProgress =
+              (scrollPercent - movePhaseEnd) / (fadeEnd - movePhaseEnd);
+            const scale = Math.max(0.3, 1 - fadeProgress * 0.7);
+            const opacity = Math.max(0, 1 - fadeProgress);
             textContainer.style.transform = `scale(${scale})`;
-            textContainer.style.transformOrigin = 'center';
-            textContainer.style.opacity = 1 - (scaleProgress * 0.3); // Slight fade
-          }
-          // Phase 2b: Fade out completely (remaining 50% of scroll)
-          else {
-            const fadeOutProgress = (scrollPercent - scalePhaseEnd) / (0.6 - scalePhaseEnd);
-            textContainer.style.opacity = 0.7 - (fadeOutProgress * 0.7); // Fade from 0.7 to 0
-          }
-          
-          // If video is ending, force fade out
-          if (videoProgress > 0.9) {
-            const fadeOutProgress = (videoProgress - 0.9) * 10;
-            textContainer.style.opacity = Math.min(
-              parseFloat(textContainer.style.opacity) || 1, 
-              1 - fadeOutProgress
-            );
+            textContainer.style.opacity = opacity;
+            textContainer.style.visibility = "visible";
+          } else {
+            textContainer.style.visibility = "hidden";
           }
         }
-        
-        // Keep "we are" at its original position (no transform)
-        weAreSpan.style.transform = 'translateX(0)';
       };
 
-      window.addEventListener('scroll', handleScroll);
+      window.addEventListener("scroll", handleScroll);
 
-      // Base shadow
-      topText.style.filter =
-        "drop-shadow(0 0 0 #bfbfbf) drop-shadow(0 0 0 #bfbfbf) drop-shadow(0 0 0 #bfbfbf)";
+      // Hover shadow
+      topText.style.filter = "drop-shadow(0 0 0 #bfbfbf)";
       topText.style.transition = "filter 0.4s cubic-bezier(0.22, 1, 0.36, 1)";
 
-      // Shadow on hover
       heySpan.addEventListener("mouseenter", () => {
         topText.style.filter =
           "drop-shadow(1px 0 0 #bfbfbf) drop-shadow(3px 0 0 #bfbfbf) drop-shadow(5px 0 0 #bfbfbf)";
       });
       heySpan.addEventListener("mouseleave", () => {
-        topText.style.filter =
-          "drop-shadow(0 0 0 #bfbfbf) drop-shadow(0 0 0 #bfbfbf) drop-shadow(0 0 0 #bfbfbf)";
+        topText.style.filter = "drop-shadow(0 0 0 #bfbfbf)";
       });
 
       fynixSpan.addEventListener("mouseenter", () => {
@@ -517,52 +260,50 @@ function showTextAnimation() {
           "drop-shadow(-1px 0 0 #bfbfbf) drop-shadow(-3px 0 0 #bfbfbf) drop-shadow(-5px 0 0 #bfbfbf)";
       });
       fynixSpan.addEventListener("mouseleave", () => {
-        topText.style.filter =
-          "drop-shadow(0 0 0 #bfbfbf) drop-shadow(0 0 0 #bfbfbf) drop-shadow(0 0 0 #bfbfbf)";
+        topText.style.filter = "drop-shadow(0 0 0 #bfbfbf)";
       });
 
-      // ✅ Optimized Parallax + Smooth Scroll
+      // Parallax on "we are"
       let isHovering = false;
       let videoX = 0,
-        videoY = 0;
-      let targetX = 0,
+        videoY = 0,
+        targetX = 0,
         targetY = 0;
-      let parallaxFrame = null; // track animation frame
+      let parallaxFrame = null;
 
       function startParallax() {
-        if (parallaxFrame) return; // already running
+        if (parallaxFrame) return;
         function animate() {
           videoX += (targetX - videoX) * 0.08;
           videoY += (targetY - videoY) * 0.08;
-          gsap.set(bgVideo, { x: videoX, y: videoY });
+          gsap.set(astronautVideo, { x: videoX, y: videoY });
           parallaxFrame = requestAnimationFrame(animate);
         }
         parallaxFrame = requestAnimationFrame(animate);
       }
 
       function stopParallax() {
-        if (parallaxFrame) {
-          cancelAnimationFrame(parallaxFrame);
-          parallaxFrame = null;
-        }
-        gsap.to(bgVideo, { x: 0, y: 0, duration: 0.8, ease: "power3.out" });
+        if (parallaxFrame) cancelAnimationFrame(parallaxFrame);
+        parallaxFrame = null;
+        gsap.to(astronautVideo, {
+          x: 0,
+          y: 0,
+          duration: 0.8,
+          ease: "power3.out",
+        });
       }
 
       weAreSpan.addEventListener("mouseenter", () => {
         isHovering = true;
         startParallax();
       });
-
       weAreSpan.addEventListener("mouseleave", () => {
         isHovering = false;
         stopParallax();
-        topText.style.transform =
-          "translateX(-50%) rotateX(0deg) rotateY(0deg)";
       });
 
       document.addEventListener("mousemove", (e) => {
         if (!isHovering) return;
-
         const rect = weAreSpan.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
@@ -575,281 +316,16 @@ function showTextAnimation() {
         const rotateX = -deltaY * 0.0015;
 
         topText.style.transform = `translateX(-50%) translate(${moveX}px, ${moveY}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-
         targetX = moveX * 3;
         targetY = moveY * 3;
       });
     }
 
-    function initSolarText() {
-      const lines = ["A Creative Space", "Designed by Designers for Designers"];
-
-      solarText.innerHTML = "";
-
-      lines.forEach((line, lineIndex) => {
-        const lineDiv = document.createElement("div");
-        lineDiv.style.display = "block";
-        lineDiv.style.textAlign = "center";
-        lineDiv.style.marginBottom = lineIndex === 0 ? "0.1em" : "0";
-
-        if (lineIndex === 0) {
-          lineDiv.style.fontSize = "2em";
-          lineDiv.style.fontWeight = "900";
-          lineDiv.style.fontStyle = "italic";
-          lineDiv.style.letterSpacing = "1px";
-        } else {
-          lineDiv.style.fontSize = "1.2em";
-          lineDiv.style.fontWeight = "400";
-          lineDiv.style.fontStyle = "italic";
-          lineDiv.style.letterSpacing = "1px";
-        }
-
-        line.split("").forEach((char) => {
-          const span = document.createElement("span");
-          span.textContent = char === " " ? "\u00A0" : char;
-          span.style.opacity = 1;
-          span.style.transform = "translateY(0)";
-          span.style.display = "inline-block";
-          span.style.transition = "opacity 0.3s ease, transform 0.3s ease";
-          lineDiv.appendChild(span);
-        });
-
-        solarText.appendChild(lineDiv);
-      });
-
-      solarText.style.visibility = "visible";
-    }
-
-    function initCornerTexts() {
-      const welcomeText = document.getElementById("welcomeText");
-      const solarIntroText = document.getElementById("solarIntroText");
-
-      const welcomeBox = welcomeText.querySelector(".corner-box.left");
-      const solarBox = solarIntroText.querySelector(".corner-box.right");
-
-      // get corner-content inside
-      const welcomeContent = welcomeBox.querySelector(".corner-content");
-      const solarContent = solarBox.querySelector(".corner-content");
-      
-      // Swap the box classes to reverse the skew directions
-      welcomeBox.classList.remove('left');
-      welcomeBox.classList.add('right');
-      solarBox.classList.remove('right');
-      solarBox.classList.add('left');
-
-      const welcomeLines = [
-        "Every idea starts small",
-        "We nurture it into orbit",
-      ];
-      const solarLines = ["Big visions need space.", "We give them galaxies"];
-
-      function createText(container, lines) {
-        container.innerHTML = "";
-        const linesArray = Array.isArray(lines) ? lines : [lines];
-
-        linesArray.forEach((line, lineIndex) => {
-          const lineDiv = document.createElement("div");
-          lineDiv.style.display = "block";
-          lineDiv.style.textAlign = "center";
-          lineDiv.style.width = "100%";
-          lineDiv.style.margin = "0 auto";
-          lineDiv.style.marginBottom =
-            lineIndex < linesArray.length - 1 ? "0.1em" : "0";
-
-          line.split("").forEach((char) => {
-            const span = document.createElement("span");
-            span.textContent = char === " " ? "\u00A0" : char;
-            span.style.opacity = 0;
-            span.style.transform = "translateY(30px)";
-            span.style.display = "inline-block";
-            lineDiv.appendChild(span);
-          });
-
-          container.appendChild(lineDiv);
-        });
-      }
-
-      createText(welcomeContent, welcomeLines);
-      createText(solarContent, solarLines);
-
-      window.welcomeSpans = Array.from(welcomeContent.querySelectorAll("span"));
-      window.solarIntroSpans = Array.from(
-        solarContent.querySelectorAll("span")
-      );
-    }
-
-    function loadPlanetModel(planet) {
-      gltfLoader.load(
-        `/textures/models/${planet.file}`,
-        (gltf) => {
-          const mesh = gltf.scene;
-
-          mesh.traverse((node) => {
-            if (node.isMesh) {
-              let mat = node.material;
-
-              const applyMaterialProps = (m) => {
-                if (!m) return;
-
-                if (m.isMeshStandardMaterial || m.isMeshPhysicalMaterial) {
-                  if (!m.isMeshStandardMaterial && !m.isMeshPhysicalMaterial)
-                    return;
-
-                  // Sirf baaki planets ke liye thoda correction
-                  if (planet.name !== "Sun") {
-                    if (m.color) {
-                      const avg = (m.color.r + m.color.g + m.color.b) / 3;
-                      if (avg < 0.12) {
-                        m.color.lerp(new THREE.Color(0x888888), 0.35);
-                      }
-                    }
-
-                    m.metalness = Math.min(0.25, m.metalness ?? 0.1);
-                    m.roughness = Math.max(0.25, m.roughness ?? 0.6);
-
-                    if (
-                      !m.emissive ||
-                      m.emissive.equals(new THREE.Color(0x000000))
-                    ) {
-                      m.emissive = new THREE.Color(0x050505);
-                    }
-                    m.emissiveIntensity = Math.max(
-                      0.2,
-                      m.emissiveIntensity ?? 0.4
-                    );
-                  }
-
-                  m.needsUpdate = true;
-                }
-              };
-
-              if (Array.isArray(mat)) mat.forEach(applyMaterialProps);
-              else applyMaterialProps(mat);
-
-              node.castShadow = true;
-              node.receiveShadow = true;
-            }
-          });
-
-          const bbox = new THREE.Box3().setFromObject(mesh);
-          const center = new THREE.Vector3();
-          bbox.getCenter(center);
-          mesh.position.sub(center);
-          const size = new THREE.Vector3();
-          bbox.getSize(size);
-          let scaleFactor = planet.radius / Math.max(size.x, size.y, size.z);
-          if (planet.name === "Sun") scaleFactor *= 0.8;
-          mesh.scale.setScalar(scaleFactor);
-          const pivot = new THREE.Object3D();
-          pivot.rotation.y = Math.random() * Math.PI * 2;
-          pivot.userData.speed = planet.speed;
-          pivot.userData.isPlanet = true;
-          mesh.position.set(planet.distance, 0, 0);
-          pivot.add(mesh);
-          solarSystem.add(pivot);
-
-          const div = document.createElement("div");
-          div.className = "planet-label";
-          div.textContent = `${planet.name}: ${planet.info}`;
-          const label = new CSS2DObject(div);
-          label.position.set(0, planet.radius + 15, 0);
-          label.visible = false;
-          mesh.add(label);
-          mesh.userData.label = label;
-          mesh.userData.isPlanet = true;
-
-          if (planet.distance > 0) {
-            const ringWidth = Math.max(0.06, planet.radius * 0.02 + 0.02);
-            const orbit = new THREE.RingGeometry(
-              planet.distance - ringWidth,
-              planet.distance + ringWidth,
-              256
-            );
-            const orbitMat = new THREE.MeshBasicMaterial({
-              color: 0xffffff,
-              side: THREE.DoubleSide,
-              transparent: true,
-              opacity: 0.25,
-              blending: THREE.AdditiveBlending,
-              depthWrite: false,
-            });
-            const orbitMesh = new THREE.Mesh(orbit, orbitMat);
-            orbitMesh.rotation.x = Math.PI / 2;
-            solarSystem.add(orbitMesh);
-            orbitMeshes.push(orbitMesh);
-          }
-          planetMeshes.push({ mesh, pivot, planet });
-
-          // Success ke baad hi count karo
-          if (planet.name === "Sun") {
-            loadedAssets++;
-          } else {
-            deferredLoaded++;
-          }
-          updateProgress(); // ← Yeh sahi hai
-        },
-        // onProgress (optional) — keep null
-        null,
-        // onError
-        (error) => {
-          console.error(`Failed to load ${planet.file}:`, error);
-          // Fail bhi ho jaye, count karo taaki loader na ruke
-          if (planet.name === "Sun") {
-            loadedAssets++;
-          } else {
-            deferredLoaded++;
-          }
-          updateProgress();
-        }
-      );
-    }
-    planets.forEach(loadPlanetModel);
-
-    function updateMeshMap() {
-      planetMeshes.forEach((p) => {
-        if (p.planet.distance > 0) {
-          p.pivot.rotation.y += p.planet.speed;
-        }
-        p.mesh.rotation.y += p.planet.rotation;
-      });
-
-      orbitMeshes.forEach((mesh) => (mesh.rotation.z += 0.0002));
-    }
-
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-    let lastHoveredPlanet = null;
-    const mouseMoveHandlerPlanet = (event) => {
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-      raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(
-        planetMeshes.map((p) => p.mesh),
-        true
-      );
-      if (lastHoveredPlanet && lastHoveredPlanet.userData.label) {
-        lastHoveredPlanet.userData.label.visible = false;
-      }
-      lastHoveredPlanet = null;
-      if (intersects.length > 0) {
-        let planetObj = intersects[0].object;
-        while (planetObj && !planetObj.userData.isPlanet) {
-          planetObj = planetObj.parent;
-        }
-        if (planetObj && planetObj.userData.label) {
-          planetObj.userData.label.visible = true;
-          lastHoveredPlanet = planetObj;
-        }
-      }
-    };
-    root.addEventListener("mousemove", mouseMoveHandlerPlanet);
-
-    // scroll / video control state
+    // === SCROLL + VIDEO + STARS CONTROL ===
     let targetProgress = 0;
-    let smoothTime = 0.05;
-    let lastScroll = 0;
+    let currentProgress = 0;
+    const smoothTime = 0.08;
     let videoDuration = 0;
-    let lastVideoTime = 0;
 
     astronautVideo.addEventListener("loadedmetadata", () => {
       videoDuration = astronautVideo.duration || 0;
@@ -857,564 +333,137 @@ function showTextAnimation() {
     astronautVideo.pause();
 
     function initScrollControl() {
+      let hasStarted = false;
+      let ticking = false;
+
       const scrollHandler = () => {
-        const now = performance.now();
-        if (now - lastScroll > 10) {
-          const scrollY = window.scrollY;
-          const scrollHeight =
-            scrollContainer.offsetHeight - window.innerHeight;
-          targetProgress = Math.min(scrollY / scrollHeight, 1);
-          lastScroll = now;
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            const scrollY =
+              window.pageYOffset || document.documentElement.scrollTop;
+            const scrollHeight =
+              Math.round(scrollContainer.offsetHeight) - window.innerHeight;
+
+            if (scrollHeight > 0) {
+              let progress = scrollY / scrollHeight;
+              progress = Math.max(0, Math.min(progress, 1));
+
+              // DEADZONE: अगर scrollY < 1px → force 0
+              if (scrollY < 1) {
+                targetProgress = 0;
+              } else {
+                targetProgress = progress;
+              }
+            }
+
+            if (!hasStarted && scrollY > 50 && astronautVideo.readyState >= 2) {
+              hasStarted = true;
+              astronautVideo.play().catch(() => {
+                const playOnInteract = () => astronautVideo.play();
+                document.addEventListener("click", playOnInteract, {
+                  once: true,
+                });
+                document.addEventListener("touchstart", playOnInteract, {
+                  once: true,
+                });
+              });
+            }
+
+            ticking = false;
+          });
+          ticking = true;
         }
       };
-      window.addEventListener("scroll", scrollHandler);
 
-      // === USER INTERACTION SE VIDEO PLAY KARO ===
-      const playVideoOnInteraction = () => {
-        if (astronautVideo.readyState >= 2) {
-          astronautVideo.play().catch(() => {});
+      window.addEventListener("scroll", scrollHandler, { passive: true });
+    }
+
+    function mainLoop() {
+      // Smooth lerp
+      currentProgress += (targetProgress - currentProgress) * smoothTime;
+
+      // FORCE EXACT LOCK WHEN SCROLL STOPS
+      if (Math.abs(targetProgress - currentProgress) < 0.001) {
+        currentProgress = targetProgress; // Snap to exact
+      }
+
+      // Force bounds
+      if (targetProgress === 0) currentProgress = 0;
+      if (targetProgress === 1) currentProgress = 1;
+
+      // === VIDEO PROGRESS ===
+      const videoProgress = Math.min(currentProgress / 0.7, 1);
+      const videoOpacity = Math.max(0, 1 - videoProgress * 1.2);
+
+      if (astronautVideo.readyState >= 2 && videoDuration > 0) {
+        const desiredTime = videoDuration * videoProgress;
+        const timeDiff = desiredTime - astronautVideo.currentTime;
+
+        // Ignore micro-changes
+        if (Math.abs(timeDiff) > 0.01) {
+          astronautVideo.currentTime += timeDiff * 0.22;
+        } else {
+          // LOCK EXACTLY when close
+          astronautVideo.currentTime = desiredTime;
         }
-        // Remove listeners after first play
-        root.removeEventListener("mousemove", playVideoOnInteraction);
-        root.removeEventListener("click", playVideoOnInteraction);
-        root.removeEventListener("touchstart", playVideoOnInteraction);
-      };
+      }
 
-      root.addEventListener("mousemove", playVideoOnInteraction, {
-        once: true,
-      });
-      root.addEventListener("click", playVideoOnInteraction, { once: true });
-      root.addEventListener("touchstart", playVideoOnInteraction, {
-        once: true,
-      });
-      // ==========================================
+      astronautVideo.style.opacity = videoOpacity;
+      astronautVideo.style.visibility = videoOpacity > 0 ? "visible" : "hidden";
+      videoSection.style.display = videoOpacity > 0 ? "flex" : "none";
 
-      astronautVideo.addEventListener("ended", () => {
-        gsap.to(astronautVideo, {
-          opacity: 0,
-          duration: 0.3,
-          onComplete: () => {
-            astronautVideo.style.visibility = "hidden";
-            videoSection.style.display = "none";
-          },
-        });
-      });
+      // === STARS OPACITY ===
+      let starsOpacity = 0;
+      if (currentProgress >= 0.1 && currentProgress <= 1.0) {
+        if (currentProgress <= 0.3)
+          starsOpacity = (currentProgress - 0.1) / 0.2;
+        else if (currentProgress < 0.7) starsOpacity = 1;
+        else starsOpacity = 1 - (currentProgress - 0.7) / 0.3;
+      }
+      starsOpacity = Math.max(0, Math.min(1, starsOpacity));
+      starsRendererRef.current.domElement.style.opacity = starsOpacity;
+
+      // === STARS SMOOTH PARALLAX ===
+      if (starsOpacity > 0.01) {
+        const offset = currentProgress - 0.5;
+        const targetX = offset * 350;
+        const targetY = offset * 280;
+        const targetZ = offset * 350;
+
+        starsBgRef.current.position.x +=
+          (targetX - starsBgRef.current.position.x) * 0.15;
+        starsBgRef.current.position.y +=
+          (targetY - starsBgRef.current.position.y) * 0.15;
+        starsBgRef.current.position.z +=
+          (targetZ - starsBgRef.current.position.z) * 0.15;
+
+        starsRendererRef.current.render(
+          starsSceneRef.current,
+          starsCameraRef.current
+        );
+      } else {
+        starsBgRef.current.position.set(0, 0, 0);
+      }
 
       requestAnimationFrame(mainLoop);
     }
 
-    // function mainLoop() {
-    //   currentProgress += (targetProgress - currentProgress) * smoothTime;
-
-    //   const phaseSplit = 0.7;
-    //   const videoProgress = Math.min(
-    //     Math.max(currentProgress / phaseSplit, 0),
-    //     1
-    //   );
-    //   const videoOpacity = 1 - Math.min(1, videoProgress * 1.2);
-
-    //   if (astronautVideo.readyState >= 2) {
-    //     const desiredTime = videoDuration * videoProgress;
-    //     astronautVideo.currentTime +=
-    //       (desiredTime - astronautVideo.currentTime) * 0.15;
-    //     if (Math.abs(astronautVideo.currentTime - lastVideoTime) < 0.02) {
-    //       astronautVideo.pause();
-    //     } else {
-    //       astronautVideo.play().catch(() => {});
-    //     }
-    //     lastVideoTime = astronautVideo.currentTime;
-    //   }
-
-    //   const sceneProgress = Math.min(
-    //     Math.max((currentProgress - phaseSplit) / (1 - phaseSplit), 0),
-    //     1
-    //   );
-    //   const shouldShowScene = sceneProgress > 0.01;
-
-    //   // Canvas visibility
-    //   renderer.domElement.style.opacity = shouldShowScene ? 1 : 0;
-    //   renderer.domElement.style.visibility = shouldShowScene
-    //     ? "visible"
-    //     : "hidden";
-    //   renderer.domElement.style.pointerEvents = shouldShowScene
-    //     ? "auto"
-    //     : "none";
-
-    //   labelRenderer.domElement.style.opacity = shouldShowScene ? 1 : 0;
-    //   labelRenderer.domElement.style.visibility = shouldShowScene
-    //     ? "visible"
-    //     : "hidden";
-
-    //   // Video fade
-    //   gsap.to(astronautVideo, {
-    //     opacity: videoOpacity,
-    //     duration: 0.4,
-    //     ease: "power2.out",
-    //   });
-    //   astronautVideo.style.visibility = videoOpacity > 0 ? "visible" : "hidden";
-    //   videoSection.style.display = videoOpacity > 0 ? "flex" : "none";
-
-    //   // "we are" fade - handled by scroll handler in showTextAnimation()
-
-    //   // Text scaling is now handled in the scroll handler
-
-    //   // Solar text animations (fade in letter by letter)
-    //   const allSpans = solarText.querySelectorAll("span");
-    //   const letterProgress = sceneProgress * allSpans.length * 1.5;
-    //   allSpans.forEach((span, index) => {
-    //     const letterFadeProgress = Math.min(
-    //       Math.max((letterProgress - index) / 1.5, 0),
-    //       1
-    //     );
-    //     span.style.opacity = letterFadeProgress;
-    //     span.style.transform = `translateY(${(1 - letterFadeProgress) * 30}px)`;
-    //   });
-
-    //   const solarScale = 1 - sceneProgress * 0.3;
-    //   const initialSolarFontSize = 6,
-    //     minSolarFontSize = 1;
-    //   const solarFontSize =
-    //     initialSolarFontSize -
-    //     sceneProgress * (initialSolarFontSize - minSolarFontSize);
-    //   solarText.style.transform = `translateX(-50%) scale(${solarScale})`;
-    //   solarText.style.fontSize = `${solarFontSize}vw`;
-    //   solarText.style.visibility = sceneProgress > 0 ? "visible" : "hidden";
-
-    //   // SOLAR TEXT FADE OUT AFTER 85%
-    //   gsap.to(solarText, {
-    //     opacity: sceneProgress > 0.85 ? 0 : 1,
-    //     duration: 1,
-    //     ease: "power2.out",
-    //   });
-
-    //   // CORNER TEXTS APPEAR AFTER SOLAR TEXT FADES (88% onwards)
-    //   const cornerTextStart = 0.88;
-    //   const cornerTextEnd = 1.0;
-    //   const cornerProgress = Math.min(
-    //     Math.max(
-    //       (sceneProgress - cornerTextStart) / (cornerTextEnd - cornerTextStart),
-    //       0
-    //     ),
-    //     1
-    //   );
-
-    //   const welcomeText = document.getElementById("welcomeText");
-    //   const solarIntroText = document.getElementById("solarIntroText");
-
-    //   if (cornerProgress > 0 && window.welcomeSpans && window.solarIntroSpans) {
-    //     // Show containers
-    //     welcomeText.style.visibility = "visible";
-    //     solarIntroText.style.visibility = "visible";
-
-    //     // Letter-by-letter animation
-    //     const totalLetters =
-    //       Math.max(window.welcomeSpans.length, window.solarIntroSpans.length) *
-    //       2;
-    //     const letterProgress = cornerProgress * totalLetters * 1.2;
-
-    //     // Welcome Text (left)
-    //     window.welcomeSpans.forEach((span, i) => {
-    //       const prog = Math.min(
-    //         Math.max((letterProgress - i * 0.8) / 1.2, 0),
-    //         1
-    //       );
-    //       span.style.opacity = prog;
-    //       span.style.transform = `translateY(${(1 - prog) * 30}px)`;
-    //     });
-
-    //     // Solar Intro (right) - delayed
-    //     const delayOffset = window.welcomeSpans.length * 0.8;
-    //     window.solarIntroSpans.forEach((span, i) => {
-    //       const prog = Math.min(
-    //         Math.max((letterProgress - delayOffset - i * 0.8) / 1.2, 0),
-    //         1
-    //       );
-    //       span.style.opacity = prog;
-    //       span.style.transform = `translateY(${(1 - prog) * 30}px)`;
-    //     });
-
-    //     // Container fade-in + slide up
-    //     const containerOpacity = Math.min(cornerProgress * 3, 1);
-    //     welcomeText.style.opacity = containerOpacity;
-    //     solarIntroText.style.opacity = containerOpacity;
-    //     welcomeText.style.transform = `translateY(${
-    //       (1 - containerOpacity) * 20
-    //     }px)`;
-    //     solarIntroText.style.transform = `translateY(${
-    //       (1 - containerOpacity) * 20
-    //     }px)`;
-    //   } else {
-    //     // Hide if not in range
-    //     if (welcomeText) welcomeText.style.visibility = "hidden";
-    //     if (solarIntroText) solarIntroText.style.visibility = "hidden";
-    //   }
-
-    //   // Three.js Solar System Scale & Position
-    //   if (shouldShowScene) {
-    //     const scaleFactor = window.innerWidth < 768 ? 0.7 : 1;
-    //     const baseScale = 0.15 + (0.8 - 0.15) * sceneProgress;
-
-    //     if (!solarSystem.userData.visible) {
-    //       solarSystem.userData.visible = true;
-    //       gsap.fromTo(
-    //         solarSystem.scale,
-    //         { x: 0.01, y: 0.01, z: 0.01 },
-    //         {
-    //           x: baseScale * scaleFactor,
-    //           y: baseScale * scaleFactor,
-    //           z: baseScale * scaleFactor,
-    //           duration: 0.8,
-    //           ease: "back.out(1.6)",
-    //         }
-    //       );
-    //     } else {
-    //       solarSystem.scale.setScalar(baseScale * scaleFactor);
-    //     }
-
-    //     solarSystem.position.y =
-    //       -window.innerHeight * 2.5 + window.innerHeight * 2.5 * sceneProgress;
-    //     camera.position.z = (350 - 150 * sceneProgress) * scaleFactor;
-    //     camera.lookAt(0, 0, 0);
-    //     controls.enableRotate = sceneProgress > 0.15;
-    //   } else {
-    //     controls.enableRotate = false;
-    //   }
-
-    //   updateMeshMap();
-
-    //   // STARS FADE & PARALLAX
-    //   const starsFadeStart = 0.1;
-    //   const starsFadeEnd = 0.3;
-    //   const starsFadeProgress = Math.min(
-    //     Math.max(
-    //       (currentProgress - starsFadeStart) / (starsFadeEnd - starsFadeStart),
-    //       0
-    //     ),
-    //     1
-    //   );
-
-    //   starsRenderer.domElement.style.opacity = starsFadeProgress;
-
-    //   const scrollOffset = currentProgress - 0.5;
-    //   const starShiftX = scrollOffset * 250;
-    //   const starShiftY = scrollOffset * 180;
-    //   const starShiftZ = scrollOffset * 300;
-    //   starsBg.position.set(starShiftX, starShiftY, starShiftZ);
-
-    //   starsCamera.rotation.copy(camera.rotation);
-    //   starsCamera.position.copy(camera.position);
-    //   starsCamera.position.z = 400;
-    //   controls.update();
-    //   starsRenderer.render(starsScene, starsCamera);
-
-    //   renderer.render(scene, camera);
-    //   labelRenderer.render(scene, camera);
-    //   requestAnimationFrame(mainLoop);
-    // }
-
-    function mainLoop() {
-  currentProgress += (targetProgress - currentProgress) * smoothTime;
-
-  const phaseSplit = 0.7;
-  const videoProgress = Math.min(
-    Math.max(currentProgress / phaseSplit, 0),
-    1
-  );
-  const videoOpacity = 1 - Math.min(1, videoProgress * 1.2);
-
-  if (astronautVideo.readyState >= 2) {
-    const desiredTime = videoDuration * videoProgress;
-    astronautVideo.currentTime +=
-      (desiredTime - astronautVideo.currentTime) * 0.15;
-    if (Math.abs(astronautVideo.currentTime - lastVideoTime) < 0.02) {
-      astronautVideo.pause();
-    } else {
-      astronautVideo.play().catch(() => {});
-    }
-    lastVideoTime = astronautVideo.currentTime;
-  }
-
-  const sceneProgress = Math.min(
-    Math.max((currentProgress - phaseSplit) / (1 - phaseSplit), 0),
-    1
-  );
-  const shouldShowScene = sceneProgress > 0.01;
-
-  // === GLOBAL FADE OUT - Solar system visible until 85%, then fades 85-95% ===
-  const holdUntil = 0.99; // Solar system stays at 100% opacity until 85%
-  const fadeStart = 0.99; // Start fading at 85%
-  const fadeEnd = 1;   // Complete fade by 95%
-  
-  let globalFadeOut = 1;
-  if (sceneProgress > holdUntil) {
-    const fadeProgress = (sceneProgress - fadeStart) / (fadeEnd - fadeStart);
-    globalFadeOut = Math.max(0, 1 - fadeProgress);
-    // Apply smooth easing
-    globalFadeOut = globalFadeOut * globalFadeOut * (3 - 2 * globalFadeOut);
-  }
-
-  // Canvas visibility with fade out
-  const canvasOpacity = (shouldShowScene ? 1 : 0) * globalFadeOut;
-  renderer.domElement.style.opacity = canvasOpacity;
-  renderer.domElement.style.visibility = shouldShowScene && canvasOpacity > 0.01
-    ? "visible"
-    : "hidden";
-  renderer.domElement.style.pointerEvents = shouldShowScene && canvasOpacity > 0.01
-    ? "auto"
-    : "none";
-
-  labelRenderer.domElement.style.opacity = canvasOpacity;
-  labelRenderer.domElement.style.visibility = shouldShowScene && canvasOpacity > 0.01
-    ? "visible"
-    : "hidden";
-
-  // Video fade
-  gsap.to(astronautVideo, {
-    opacity: videoOpacity,
-    duration: 0.4,
-    ease: "power2.out",
-  });
-  astronautVideo.style.visibility = videoOpacity > 0 ? "visible" : "hidden";
-  videoSection.style.display = videoOpacity > 0 ? "flex" : "none";
-
-  // Top text fade with global fade
-  if (topText) {
-    const textContainer = topText.querySelector('div');
-    if (textContainer) {
-      const currentOpacity = parseFloat(textContainer.style.opacity) || 1;
-      // Only apply fade after holdUntil point
-      if (sceneProgress > holdUntil && currentOpacity > 0) {
-        textContainer.style.opacity = currentOpacity * globalFadeOut;
-      }
-    }
-  }
-
-  // Solar text animations (fade in letter by letter)
-  const allSpans = solarText.querySelectorAll("span");
-  const letterProgress = sceneProgress * allSpans.length * 1.5;
-  allSpans.forEach((span, index) => {
-    const letterFadeProgress = Math.min(
-      Math.max((letterProgress - index) / 1.5, 0),
-      1
-    );
-    span.style.opacity = letterFadeProgress * globalFadeOut;
-    span.style.transform = `translateY(${(1 - letterFadeProgress) * 30}px)`;
-  });
-
-  const solarScale = 1 - sceneProgress * 0.3;
-  const initialSolarFontSize = 6,
-    minSolarFontSize = 1;
-  const solarFontSize =
-    initialSolarFontSize -
-    sceneProgress * (initialSolarFontSize - minSolarFontSize);
-  solarText.style.transform = `translateX(-50%) scale(${solarScale})`;
-  solarText.style.fontSize = `${solarFontSize}vw`;
-  solarText.style.visibility = sceneProgress > 0 && globalFadeOut > 0.01 ? "visible" : "hidden";
-
-  // SOLAR TEXT FADE OUT - Modified to work with global fade
-  // Fades at 70% normally, but respects global fade after holdUntil
-  const solarTextLocalFade = sceneProgress > 0.7 ? Math.max(0, 1 - (sceneProgress - 0.7) / 0.15) : 1;
-  const solarTextOpacity = solarTextLocalFade * globalFadeOut;
-  
-  gsap.to(solarText, {
-    opacity: solarTextOpacity,
-    duration: 1,
-    ease: "power2.out",
-  });
-
-  // CORNER TEXTS - Stay visible longer, then fade with global fade
-  const cornerTextStart = 0.75; // Appear earlier at 75%
-  const cornerTextEnd = 0.85;   // Fully visible by 85%
-  const cornerProgress = Math.min(
-    Math.max(
-      (sceneProgress - cornerTextStart) / (cornerTextEnd - cornerTextStart),
-      0
-    ),
-    1
-  );
-
-  const welcomeText = document.getElementById("welcomeText");
-  const solarIntroText = document.getElementById("solarIntroText");
-
-  if (cornerProgress > 0 && window.welcomeSpans && window.solarIntroSpans) {
-    // Show containers
-    const shouldShowCorner = globalFadeOut > 0.01;
-    welcomeText.style.visibility = shouldShowCorner ? "visible" : "hidden";
-    solarIntroText.style.visibility = shouldShowCorner ? "visible" : "hidden";
-
-    // Letter-by-letter animation
-    const totalLetters =
-      Math.max(window.welcomeSpans.length, window.solarIntroSpans.length) *
-      2;
-    const letterProgress = cornerProgress * totalLetters * 1.2;
-
-    // Welcome Text (left) - with global fade
-    window.welcomeSpans.forEach((span, i) => {
-      const prog = Math.min(
-        Math.max((letterProgress - i * 0.8) / 1.2, 0),
-        1
-      );
-      span.style.opacity = prog * globalFadeOut;
-      span.style.transform = `translateY(${(1 - prog) * 30}px)`;
-    });
-
-    // Solar Intro (right) - delayed with global fade
-    const delayOffset = window.welcomeSpans.length * 0.8;
-    window.solarIntroSpans.forEach((span, i) => {
-      const prog = Math.min(
-        Math.max((letterProgress - delayOffset - i * 0.8) / 1.2, 0),
-        1
-      );
-      span.style.opacity = prog * globalFadeOut;
-      span.style.transform = `translateY(${(1 - prog) * 30}px)`;
-    });
-
-    // Container fade-in + slide up - with global fade
-    const containerOpacity = Math.min(cornerProgress * 3, 1) * globalFadeOut;
-    welcomeText.style.opacity = containerOpacity;
-    solarIntroText.style.opacity = containerOpacity;
-    
-    const translateAmount = (1 - Math.min(cornerProgress * 3, 1)) * 20;
-    welcomeText.style.transform = `translateY(${translateAmount}px)`;
-    solarIntroText.style.transform = `translateY(${translateAmount}px)`;
-  } else {
-    // Hide if not in range
-    if (welcomeText) welcomeText.style.visibility = "hidden";
-    if (solarIntroText) solarIntroText.style.visibility = "hidden";
-  }
-
-  // Three.js Solar System Scale & Position
-  if (shouldShowScene) {
-    const scaleFactor = window.innerWidth < 768 ? 0.7 : 1;
-    const baseScale = 0.15 + (0.8 - 0.15) * sceneProgress;
-
-    if (!solarSystem.userData.visible) {
-      solarSystem.userData.visible = true;
-      gsap.fromTo(
-        solarSystem.scale,
-        { x: 0.01, y: 0.01, z: 0.01 },
-        {
-          x: baseScale * scaleFactor,
-          y: baseScale * scaleFactor,
-          z: baseScale * scaleFactor,
-          duration: 0.8,
-          ease: "back.out(1.6)",
-        }
-      );
-    } else {
-      solarSystem.scale.setScalar(baseScale * scaleFactor);
-    }
-
-    solarSystem.position.y =
-      -window.innerHeight * 2.5 + window.innerHeight * 2.5 * sceneProgress;
-    camera.position.z = (350 - 150 * sceneProgress) * scaleFactor;
-    camera.lookAt(0, 0, 0);
-    controls.enableRotate = sceneProgress > 0.15;
-  } else {
-    controls.enableRotate = false;
-  }
-
-  updateMeshMap();
-
-  // STARS FADE & PARALLAX - with global fade
-  const starsFadeStart = 0.1;
-  const starsFadeEnd = 0.3;
-  const starsFadeProgress = Math.min(
-    Math.max(
-      (currentProgress - starsFadeStart) / (starsFadeEnd - starsFadeStart),
-      0
-    ),
-    1
-  );
-
-  starsRenderer.domElement.style.opacity = starsFadeProgress * globalFadeOut;
-
-  const scrollOffset = currentProgress - 0.5;
-  const starShiftX = scrollOffset * 250;
-  const starShiftY = scrollOffset * 180;
-  const starShiftZ = scrollOffset * 300;
-  starsBg.position.set(starShiftX, starShiftY, starShiftZ);
-
-  starsCamera.rotation.copy(camera.rotation);
-  starsCamera.position.copy(camera.position);
-  starsCamera.position.z = 400;
-  controls.update();
-  starsRenderer.render(starsScene, starsCamera);
-
-  renderer.render(scene, camera);
-  labelRenderer.render(scene, camera);
-  requestAnimationFrame(mainLoop);
-}
     const resizeHandler = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      labelRenderer.setSize(window.innerWidth, window.innerHeight);
-
-      // === RESIZE STARS RENDERER ===
-      starsCamera.aspect = window.innerWidth / window.innerHeight;
-      starsCamera.updateProjectionMatrix();
-      starsRenderer.setSize(window.innerWidth, window.innerHeight);
+      starsCameraRef.current.aspect = window.innerWidth / window.innerHeight;
+      starsCameraRef.current.updateProjectionMatrix();
+      starsRendererRef.current.setSize(window.innerWidth, window.innerHeight);
     };
     window.addEventListener("resize", resizeHandler);
 
-    const keydownHandler = (e) => {
-      const scrollHeight = scrollContainer.offsetHeight - window.innerHeight;
-      const step = scrollHeight * 0.05;
-      let scrollY = window.scrollY;
-      if (e.key === "ArrowDown") {
-        scrollY = Math.min(scrollY + step, scrollHeight);
-        window.scrollTo(0, scrollY);
-      }
-      if (e.key === "ArrowUp") {
-        scrollY = Math.max(scrollY - step, 0);
-        window.scrollTo(0, scrollY);
-      }
-    };
-    window.addEventListener("keydown", keydownHandler);
-
-    document.body.style.margin = "0";
-    document.body.style.padding = "0";
-    document.body.style.background = "#000";
-
-    // cleanup
+    // === CLEANUP ===
     return () => {
-      cancelAnimationFrame(animRef.current);
-      window.removeEventListener("resize", resizeHandler);
       window.removeEventListener("scroll", () => {});
-      root.removeEventListener("mousemove", mouseMoveHandlerPlanet);
-      window.removeEventListener("keydown", keydownHandler);
-      if (rendererRef.current) {
-        rendererRef.current.dispose();
-        if (
-          rendererRef.current.domElement &&
-          rendererRef.current.domElement.parentNode
-        ) {
-          rendererRef.current.domElement.parentNode.removeChild(
-            rendererRef.current.domElement
-          );
-        }
-      }
-      if (
-        labelRendererRef.current &&
-        labelRendererRef.current.domElement &&
-        labelRendererRef.current.domElement.parentNode
-      ) {
-        labelRendererRef.current.domElement.parentNode.removeChild(
-          labelRendererRef.current.domElement
-        );
-      }
-      if (mouseMoveHandlerGlobalRef.current) {
-        topText?.removeEventListener(
-          "mousemove",
-          mouseMoveHandlerGlobalRef.current
-        );
-      }
-      if (starsRenderer) {
-        starsRenderer.dispose();
-        if (starsRenderer.domElement && starsRenderer.domElement.parentNode) {
-          starsRenderer.domElement.parentNode.removeChild(
-            starsRenderer.domElement
+      window.removeEventListener("resize", resizeHandler);
+      if (starsRendererRef.current) {
+        starsRendererRef.current.dispose();
+        if (starsRendererRef.current.domElement?.parentNode) {
+          starsRendererRef.current.domElement.parentNode.removeChild(
+            starsRendererRef.current.domElement
           );
         }
       }
@@ -1423,14 +472,26 @@ function showTextAnimation() {
   }, []);
 
   return (
-    <div
-      ref={rootRef}
-      style={{
-        position: "relative",
-        width: "100%",
-        height: "100vh",
-        overflow: "visible",
-      }}
-    />
+    <>
+      <div
+        ref={cursorContainerRef}
+        className="fixed inset-0 pointer-events-none z-[100000000]"
+        style={{ width: "100vw", height: "100vh" }}
+      >
+        {cursorContainerRef.current && (
+          <CursorEffect container={cursorContainerRef.current} />
+        )}
+      </div>
+
+      <div
+        ref={rootRef}
+        style={{
+          position: "relative",
+          width: "100%",
+          minHeight: "100vh",
+          overflow: "visible",
+        }}
+      />
+    </>
   );
 }
