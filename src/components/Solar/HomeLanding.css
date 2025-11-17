@@ -19,6 +19,7 @@
   --text: #ffffff;
   --shadow: #bfbfbf;
 }
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -35,10 +36,10 @@ body {
   overflow-x: hidden;
   scroll-behavior: smooth;
 }
+
 html::-webkit-scrollbar {
   display: none;
 }
-
 /* ================================
    LOADER
    ================================ */
