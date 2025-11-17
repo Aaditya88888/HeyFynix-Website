@@ -1,10 +1,10 @@
+// app/page.jsx
 "use client";
 
-import { useRef } from "react";
 import Navbar from "@/components/Home/Navbar/Navbar";
 import HomeLanding from "@/components/Solar/HomeLanding";
 import CreativeText from "@/components/Solar/CreativeText";
-// All Next Sections
+// import MyMainCode from "@/components/Solar/MyMainCode";
 import InfiniteCreativity from "@/components/Home/InfiniteCreativity/InfiniteCreativity";
 import WhoWeAre from "@/components/Home/WhoWeAre/WhoWeAre";
 import WhatWeDo from "@/components/Home/WhatWeDo/WhatWeDo";
@@ -14,40 +14,16 @@ import MakesUsDifferent from "@/components/Home/MakesUsDifferent/MakesUsDifferen
 import SocialWork from "@/components/Home/SocialWork/SocialWork";
 
 export default function Home() {
-  const rootRef = useRef(null);
-
   return (
-    <>
-      {/* NAVBAR */}
+    <main className="bg-black text-white">
       <Navbar />
-
-      {/* SOLAR SYSTEM / HERO SECTION */}
-      {/* <div
-        ref={rootRef}
-        style={{
-          position: "relative",
-          width: "100%",
-          minHeight: "100vh",
-          overflow: "visible",
-        }}
-      > */}
-      <HomeLanding />
-      {/* </div> */}
-
-      {/* NEXT SECTIONS - Solar System ke Baad
-      <div
-        id="next-sections"
-        style={{
-          position: "relative",
-          width: "100%",
-          background: "#000",
-          color: "#fff",
-          fontFamily: "var(--font-inter), sans-serif",
-          paddingTop: "10vh",
-          zIndex: 20,
-        }}
-      > */}
-      <CreativeText startOffset={0.8} />
+      {/* HERO SECTION */}
+      <section id="hero" className="relative min-h-screen overflow-hidden">
+        <HomeLanding />
+      </section>
+      {/* CREATIVE TEXT */}
+      <CreativeText startOffset={0.87} />
+      {/* OTHER SECTIONS */}
       <InfiniteCreativity />
       <WhoWeAre />
       <WhatWeDo />
@@ -55,7 +31,12 @@ export default function Home() {
       <Process />
       <MakesUsDifferent />
       <SocialWork />
-      {/* </div> */}
-    </>
+      {/* SOLAR SYSTEM */}
+      // <section className="solar-section">
+      //   <div className="solar-inner">
+      //     <MyMainCode />
+      //   </div>
+      // </section>
+    </main>
   );
 }
