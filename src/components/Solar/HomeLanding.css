@@ -20,30 +20,6 @@
   --shadow: #bfbfbf;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-inter);
-  overflow-x: hidden;
-  scroll-behavior: smooth;
-  overscroll-behavior-y: none;
-  touch-action: pan-y;
-}
-
-/* Hide scrollbar */
-html {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
 html::-webkit-scrollbar {
   display: none;
 }
