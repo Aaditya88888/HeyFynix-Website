@@ -19,7 +19,13 @@
   --text: #ffffff;
   --shadow: #bfbfbf;
 }
-
+html,
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-inter);
+  scroll-behavior: smooth;
+}
 html::-webkit-scrollbar {
   display: none;
 }
