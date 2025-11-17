@@ -1,3 +1,7 @@
+/* ================================
+   GLOBAL VARIABLES & RESET
+================================ */
+
 @font-face {
   font-family: "NeueHaasDisplay";
   src: url("/neue-haas-grotesk-display-pro-cufonfonts/NeueHaasDisplaymediu.ttf")
@@ -5,6 +9,7 @@
   font-weight: 500;
   font-style: normal;
 }
+
 @font-face {
   font-family: "NeueHaasDisplay";
   src: url("/neue-haas-grotesk-display-pro-cufonfonts/NeueHaasDisplayLight.ttf")
@@ -20,29 +25,21 @@
   --shadow: #bfbfbf;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
 html,
 body {
-  margin: 0;
-  padding: 0;
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-inter);
-  overflow-x: hidden;
-  scroll-behavior: smooth;
 }
 
 html::-webkit-scrollbar {
   display: none;
 }
+
 /* ================================
    LOADER
-   ================================ */
+================================ */
+
 #loader {
   position: fixed;
   inset: 0;
@@ -110,7 +107,8 @@ html::-webkit-scrollbar {
 
 /* ================================
    VIDEO SECTION
-   ================================ */
+================================ */
+
 #videoSection {
   position: fixed;
   inset: 0;
@@ -133,7 +131,8 @@ html::-webkit-scrollbar {
 
 /* ================================
    THREE.JS CANVAS
-   ================================ */
+================================ */
+
 canvas.three-canvas,
 .three-canvas {
   position: fixed !important;
@@ -173,7 +172,8 @@ canvas.three-canvas,
 
 /* ================================
    SCROLL CONTAINER (Landing Only)
-   ================================ */
+================================ */
+
 #scrollContainer {
   position: relative;
   width: 100%;
@@ -182,7 +182,6 @@ canvas.three-canvas,
   background: transparent;
 }
 
-/* Remove forced height */
 @media (max-width: 768px) {
   #scrollContainer {
     min-height: 100vh;
