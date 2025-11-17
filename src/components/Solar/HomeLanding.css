@@ -19,11 +19,20 @@
   --text: #ffffff;
   --shadow: #bfbfbf;
 }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 html,
 body {
+  margin: 0;
+  padding: 0;
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-inter);
+  overflow-x: hidden;
   scroll-behavior: smooth;
 }
 html::-webkit-scrollbar {
