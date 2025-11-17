@@ -25,11 +25,21 @@
   --shadow: #bfbfbf;
 }
 
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 html,
 body {
+  margin: 0;
+  padding: 0;
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-inter);
+  overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 html::-webkit-scrollbar {
@@ -96,13 +106,11 @@ html::-webkit-scrollbar {
 }
 
 #topText.hover-hey {
-  filter: drop-shadow(1px 0 0 #bfbfbf) drop-shadow(3px 0 0 #bfbfbf)
-    drop-shadow(5px 0 0 #bfbfbf);
+  filter: drop-shadow(1px 0 0 #bfbfbf) drop-shadow(3px 0 0 #bfbfbf) drop-shadow(5px 0 0 #bfbfbf);
 }
 
 #topText.hover-fynix {
-  filter: drop-shadow(-1px 0 0 #bfbfbf) drop-shadow(-3px 0 0 #bfbfbf)
-    drop-shadow(-5px 0 0 #bfbfbf);
+  filter: drop-shadow(-1px 0 0 #bfbfbf) drop-shadow(-3px 0 0 #bfbfbf) drop-shadow(-5px 0 0 #bfbfbf);
 }
 
 /* ================================
