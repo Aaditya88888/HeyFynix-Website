@@ -4,7 +4,6 @@
 import Navbar from "@/components/Home/Navbar/Navbar";
 import HomeLanding from "@/components/Solar/HomeLanding";
 import CreativeText from "@/components/Solar/CreativeText";
-// import MyMainCode from "@/components/Solar/MyMainCode";
 import InfiniteCreativity from "@/components/Home/InfiniteCreativity/InfiniteCreativity";
 import WhoWeAre from "@/components/Home/WhoWeAre/WhoWeAre";
 import WhatWeDo from "@/components/Home/WhatWeDo/WhatWeDo";
@@ -31,12 +30,6 @@ export default function Home() {
       <Process />
       <MakesUsDifferent />
       <SocialWork />
-      {/* SOLAR SYSTEM */}
-      // <section className="solar-section">
-      //   <div className="solar-inner">
-      //     <MyMainCode />
-      //   </div>
-      // </section>
     </main>
   );
 }
