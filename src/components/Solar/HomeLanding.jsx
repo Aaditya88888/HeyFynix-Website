@@ -17,10 +17,10 @@ export default function MyMainCode() {
   const starsBgRef = useRef(null);
 
   useEffect(() => {
-    // === DISABLE BROWSER SCROLL RESTORATION ===
-    if ("scrollRestoration" in history) {
-      history.scrollRestoration = "manual";
-    }
+    // // === DISABLE BROWSER SCROLL RESTORATION ===
+    // if ("scrollRestoration" in history) {
+    //   history.scrollRestoration = "manual";
+    // }
 
     const root = rootRef.current;
     if (!root) return;
@@ -76,11 +76,13 @@ export default function MyMainCode() {
     starsRenderer.domElement.style.position = "fixed";
     starsRenderer.domElement.style.top = "0";
     starsRenderer.domElement.style.left = "0";
-    starsRenderer.domElement.style.zIndex = "800";
+    starsRenderer.domElement.style.zIndex = "8";
     starsRenderer.domElement.style.opacity = "0";
-    starsRenderer.domElement.style.pointerEvents = "none";
-    starsRendererRef.current = starsRenderer;
+    starsRenderer.domElement.style.pointerEvents = "auto"; // <-- IMPORTANT: allow OrbitControls
 
+    starsRendererRef.current = starsRenderer;
+    const existingCanvas = root.querySelector("canvas");
+    if (existingCanvas) existingCanvas.remove();
     root.appendChild(starsRenderer.domElement);
 
     const starGeometry = new THREE.BufferGeometry();
@@ -181,6 +183,7 @@ export default function MyMainCode() {
       heySpan.id = "heySpan";
       heySpan.style.display = "inline-block";
       heySpan.style.transition = "transform 0.5s ease-out";
+      heySpan.style.pointerEvents = "auto"; // <-- allow hover on span
       heySpan.textContent = before;
 
       const weAreSpan = document.createElement("span");
@@ -240,7 +243,7 @@ export default function MyMainCode() {
           }
         }
       };
-
+      window.addEventListener("resize", resizeHandler);
       window.addEventListener("scroll", handleScroll);
 
       // Hover shadow
@@ -453,12 +456,11 @@ export default function MyMainCode() {
       starsCameraRef.current.updateProjectionMatrix();
       starsRendererRef.current.setSize(window.innerWidth, window.innerHeight);
     };
-    window.addEventListener("resize", resizeHandler);
 
     // === CLEANUP ===
     return () => {
-      window.removeEventListener("scroll", () => {});
       window.removeEventListener("resize", resizeHandler);
+      window.removeEventListener("scroll", () => {});
       if (starsRendererRef.current) {
         starsRendererRef.current.dispose();
         if (starsRendererRef.current.domElement?.parentNode) {
