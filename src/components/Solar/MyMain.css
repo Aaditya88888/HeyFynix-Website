@@ -1,0 +1,183 @@
+/* ---------- Fonts (keep your original font-face) ---------- */
+@font-face {
+  font-family: "NeueHaasDisplay";
+  src: url("/neue-haas-grotesk-display-pro-cufonfonts/NeueHaasDisplaymediu.ttf")
+    format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: "NeueHaasDisplay1";
+  src: url("/neue-haas-grotesk-display-pro-cufonfonts/NeueHaasDisplayLight.ttf")
+    format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+:root {
+  --font-inter: "Inter", Arial, sans-serif;
+  --bg: #000;
+}
+
+/* Reset */
+* {
+  box-sizing: border-box;
+}
+body,
+html,
+#root {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: #fff;
+}
+
+/* Corner texts (kept from your file) */
+.corner-text {
+  position: fixed;
+  font-weight: 200;
+  color: rgba(226, 223, 223, 0.7);
+  z-index: 9999;
+  font-family: var(--font-inter) !important;
+  pointer-events: auto !important;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  font-size: clamp(11px, 1.8vw, 20px);
+}
+.corner-text.left {
+  top: 20vh;
+  left: 3vw;
+  transform: translateY(20px);
+}
+.corner-text.right {
+  top: 20vh;
+  right: 5vw;
+  transform: translateY(20px);
+}
+.corner-box {
+  position: relative;
+  display: inline-block;
+  border: 2px solid rgba(167, 165, 165, 0.25);
+  border-radius: 25px;
+  padding: 24px;
+  z-index: 999999;
+}
+.corner-box.left {
+  transform: skew(-25deg);
+}
+.corner-box.right {
+  transform: skew(25deg);
+}
+.corner-content {
+  display: inline-block;
+  transform: skew(25deg);
+}
+.corner-box.right .corner-content {
+  transform: skew(-25deg);
+}
+.corner-box::before {
+  content: "";
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 42px;
+  height: 42px;
+  background: black;
+  border-radius: 50%;
+}
+.corner-box::after {
+  content: "";
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 35px;
+  background: url("/quates.png") no-repeat center/contain;
+  filter: brightness(0) invert(0.3);
+  z-index: 2;
+}
+.corner-box.left::after {
+  transform: translateX(-50%) scaleX(-1);
+}
+
+/* Planet label */
+.planet-label {
+  color: white;
+  font-family: NeueHaasDisplay, Arial, sans-serif;
+  font-size: clamp(10px, 1.2vw, 16px);
+  font-weight: bold;
+  pointer-events: auto !important;
+  text-shadow: 0 0 5px black;
+}
+
+/* ---------- Solar section layout ---------- */
+/* The parent section (in page.jsx) should have class .solar-section */
+.solar-section {
+  position: relative;
+  width: 100vw;
+  /* This controls how long the pinned phase lasts (increase -> longer pin) */
+  min-height: 100vh; /* leave enough room for pin + release; tweak as needed */
+  display: block;
+  overflow: visible;
+}
+
+/* The inner area that gets pinned (100vh viewport area) */
+.solar-section .solar-inner {
+  position: relative;
+  width: 100vw;
+  height: 120vh;
+  overflow: hidden;
+}
+
+/* Canvas container inside solar-inner */
+.solar-canvas-container {
+  position: absolute;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: auto !important; /* enable later when visible */
+  z-index: 5;
+}
+
+/* canvas elements (main + stars) are absolute inside container */
+.three-canvas,
+.stars-canvas,
+.label-renderer {
+  position: absolute !important;
+  inset: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  pointer-events: auto !important;
+}
+
+/* When scene visible we set pointer-events auto on main canvas via JS */
+.three-canvas {
+  z-index: 6;
+}
+.label-renderer {
+  z-index: 7;
+  pointer-events: auto !important;
+}
+.stars-canvas {
+  z-index: 4;
+}
+
+/* ensure next sections not overlapped visually */
+.after-solar-gap {
+  height: 1vh; /* optional extra gap after solar section */
+}
+
+/* hide scrollbars on WebKit if you want */
+html::-webkit-scrollbar {
+  display: none;
+}
+
+/* responsive: reduce star count (already handled in JS), maintain heights */
+@media (max-width: 768px) {
+  .solar-section {
+    min-height: 300vh; /* allow longer pin on mobile */
+  }
+}
