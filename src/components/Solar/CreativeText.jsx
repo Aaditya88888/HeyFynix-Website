@@ -7,6 +7,7 @@ export default function CreativeText({
   revealRange = 0.12,
 }) {
   const containerRef = useRef(null);
+  const canvasRef = useRef(null);
   const rafRef = useRef(null);
   const stateRef = useRef({
     initialized: false,
@@ -17,6 +18,70 @@ export default function CreativeText({
     centerTolerance: 30,
   });
 
+  // ============ STARS BACKGROUND EFFECT ============
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    let animationFrame;
+
+    // Resize canvas
+    const resizeCanvas = () => {
+      canvas.width = canvas.offsetWidth * devicePixelRatio;
+      canvas.height = canvas.offsetHeight * devicePixelRatio;
+      ctx.scale(devicePixelRatio, devicePixelRatio);
+    };
+
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+
+    // Create stars
+    const stars = [];
+    const starCount = window.innerWidth < 768 ? 80 : 150;
+
+    for (let i = 0; i < starCount; i++) {
+      stars.push({
+        x: Math.random() * canvas.offsetWidth,
+        y: Math.random() * canvas.offsetHeight,
+        radius: Math.random() * 1.3 + 0.4,
+        opacity: Math.random() * 0.5 + 0.3,
+        twinkleSpeed: Math.random() * 0.02 + 0.01,
+        twinklePhase: Math.random() * Math.PI * 2,
+      });
+    }
+
+    let time = 0;
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+
+      stars.forEach((star) => {
+        const twinkle =
+          Math.sin(time * star.twinkleSpeed + star.twinklePhase) * 0.2 + 0.4;
+        const opacity = star.opacity * twinkle;
+
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = "#ffffff";
+        ctx.fill();
+      });
+
+      ctx.shadowBlur = 0;
+      time += 0.8;
+      animationFrame = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      window.removeEventListener("resize", resizeCanvas);
+      if (animationFrame) cancelAnimationFrame(animationFrame);
+    };
+  }, []);
+
+  // ============ MAIN LOGIC (Same as before) ============
   useEffect(() => {
     let mounted = true;
     let retryInterval = null;
@@ -29,7 +94,8 @@ export default function CreativeText({
     function buildDOM() {
       const container = containerRef.current;
       if (!container) return null;
-      container.innerHTML = "";
+      const textWrapper = container.querySelector(".text-wrapper") || container;
+      textWrapper.innerHTML = "";
 
       const lines = ["A Creative Space", "Designed by Designers for Designers"];
       const allSpans = [];
@@ -40,11 +106,11 @@ export default function CreativeText({
           text-align:center;
           margin-bottom:${i === 0 ? "0.1em" : "0"};
           font-size:${
-            i === 0 ? "clamp(2rem,6vw,6rem)" : "clamp(1.2rem,3.5vw,3rem)"
+            i === 0 ? "clamp(2.5rem,7vw,7rem)" : "clamp(1.4rem,4vw,3.5rem)"
           };
-          font-weight:${i === 0 ? "900" : "400"};
+          font-weight:${i === 0 ? "900" : "500"};
           font-style:italic;
-          letter-spacing:1px;
+          letter-spacing:1.5px;
           line-height:1.1;
           white-space: nowrap;
         `;
@@ -53,13 +119,13 @@ export default function CreativeText({
           const span = document.createElement("span");
           span.textContent = char === " " ? "\u00A0" : char;
           span.style.opacity = "0";
-          span.style.transform = "translateX(-30px)";
+          span.style.transform = "translateX(-40px)";
           span.style.display = "inline-block";
-          span.style.transition = "opacity 0.4s ease, transform 0.4s ease";
+          span.style.transition = "opacity 0.6s ease, transform 0.6s ease";
           lineDiv.appendChild(span);
           allSpans.push(span);
         });
-        container.appendChild(lineDiv);
+        textWrapper.appendChild(lineDiv);
       });
       return allSpans;
     }
@@ -77,27 +143,22 @@ export default function CreativeText({
     function pinElement() {
       const el = containerRef.current;
       if (!el || stateRef.current.isPinned) return;
-
       el.style.position = "fixed";
       el.style.top = "50%";
       el.style.left = "50%";
       el.style.transform = "translate(-50%, -50%)";
-      el.style.width = "100%";
       stateRef.current.isPinned = true;
     }
 
     function unpinElement() {
       const el = containerRef.current;
       if (!el || !stateRef.current.isPinned) return;
-
       const rect = el.getBoundingClientRect();
       const currentTop = window.scrollY + rect.top;
-
       el.style.position = "absolute";
       el.style.top = `${currentTop}px`;
       el.style.left = "50%";
       el.style.transform = "translateX(-50%)";
-      el.style.width = "100%";
       stateRef.current.isPinned = false;
     }
 
@@ -108,10 +169,8 @@ export default function CreativeText({
       const currentScrollY = window.pageYOffset;
       const direction = currentScrollY > lastScrollY ? "down" : "up";
       lastScrollY = currentScrollY;
-
       const prog = computeContainerProgress(scrollContainer);
 
-      // === INITIALIZE DOM + SHOW TEXT ===
       if (!stateRef.current.initialized && prog >= startOffset) {
         stateRef.current.allSpans = buildDOM();
         stateRef.current.totalLetters = stateRef.current.allSpans.length;
@@ -119,8 +178,8 @@ export default function CreativeText({
 
         const el = containerRef.current;
         if (el) {
-          el.style.opacity = "1"; // ← YEH MISSING THA!
-          el.style.visibility = "visible"; // ← YEH BHI!
+          el.style.opacity = "1";
+          el.style.visibility = "visible";
         }
       }
 
@@ -138,7 +197,6 @@ export default function CreativeText({
       );
       const isFullyRevealed = localProgress >= 1;
 
-      // === UNPIN ===
       if (
         isFullyRevealed &&
         direction === "down" &&
@@ -148,23 +206,20 @@ export default function CreativeText({
         unpinElement();
       }
 
-      // === REPIN ===
       if (!stateRef.current.isPinned && direction === "up") {
         const rect = el.getBoundingClientRect();
         const centerY = window.innerHeight / 2;
         const elementCenter = rect.top + rect.height / 2;
         const diff = Math.abs(elementCenter - centerY);
-
         if (diff <= stateRef.current.centerTolerance) {
           pinElement();
           stateRef.current.wasFullyRevealed = false;
         }
       }
 
-      // === REVEAL ANIMATION ===
       const spans = stateRef.current.allSpans || [];
       const total = stateRef.current.totalLetters;
-      const showCount = Math.floor(localProgress * total);
+      const showCount = Math.floor(localProgress * total * 1.1);
 
       spans.forEach((s, i) => {
         if (i < showCount) {
@@ -172,30 +227,23 @@ export default function CreativeText({
           s.style.transform = "translateX(0px)";
         } else {
           s.style.opacity = "0";
-          s.style.transform = "translateX(-30px)";
+          s.style.transform = "translateX(-40px)";
         }
       });
 
-      // Continue loop
-      if (mounted) {
-        rafRef.current = requestAnimationFrame(checkPinStatus);
-      }
+      if (mounted) rafRef.current = requestAnimationFrame(checkPinStatus);
     }
 
     function onScroll() {
-      if (!rafRef.current) {
+      if (!rafRef.current)
         rafRef.current = requestAnimationFrame(checkPinStatus);
-      }
     }
 
     function startWatching() {
       const sc = findScrollContainer();
       if (sc) {
         lastScrollY = window.pageYOffset;
-
-        // Start RAF loop
         rafRef.current = requestAnimationFrame(checkPinStatus);
-
         window.addEventListener("scroll", onScroll, { passive: true });
         window.addEventListener("resize", onScroll);
       } else {
@@ -206,9 +254,7 @@ export default function CreativeText({
           if (sc2) {
             clearInterval(retryInterval);
             startWatching();
-          } else if (tries > 40) {
-            clearInterval(retryInterval);
-          }
+          } else if (tries > 40) clearInterval(retryInterval);
         }, 60);
       }
     }
@@ -230,19 +276,48 @@ export default function CreativeText({
       className="creativeText"
       style={{
         width: "100%",
-        textAlign: "center",
-        opacity: 0, // ← Start hidden
-        visibility: "hidden", // ← Start hidden
-        transition: "opacity 0.3s ease",
+        height: "100vh",
         position: "fixed",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        zIndex: 900,
+        top: "50%", // ← center vertically
+        left: "50%", // ← center horizontally
+        transform: "translate(-50%, -50%)", // ← proper centering
+        opacity: 0,
+        visibility: "hidden",
         pointerEvents: "none",
-        fontFamily: "var(--font-inter), sans-serif",
-        color: "#fff",
+        zIndex: 900,
+        overflow: "hidden",
       }}
-    />
+    >
+      {/* Stars Canvas Background */}
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          background: "transparent",
+          zIndex: 1,
+        }}
+      />
+
+      {/* Text Content */}
+      <div
+        className="text-wrapper"
+        style={{
+          position: "relative",
+          zIndex: 2,
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "0 2rem",
+          fontFamily: "var(--font-inter), sans-serif",
+          color: "#fff",
+        }}
+      />
+    </div>
   );
 }
