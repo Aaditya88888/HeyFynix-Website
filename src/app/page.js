@@ -1,35 +1,34 @@
-// app/page.jsx
 "use client";
-
-import Navbar from "@/components/Home/Navbar/Navbar";
+import React from "react";
+import Navbar from "@/components/Home/Navbar/Navbar"; // keep your existing Navbar
 import HomeLanding from "@/components/Solar/HomeLanding";
 import CreativeText from "@/components/Solar/CreativeText";
-import InfiniteCreativity from "@/components/Home/InfiniteCreativity/InfiniteCreativity";
-import WhoWeAre from "@/components/Home/WhoWeAre/WhoWeAre";
-import WhatWeDo from "@/components/Home/WhatWeDo/WhatWeDo";
-import Work from "@/components/Home/Work/Work";
-import Process from "@/components/Home/Process/Process";
-import MakesUsDifferent from "@/components/Home/MakesUsDifferent/MakesUsDifferent";
-import SocialWork from "@/components/Home/SocialWork/SocialWork";
+import MyMainCode from "@/components/Solar/MyMainCode";
 
-export default function Home() {
+export default function Page() {
   return (
-    <main className="bg-black text-white">
+    <main className="w-full bg-black text-white">
       <Navbar />
-      {/* HERO SECTION */}
-      <section id="hero" className="relative min-h-screen overflow-hidden">
+
+      {/* SECTION 1 */}
+      <section className="min-h-screen flex items-center justify-center bg-black">
         <HomeLanding />
       </section>
-      {/* CREATIVE TEXT */}
-      <CreativeText startOffset={0.87} />
-      {/* OTHER SECTIONS */}
-      <InfiniteCreativity />
-      <WhoWeAre />
-      <WhatWeDo />
-      <Work />
-      <Process />
-      <MakesUsDifferent />
-      <SocialWork />
+
+      {/* SECTION 2 */}
+      <section className="min-h-screen flex items-center justify-center bg-black">
+        <CreativeText startOffset={0.87} />
+      </section>
+
+      {/* SOLAR SECTION (Canvas scrolls with content) */}
+      <section className="solar-section min-h-screen flex items-center justify-center bg-black">
+        <div className="solar-inner w-full max-w-6xl px-4">
+          <MyMainCode />
+        </div>
+      </section>
+
+      {/* gap & following sections */}
+      <div className="after-solar-gap" style={{ height: "5vh" }} />
     </main>
   );
 }
