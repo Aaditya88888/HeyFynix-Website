@@ -119,17 +119,19 @@ html,
   position: relative;
   width: 100vw;
   /* This controls how long the pinned phase lasts (increase -> longer pin) */
-  min-height: 100vh; /* leave enough room for pin + release; tweak as needed */
+  height: 100vh; /* leave enough room for pin + release; tweak as needed */
   display: block;
-  overflow: visible;
+  margin: 0; /* ← extra margin hata do */
+  padding: 0;
+  overflow: visible !important;
 }
 
 /* The inner area that gets pinned (100vh viewport area) */
 .solar-section .solar-inner {
   position: relative;
   width: 100vw;
-  height: 120vh;
-  overflow: hidden;
+  height: 100vh;
+  overflow: visible !important;
 }
 
 /* Canvas container inside solar-inner */
@@ -140,6 +142,7 @@ html,
   height: 100vh;
   pointer-events: auto !important; /* enable later when visible */
   z-index: 5;
+  overflow: visible !important;
 }
 
 /* canvas elements (main + stars) are absolute inside container */
