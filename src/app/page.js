@@ -6,7 +6,8 @@ import CreativeText from "@/components/Solar/CreativeText";
 import MyMainCode from "@/components/Solar/MyMainCode";
 import WhoWeAre from "@/components/Home/WhoWeAre/WhoWeAre";
 import WhatWeDo from "@/components/Home/WhatWeDo/WhatWeDo";
-import WhatWeDo from "@/components/Home/InfiniteCreativity/InfiniteCreativity";
+import InfiniteCreativity from "@/components/Home/InfiniteCreativity/InfiniteCreativity";
+import Process from "@/components/Home/Process/Process";
 
 export default function Page() {
   return (
@@ -32,12 +33,13 @@ export default function Page() {
       <div style={{ height: "10vh" }} />
 
       {/* SECTION 4 */}
-<InfiniteCreativity />
+      <InfiniteCreativity />
 
       <WhoWeAre />
 
       {/* SECTION 5 */}
       <WhatWeDo />
+      <Process />
     </main>
   );
 }
