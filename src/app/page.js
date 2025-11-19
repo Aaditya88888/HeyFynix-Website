@@ -6,37 +6,35 @@ import CreativeText from "@/components/Solar/CreativeText";
 import MyMainCode from "@/components/Solar/MyMainCode";
 import WhoWeAre from "@/components/Home/WhoWeAre/WhoWeAre";
 import WhatWeDo from "@/components/Home/WhatWeDo/WhatWeDo";
-import InfiniteCreativity from "@/components/Home/InfiniteCreativity/InfiniteCreativity";
-import Process from "@/components/Home/Process/Process";
 
 export default function Page() {
   return (
-    <main className=" bg-black text-white">
+    <main className="w-full bg-black text-white">
       <Navbar />
 
-      {/* SECTION 1 */}
+      {/* SECTION 1 — Home intro */}
       <section className="min-h-screen flex items-center justify-center bg-black">
         <HomeLanding />
       </section>
 
-      {/* SECTION 2*/}
+      {/* SECTION 2 — CreativeText (StartOffset: 0.87) */}
       <section className="min-h-screen flex items-center justify-center bg-black">
         <CreativeText startOffset={0.87} />
       </section>
-      
 
-      {/* SOLAR SECTION */}
-      <section className="solar-section min-h-screen flex items-center justify-center bg-black">
-        <div className="solar-inner w-full max-w-6xl px-4">
-          <MyMainCode />
-        </div>
+      {/* SECTION 3 — Solar Canvas */}
+      <section className="min-h-screen bg-black">
+        <MyMainCode />
       </section>
 
-      <div className="after-solar-gap" style={{ height: "5vh" }} />
-      <InfiniteCreativity />
+      {/* GAP */}
+      <div style={{ height: "10vh" }} />
+
+      {/* SECTION 4 */}
       <WhoWeAre />
+
+      {/* SECTION 5 */}
       <WhatWeDo />
-      <Process />
     </main>
   );
 }
