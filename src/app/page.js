@@ -20,9 +20,9 @@ export default function Page() {
       </section>
 
       {/* SECTION 2 */}
-      <section className="min-h-screen flex items-center justify-center bg-black">
-        <CreativeText startOffset={0.87} />
-      </section>
+      // <section className="min-h-screen flex items-center justify-center bg-black">
+      //   <CreativeText startOffset={0.87} />
+      // </section>
 
       {/* SOLAR SECTION (Canvas scrolls with content) */}
       <section className="solar-section min-h-screen flex items-center justify-center bg-black">
