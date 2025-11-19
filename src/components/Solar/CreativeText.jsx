@@ -26,7 +26,6 @@ export default function CreativeText({
     const ctx = canvas.getContext("2d");
     let animationFrame;
 
-    // Resize canvas
     const resizeCanvas = () => {
       canvas.width = canvas.offsetWidth * devicePixelRatio;
       canvas.height = canvas.offsetHeight * devicePixelRatio;
@@ -36,7 +35,6 @@ export default function CreativeText({
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
-    // Create stars
     const stars = [];
     const starCount = window.innerWidth < 768 ? 80 : 150;
 
@@ -54,7 +52,6 @@ export default function CreativeText({
     let time = 0;
     const animate = () => {
       ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
-
       stars.forEach((star) => {
         const twinkle =
           Math.sin(time * star.twinkleSpeed + star.twinklePhase) * 0.2 + 0.4;
@@ -81,21 +78,36 @@ export default function CreativeText({
     };
   }, []);
 
-  // ============ MAIN LOGIC (Same as before) ============
+  // ============ MAIN LOGIC ============
   useEffect(() => {
     let mounted = true;
     let retryInterval = null;
     let lastScrollY = 0;
 
-    function findScrollContainer() {
-      return document.querySelector("#scrollContainer");
-    }
+    const findScrollContainer = () => document.querySelector("#scrollContainer");
 
-    function buildDOM() {
+    const buildDOM = () => {
       const container = containerRef.current;
       if (!container) return null;
-      const textWrapper = container.querySelector(".text-wrapper") || container;
-      textWrapper.innerHTML = "";
+
+      // Safe: only manipulate text-wrapper
+      let textWrapper = container.querySelector(".text-wrapper");
+      if (!textWrapper) {
+        textWrapper = document.createElement("div");
+        textWrapper.className = "text-wrapper";
+        textWrapper.style.position = "relative";
+        textWrapper.style.zIndex = "2";
+        textWrapper.style.width = "100%";
+        textWrapper.style.height = "100%";
+        textWrapper.style.display = "flex";
+        textWrapper.style.flexDirection = "column";
+        textWrapper.style.justifyContent = "center";
+        textWrapper.style.alignItems = "center";
+        textWrapper.style.padding = "0 2rem";
+        container.appendChild(textWrapper);
+      } else {
+        textWrapper.innerHTML = "";
+      }
 
       const lines = ["A Creative Space", "Designed by Designers for Designers"];
       const allSpans = [];
@@ -105,16 +117,13 @@ export default function CreativeText({
         lineDiv.style.cssText = `
           text-align:center;
           margin-bottom:${i === 0 ? "0.1em" : "0"};
-          font-size:${
-            i === 0 ? "clamp(2.5rem,7vw,7rem)" : "clamp(1.4rem,4vw,3.5rem)"
-          };
+          font-size:${i === 0 ? "clamp(2.5rem,7vw,7rem)" : "clamp(1.4rem,4vw,3.5rem)"};
           font-weight:${i === 0 ? "900" : "500"};
           font-style:italic;
           letter-spacing:1.5px;
           line-height:1.1;
           white-space: nowrap;
         `;
-
         line.split("").forEach((char) => {
           const span = document.createElement("span");
           span.textContent = char === " " ? "\u00A0" : char;
@@ -127,10 +136,11 @@ export default function CreativeText({
         });
         textWrapper.appendChild(lineDiv);
       });
-      return allSpans;
-    }
 
-    function computeContainerProgress(scrollContainer) {
+      return allSpans;
+    };
+
+    const computeContainerProgress = (scrollContainer) => {
       const scrollY = window.pageYOffset || document.documentElement.scrollTop;
       const containerHeight = Math.max(
         0,
@@ -138,9 +148,9 @@ export default function CreativeText({
       );
       if (containerHeight <= 0) return 0;
       return Math.max(0, Math.min(1, scrollY / containerHeight));
-    }
+    };
 
-    function pinElement() {
+    const pinElement = () => {
       const el = containerRef.current;
       if (!el || stateRef.current.isPinned) return;
       el.style.position = "fixed";
@@ -148,9 +158,9 @@ export default function CreativeText({
       el.style.left = "50%";
       el.style.transform = "translate(-50%, -50%)";
       stateRef.current.isPinned = true;
-    }
+    };
 
-    function unpinElement() {
+    const unpinElement = () => {
       const el = containerRef.current;
       if (!el || !stateRef.current.isPinned) return;
       const rect = el.getBoundingClientRect();
@@ -160,15 +170,16 @@ export default function CreativeText({
       el.style.left = "50%";
       el.style.transform = "translateX(-50%)";
       stateRef.current.isPinned = false;
-    }
+    };
 
-    function checkPinStatus() {
+    const checkPinStatus = () => {
       const scrollContainer = findScrollContainer();
       if (!scrollContainer) return;
 
       const currentScrollY = window.pageYOffset;
       const direction = currentScrollY > lastScrollY ? "down" : "up";
       lastScrollY = currentScrollY;
+
       const prog = computeContainerProgress(scrollContainer);
 
       if (!stateRef.current.initialized && prog >= startOffset) {
@@ -197,11 +208,7 @@ export default function CreativeText({
       );
       const isFullyRevealed = localProgress >= 1;
 
-      if (
-        isFullyRevealed &&
-        direction === "down" &&
-        stateRef.current.isPinned
-      ) {
+      if (isFullyRevealed && direction === "down" && stateRef.current.isPinned) {
         stateRef.current.wasFullyRevealed = true;
         unpinElement();
       }
@@ -232,14 +239,13 @@ export default function CreativeText({
       });
 
       if (mounted) rafRef.current = requestAnimationFrame(checkPinStatus);
-    }
+    };
 
-    function onScroll() {
-      if (!rafRef.current)
-        rafRef.current = requestAnimationFrame(checkPinStatus);
-    }
+    const onScroll = () => {
+      if (!rafRef.current) rafRef.current = requestAnimationFrame(checkPinStatus);
+    };
 
-    function startWatching() {
+    const startWatching = () => {
       const sc = findScrollContainer();
       if (sc) {
         lastScrollY = window.pageYOffset;
@@ -257,7 +263,7 @@ export default function CreativeText({
           } else if (tries > 40) clearInterval(retryInterval);
         }, 60);
       }
-    }
+    };
 
     startWatching();
 
@@ -276,19 +282,23 @@ export default function CreativeText({
       className="creativeText"
       style={{
         width: "100%",
-        height: "100vh",
-        position: "fixed",
-        top: "50%", // ← center vertically
-        left: "50%", // ← center horizontally
-        transform: "translate(-50%, -50%)", // ← proper centering
+        textAlign: "center",
         opacity: 0,
         visibility: "hidden",
+        transition: "opacity 0.3s ease",
+        height: "100vh",
+        position: "fixed",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
         pointerEvents: "none",
+        fontFamily: "var(--font-inter), sans-serif",
+        color: "#fff",
         zIndex: 900,
         overflow: "hidden",
       }}
     >
-      {/* Stars Canvas Background */}
+      {/* Stars */}
       <canvas
         ref={canvasRef}
         style={{
@@ -301,7 +311,7 @@ export default function CreativeText({
         }}
       />
 
-      {/* Text Content */}
+      {/* Text */}
       <div
         className="text-wrapper"
         style={{
@@ -314,10 +324,8 @@ export default function CreativeText({
           justifyContent: "center",
           alignItems: "center",
           padding: "0 2rem",
-          fontFamily: "var(--font-inter), sans-serif",
-          color: "#fff",
         }}
-      />
+      ></div>
     </div>
   );
 }
