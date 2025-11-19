@@ -17,11 +17,6 @@ export default function MyMainCode() {
   const starsBgRef = useRef(null);
 
   useEffect(() => {
-    // // === DISABLE BROWSER SCROLL RESTORATION ===
-    // if ("scrollRestoration" in history) {
-    //   history.scrollRestoration = "manual";
-    // }
-
     const root = rootRef.current;
     if (!root) return;
 
