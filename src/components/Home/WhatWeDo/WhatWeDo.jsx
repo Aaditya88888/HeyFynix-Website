@@ -193,10 +193,13 @@ const WhatWeDo = () => {
     };
   }, []);
 
-  // ==== EXISTING IMAGE HOVER LOGIC ====
+  // ==== IMAGE HOVER LOGIC + DEFAULT IMAGE ====
   useEffect(() => {
     const bgOverlay = document.getElementById("bgOverlay");
     const cards = document.querySelectorAll(".group");
+
+    // ⭐ DEFAULT BACKGROUND IMAGE (process-1)
+    bgOverlay.style.backgroundImage = `url(/images/home/process-1.jpg)`;
 
     cards.forEach((card) => {
       card.addEventListener("mouseenter", () => {
@@ -218,42 +221,42 @@ const WhatWeDo = () => {
       desc: "Who are you when no one’s watching? That’s what we help you define.",
       extra:
         "We build unique brand identities that help people remember you. When your visuals and story stay consistent, you can increase your revenue by 23%.",
-      img: "https://images.pexels.com/photos/6606317/pexels-photo-6606317.jpeg",
+      img: "/images/home/process-1.jpg",
     },
     {
       title: "Filmmaking",
       desc: "People forget ads. They remember stories.",
       extra:
         "A strong story builds a connection, and video is the best way to tell it. Our brand films and commercials boost awareness by 54%.",
-      img: "https://images.pexels.com/photos/11001143/pexels-photo-11001143.jpeg",
+      img: "/images/home/process-2.jpg",
     },
     {
       title: "Content Creation",
       desc: "Scroll. Scroll. Skip. Stop. That “stop” moment? That’s us.",
       extra:
         "People scroll fast, we help stop the scroll with stunning visuals. Because brands with high-quality content with visuals get 650% more engagement than low quality ones.",
-      img: "https://images.pexels.com/photos/31293423/pexels-photo-31293423.jpeg",
+      img: "/images/home/process-3.jpg",
     },
     {
       title: "Marketing",
       desc: "Marketing is not about being loud. It’s about being remembered.",
       extra:
         "We turn social pages into growing communities that drive real business. 78% of people are more likely to buy from brands they follow and feel connected to.",
-      img: "https://images.pexels.com/photos/1365425/pexels-photo-1365425.jpeg",
+      img: "/images/home/process-4.jpg",
     },
     {
       title: "Web Design",
       desc: "Your website isn’t just a link. It’s your first impression.",
       extra:
         "We create websites that don’t just exist, they work. They guide, convert, and tell your story with clarity and style. 88% of users leave if the experience is poor.",
-      img: "https://images.pexels.com/photos/1009949/pexels-photo-1009949.jpeg",
+      img: "/images/home/process-5.jpg",
     },
     {
       title: "Creative Consultancy",
       desc: "Feeling stuck? Let’s talk about strategy.",
       extra:
         "Confused about how to position your brand? We help you find clarity. We believe clear positioning can help brands grow 2x faster.",
-      img: "https://images.pexels.com/photos/34188758/pexels-photo-34188758.jpeg",
+      img: "/images/home/process-1.jpg",
     },
   ];
 
@@ -266,21 +269,58 @@ const WhatWeDo = () => {
       />
 
       {/* === CONTENT === */}
-      <div className="relative z-10">
+      <div className="relative z-10 px-20">
         {/* Centered Heading Section */}
-        <div className="flex flex-col items-center justify-center text-center min-h-[60vh] px-6 relative z-20">
-          <h1 className="text-4xl md:text-5xl font-semibold mb-6 max-w-4xl">
-            Let's Dive In
-          </h1>
-          <p className="text-2xl md:text-3xl text-gray-300 max-w-4xl leading-relaxed">
-            Your challenges are our playground. Here’s how we can team up to
-            make things happen (and we're pretty darn good at it).
-          </p>
+
+        {/* <div className="flex items-center justify-center text-center min-h-[60vh]  relative z-20">
+          <div className="left w-1/2  h-full text-left">
+            <div className="w-fit">
+              <h1 className="text-9xl font-medium">What We do</h1>
+              <p className="text-2xl font-medium text-right">
+                (and we're pretty darn good at it)
+              </p>
+            </div>
+          </div>
+
+          <div className="right w-1/2  flex flex-col items-end text-right gap-20">
+            <img
+              src="https://images.pexels.com/photos/596134/pexels-photo-596134.jpeg"
+              alt=""
+              className="w-[445px] h-[230px] object-cover"
+            />
+            <p className="text-2xl font-normal text-left">
+              Your challenges are our playground. Here’s how we can team up to
+              make things happen
+            </p>
+          </div>
+        </div> */}
+
+        <div className="flex h-[40vh]">
+          <div className="left w-[40%]  flex justify-start items-center pb-15">
+            <h1 className="text-8xl font-medium whitespace-nowrap ">
+              What We do
+            </h1>
+          </div>
+          <div className="center w-[30%] text-2xl font-normal  flex justify-center items-end">
+            <p className="pb-10">
+              Your challenges are our playground. Here’s how we can team up to
+              make things happen
+            </p>
+          </div>
+
+          <div className="right w-[30%] flex flex-col justify-between items-end pb-3 ">
+            <img
+              src="https://images.pexels.com/photos/596134/pexels-photo-596134.jpeg"
+              alt=""
+              className="w-[445px] h-[230px] object-cover"
+            />
+            <p className="text-xl">(and we're pretty darn good at it)</p>
+          </div>
         </div>
 
         {/* Cards Grid */}
         <div
-          className="grid grid-cols-3 grid-rows-2 w-full min-h-screen relative z-10"
+          className="grid grid-cols-3 grid-rows-2 w-full h-[70vh] relative z-10"
           id="container"
         >
           {/* BG overlay */}

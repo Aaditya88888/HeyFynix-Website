@@ -915,11 +915,192 @@
 
 // ********************************************************
 
-"use client";
+// "use client";
 
-import React, { useEffect, useRef } from "react";
+// import React, { useEffect, useRef } from "react";
+// import { gsap } from "gsap";
+// import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+// gsap.registerPlugin(ScrollTrigger);
+
+// const InfiniteCreativity = () => {
+//   const sectionRef = useRef(null);
+//   const videoContainerRef = useRef(null);
+//   const textContainerRef = useRef(null);
+//   const videoRef = useRef(null);
+//   const headingContainerRef = useRef(null);
+//   const showreelTextRef = useRef(null); // Ref for "Check Out our Showreel"
+
+//   useEffect(() => {
+//     const section = sectionRef.current;
+//     const videoContainer = videoContainerRef.current;
+//     const textContainer = textContainerRef.current;
+//     const video = videoRef.current;
+//     const headingContainer = headingContainerRef.current;
+//     const showreelText = showreelTextRef.current;
+
+//     const tl = gsap.timeline({
+//       scrollTrigger: {
+//         trigger: section,
+//         start: "top top",
+//         end: "+=320%",
+//         scrub: true,
+//         pin: true,
+//         anticipatePin: 1,
+//         // markers: true,
+//       },
+//     });
+
+//     // === ANIMATIONS ===
+//     tl
+//       // 0. HIDE "Check Out our Showreel" TEXT ON SCROLL START
+//       .to(
+//         showreelText,
+//         {
+//           opacity: 0,
+//           y: -20,
+//           duration: 0.6,
+//           ease: "power2.out",
+//           onComplete: () => {
+//             if (showreelText) {
+//               showreelText.style.display = "none";
+//             }
+//           },
+//         },
+//         0
+//       )
+
+//       // 1. Headings move upward
+//       .to(
+//         headingContainer,
+//         {
+//           y: -300,
+//           opacity: 0,
+//           duration: 1.4,
+//           ease: "power2.out",
+//         },
+//         0
+//       )
+
+//       // 2. Text container moves upward
+//       .to(
+//         textContainer,
+//         {
+//           y: -280,
+//           opacity: 0,
+//           duration: 1.2,
+//           ease: "power2.out",
+//         },
+//         0
+//       )
+
+//       // 3. Video container drifts down
+//       .to(
+//         videoContainer,
+//         {
+//           y: 130,
+//           duration: 1.6,
+//           ease: "power2.out",
+//         },
+//         0
+//       )
+
+//       // 4. Video scales and locks to center
+//       .to(
+//         video,
+//         {
+//           width: "78vw",
+//           height: "78vh",
+//           maxWidth: "90vw",
+//           borderRadius: "1.5rem",
+//           position: "fixed",
+//           top: "10%",
+//           left: "112%",
+//           xPercent: -50,
+//           yPercent: -40,
+//           zIndex: 9999,
+//           boxShadow: "0 40px 80px rgba(0,0,0,0.7)",
+//           duration: 2.8,
+//           ease: "expo.out",
+//         },
+//         0.7
+//       );
+
+//     // Cleanup on unmount
+//     return () => {
+//       ScrollTrigger.getAll().forEach((t) => t.kill());
+//     };
+//   }, []);
+
+//   return (
+//     <>
+//       <section
+//         ref={sectionRef}
+//         className="relative px-16 py-10 bg-black text-white overflow-hidden min-h-screen"
+//       >
+//         {/* HEADINGS */}
+//         <div ref={headingContainerRef} className="heading-container mb-8">
+//           <h1 className="text-4xl md:text-5xl font-bold ml-50">
+//             Beyond Boundary
+//           </h1>
+//           <h1 className="text-4xl md:text-5xl font-bold">
+//             Infinite Creativity
+//           </h1>
+//         </div>
+
+//         <div className="main-container flex flex-col md:flex-row gap-8 relative z-10">
+//           {/* VIDEO CONTAINER */}
+//           <div
+//             ref={videoContainerRef}
+//             className="video-container md:w-[50%] flex flex-col"
+//           >
+//             <video
+//               ref={videoRef}
+//               src="https://www.w3schools.com/html/mov_bbb.mp4"
+//               className="w-full h-auto object-cover rounded-lg z-50"
+//               autoPlay
+//               muted
+//               loop
+//               playsInline
+//             />
+//             {/* SHOWREEL TEXT - FADES OUT ON SCROLL */}
+//             <p ref={showreelTextRef} className="mt-4 text-lg font-medium">
+//               Check Out our Showreel
+//             </p>
+//           </div>
+
+//           {/* TEXT CONTAINER */}
+//           <div
+//             ref={textContainerRef}
+//             className="text-container md:w-[60%] flex justify-center gap-5"
+//           >
+//             <h4 className="text-2xl md:w-[45%] md:text-3xl font-semibold mb-4">
+//               Creativity is the Foundation of what we do
+//             </h4>
+//             <p className="text-lg md:w-[55%] leading-relaxed flex items-end">
+//               Heyfynix is a digital production studio that brings your ideas to
+//               life through visually captivating designs and interactive
+//               experiences. With our talented team, we push boundaries by solving
+//               complex problems, delivering tailored solutions that exceed
+//               expectations and engage audiences.
+//             </p>
+//           </div>
+//         </div>
+//       </section>
+//     </>
+//   );
+// };
+
+// export default InfiniteCreativity;
+
+//******************************************************************** */
+
+"use client";
+import React, { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { IoMdPlay } from "react-icons/io";
+import { FaPause } from "react-icons/fa";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -927,167 +1108,403 @@ const InfiniteCreativity = () => {
   const sectionRef = useRef(null);
   const videoContainerRef = useRef(null);
   const textContainerRef = useRef(null);
+  const videoWrapperRef = useRef(null);
   const videoRef = useRef(null);
   const headingContainerRef = useRef(null);
-  const showreelTextRef = useRef(null); // Ref for "Check Out our Showreel"
+
+  const boundaryRef = useRef(null);
+  const beyondRef = useRef(null);
+
+  const showreelTextRef = useRef(null);
+  const playReelRef = useRef(null);
+  const topPlusRef = useRef(null);
+  const bottomPlusRef = useRef(null);
+  const playButtonRef = useRef(null);
+
+  const [isHovering, setIsHovering] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isFullVideo, setIsFullVideo] = useState(false);
+  const [isPlayingFullVideo, setIsPlayingFullVideo] = useState(false);
+
+  const enterFullscreen = () => {};
+  const exitFullscreen = () => {};
 
   useEffect(() => {
-    const section = sectionRef.current;
-    const videoContainer = videoContainerRef.current;
-    const textContainer = textContainerRef.current;
-    const video = videoRef.current;
-    const headingContainer = headingContainerRef.current;
-    const showreelText = showreelTextRef.current;
+    const handleFullscreenChange = () => {};
+  }, [isFullscreen]);
 
-    const tl = gsap.timeline({
+  const handlePlayClick = (e) => {
+    e.stopPropagation();
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (!isPlayingFullVideo) {
+      setIsPlayingFullVideo(true);
+      setIsFullVideo(true);
+      video.loop = true;
+      video.play();
+    } else {
+      setIsPlayingFullVideo(false);
+      setIsFullVideo(false);
+      video.currentTime = 0;
+      video.loop = false;
+      video.play();
+    }
+  };
+
+  useEffect(() => {
+    const videoWrapper = videoWrapperRef.current;
+    const topPlus = topPlusRef.current;
+    const bottomPlus = bottomPlusRef.current;
+
+    gsap.set([topPlus, bottomPlus], { opacity: 0 });
+
+    // gsap.fromTo(
+    //   boundaryRef.current,
+    //   { x: -200 },
+    //   {
+    //     x: 0,
+    //     duration: 1.5,
+    //     ease: "power2.out",
+    //     scrollTrigger: {
+    //       trigger: headingContainerRef.current,
+    //       start: "top 80%",
+    //       end: "top 50%",
+    //       toggleActions: "restart none none reverse",
+    //     },
+    //   }
+    // );
+
+    // gsap.fromTo(
+    //   beyondRef.current,
+    //   { x: -200 },
+    //   {
+    //     x: 0,
+    //     duration: 1.5,
+    //     delay: 0.1,
+    //     ease: "power2.out",
+    //     scrollTrigger: {
+    //       trigger: headingContainerRef.current,
+    //       start: "top 80%",
+    //       end: "top 50%",
+    //       toggleActions: "restart none none reverse",
+    //     },
+    //   }
+    // );
+
+    /* -------------------------------------------
+   BEYOND & BOUNDARY — DROP FIRST, THEN SLIDE
+------------------------------------------- */
+
+    const tlHeading = gsap.timeline({
       scrollTrigger: {
-        trigger: section,
-        start: "top top",
-        end: "+=320%",
-        scrub: true,
-        pin: true,
-        anticipatePin: 1,
-        // markers: true,
+        trigger: headingContainerRef.current,
+        start: "top 85%",
+        end: "top 50%",
+        toggleActions: "restart none none reverse",
       },
     });
 
-    // === ANIMATIONS ===
-    tl
-      // 0. HIDE "Check Out our Showreel" TEXT ON SCROLL START
-      .to(
-        showreelText,
-        {
-          opacity: 0,
-          y: -20,
-          duration: 0.6,
-          ease: "power2.out",
-          onComplete: () => {
-            if (showreelText) {
-              showreelText.style.display = "none";
-            }
-          },
+    // Step 1 — Drop from top → bottom (50px)
+    tlHeading.fromTo(
+      [beyondRef.current, boundaryRef.current],
+      { y: 50, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" }
+    );
+
+    // Step 2 — Slide left → right
+    tlHeading.fromTo(
+      boundaryRef.current,
+      { x: -200 },
+      { x: 0, duration: 0.8, ease: "power2.out" }
+    );
+
+    tlHeading.fromTo(
+      beyondRef.current,
+      { x: -200 },
+      {
+        x: 0,
+        duration: 0.7,
+        ease: "power2.out",
+        delay: 0.1,
+      }
+    );
+
+    /* -------------------------------------------
+   INFINITE CREATIVITY — DROP FROM TOP (50px)
+------------------------------------------- */
+
+    gsap.fromTo(
+      headingContainerRef.current.querySelector("h1:nth-child(2)"),
+      { y: -50, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 1.2,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: headingContainerRef.current,
+          start: "top 90%",
+          end: "top 60%",
+          toggleActions: "restart none none reverse",
         },
+      }
+    );
+
+    gsap.set(videoWrapper, {
+      width: "43vw",
+      height: "50vh",
+      scale: 0.9,
+      transformOrigin: "bottom top",
+      filter: "grayscale(100%) brightness(90%) contrast(150%)",
+    });
+
+    const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
+
+    // FIX 1 — removed display: none
+    tl.to(showreelTextRef.current, {
+      opacity: 0,
+      duration: 0.6,
+    })
+      .to(
+        headingContainerRef.current,
+        { y: -300, opacity: 0, duration: 1.4 },
         0
       )
-
-      // 1. Headings move upward
+      .to(textContainerRef.current, { y: -280, opacity: 0, duration: 1.2 }, 0)
       .to(
-        headingContainer,
+        videoWrapper,
         {
-          y: -300,
-          opacity: 0,
-          duration: 1.4,
-          ease: "power2.out",
-        },
-        0
-      )
-
-      // 2. Text container moves upward
-      .to(
-        textContainer,
-        {
-          y: -280,
-          opacity: 0,
-          duration: 1.2,
-          ease: "power2.out",
-        },
-        0
-      )
-
-      // 3. Video container drifts down
-      .to(
-        videoContainer,
-        {
-          y: 130,
-          duration: 1.6,
-          ease: "power2.out",
-        },
-        0
-      )
-
-      // 4. Video scales and locks to center
-      .to(
-        video,
-        {
-          width: "78vw",
-          height: "78vh",
-          maxWidth: "90vw",
+          width: "90vw",
+          height: "70vh",
+          scale: 1,
           borderRadius: "1.5rem",
-          position: "fixed",
-          top: "10%",
-          left: "112%",
-          xPercent: -50,
-          yPercent: -40,
-          zIndex: 9999,
           boxShadow: "0 40px 80px rgba(0,0,0,0.7)",
+          filter: "grayscale(0%) brightness(100%) contrast(110%)",
           duration: 2.8,
-          ease: "expo.out",
+          ease: "power3.out",
         },
         0.7
-      );
+      )
+      .to(playReelRef.current, { opacity: 1, duration: 0.8 }, 1.4)
+      .to([topPlus, bottomPlus], { opacity: 1, duration: 1 }, 1.8);
 
-    // Cleanup on unmount
-    return () => {
-      ScrollTrigger.getAll().forEach((t) => t.kill());
-    };
+    ScrollTrigger.create({
+      trigger: videoWrapper,
+      start: "top 40%",
+      end: "+=1",
+      animation: tl,
+      toggleActions: "play reverse play reverse",
+      scrub: 2,
+      immediateRender: false, // FIX 2 added
+    });
+
+    return () => ScrollTrigger.killAll();
   }, []);
 
-  return (
-    <>
-      <section
-        ref={sectionRef}
-        className="relative px-16 py-10 bg-black text-white overflow-hidden min-h-screen"
-      >
-        {/* HEADINGS */}
-        <div ref={headingContainerRef} className="heading-container mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold ml-50">
-            Beyond Boundary
-          </h1>
-          <h1 className="text-4xl md:text-5xl font-bold">
-            Infinite Creativity
-          </h1>
-        </div>
+  useEffect(() => {
+    const topPlus = topPlusRef.current;
+    const bottomPlus = bottomPlusRef.current;
+    const button = playButtonRef.current;
+    const videoWrapper = videoWrapperRef.current;
 
-        <div className="main-container flex flex-col md:flex-row gap-8 relative z-10">
-          {/* VIDEO CONTAINER */}
+    if (!topPlus || !bottomPlus || !button || !videoWrapper) return;
+
+    let topCtx = null;
+    let bottomCtx = null;
+
+    const arrowSVG = `<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="inline-block w-6 h-6 mb-1"><path d="M13 5l7 7-7 7M5 12h14"/></svg>`;
+
+    const createMarquee = (container, isBottom = false) => {
+      const text = `
+        <span class="px-79 text-base">${arrowSVG}${arrowSVG}${arrowSVG} PLAY REEL</span>
+        <span class="px-8 text-base">${arrowSVG}${arrowSVG}${arrowSVG} PLAY REEL</span>
+        <span class="px-79 text-base">${arrowSVG}${arrowSVG}${arrowSVG} PLAY REEL</span>
+        <span class="px-8 text-base">${arrowSVG}${arrowSVG}${arrowSVG} PLAY REEL</span>
+        <span class="px-79 text-base">${arrowSVG}${arrowSVG}${arrowSVG} PLAY REEL</span>
+        <span class="px-8 text-base">${arrowSVG}${arrowSVG}${arrowSVG} PLAY REEL</span>
+      `.trim();
+
+      container.innerHTML = `<div class="inline-block whitespace-nowrap">${text}${text}${text}</div>`;
+      const wrapper = container.querySelector("div");
+
+      const ctx = gsap.context(() => {
+        gsap.fromTo(
+          wrapper,
+          { x: isBottom ? "-33.33%" : 0 },
+          {
+            x: isBottom ? "0%" : "-33.33%",
+            duration: 14,
+            ease: "none",
+            repeat: -1,
+          }
+        );
+      }, container);
+
+      return ctx;
+    };
+
+    const handleMouseEnter = () => {
+      const scale = gsap.getProperty(videoWrapper, "scale");
+      if (scale < 1 || isFullscreen) return;
+
+      setIsHovering(true);
+      gsap.to([topPlus, bottomPlus], { opacity: 0, duration: 0.2 });
+
+      topCtx = createMarquee(topPlus, false);
+      bottomCtx = createMarquee(bottomPlus, true);
+
+      gsap.to([topPlus, bottomPlus], { opacity: 1, duration: 0.4, delay: 0.2 });
+    };
+
+    const handleMouseLeave = () => {
+      const scale = gsap.getProperty(videoWrapper, "scale");
+      if (scale < 1 || isFullscreen) return;
+
+      setIsHovering(false);
+      if (topCtx) topCtx.revert();
+      if (bottomCtx) bottomCtx.revert();
+
+      const plusHTML = `
+        <span class="px-8">+</span>
+        <span class="px-90">+</span>
+        <span class="px-8">+</span>
+        <span class="px-90">+</span>
+        <span class="px-8">+</span>
+      `;
+      topPlus.innerHTML = plusHTML;
+      bottomPlus.innerHTML = plusHTML;
+
+      gsap.to([topPlus, bottomPlus], { opacity: 1, duration: 0.3 });
+    };
+
+    button.addEventListener("mouseenter", handleMouseEnter);
+    button.addEventListener("mouseleave", handleMouseLeave);
+
+    return () => {
+      button.removeEventListener("mouseenter", handleMouseEnter);
+      button.removeEventListener("mouseleave", handleMouseLeave);
+      if (topCtx) topCtx.revert();
+      if (bottomCtx) bottomCtx.revert();
+    };
+  }, [isFullscreen]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleTimeUpdate = () => {
+      if (!isFullVideo && video.currentTime >= 5) {
+        video.currentTime = 0;
+        video.play();
+      }
+    };
+
+    video.addEventListener("timeupdate", handleTimeUpdate);
+
+    return () => video.removeEventListener("timeupdate", handleTimeUpdate);
+  }, [isFullVideo]);
+
+  return (
+    <section
+      ref={sectionRef}
+      className="relative px-[4%] py-10 bg-black text-white overflow-hidden h-[130vh]"
+    >
+      <div ref={headingContainerRef} className="heading-container mb-20">
+        <h1 className="text-7xl md:text-8xl font-medium ml-50">
+          <span ref={beyondRef} className="inline-block">
+            Beyond&nbsp;
+          </span>
+          <span ref={boundaryRef} className="inline-block mr-4">
+            Boundary
+          </span>
+        </h1>
+        <h1 className="text-4xl md:text-8xl font-medium mt-7">
+          Infinite Creativity
+        </h1>
+      </div>
+
+      <div className="main-container flex flex-col md:flex-row relative z-10">
+        <div
+          ref={videoContainerRef}
+          className="video-container md:w-[50%] flex flex-col relative"
+        >
+          <div ref={topPlusRef} className="w-full flex text-3xl mb-3 opacity-0">
+            <span className="px-8">+</span>
+            <span className="px-90">+</span>
+            <span className="px-8">+</span>
+            <span className="px-90">+</span>
+            <span className="px-8">+</span>
+          </div>
+
           <div
-            ref={videoContainerRef}
-            className="video-container md:w-[50%] flex flex-col"
+            ref={videoWrapperRef}
+            className="relative rounded-lg z-50 will-change-transform mx-auto"
           >
             <video
               ref={videoRef}
-              src="https://www.w3schools.com/html/mov_bbb.mp4"
-              className="w-full h-auto object-cover rounded-lg z-50"
+              src="https://cdn.pixabay.com/video/2025/07/27/293788_tiny.mp4"
+              className="w-full h-full object-cover rounded-[30px] brightness-90 contrast-150"
               autoPlay
               muted
-              loop
               playsInline
             />
-            {/* SHOWREEL TEXT - FADES OUT ON SCROLL */}
-            <p ref={showreelTextRef} className="mt-4 text-lg font-medium">
+            <p ref={showreelTextRef} className="text-base font-normal mb-25">
               Check Out our Showreel
             </p>
+
+            <div
+              ref={playReelRef}
+              className="absolute inset-0 flex items-center justify-center text-white text-8xl font-medium opacity-0 z-[999] pointer-events-none"
+            >
+              <div className="flex items-center gap-4">
+                <span>PLAY</span>
+                <button
+                  ref={playButtonRef}
+                  onClick={handlePlayClick}
+                  className="pointer-events-auto relative overflow-hidden p-6 rounded-full group bg-white flex items-center justify-center"
+                >
+                  <span className="absolute inset-0 bg-blue-500 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></span>
+                  {isPlayingFullVideo ? (
+                    <FaPause className="relative z-10 text-black group-hover:text-white text-4xl" />
+                  ) : (
+                    <IoMdPlay className="relative z-10 text-black group-hover:text-white text-4xl" />
+                  )}
+                </button>
+                <span>REEL</span>
+              </div>
+            </div>
           </div>
 
-          {/* TEXT CONTAINER */}
           <div
-            ref={textContainerRef}
-            className="text-container md:w-[60%] flex justify-center gap-5"
+            ref={bottomPlusRef}
+            className="w-full flex text-3xl mb-3 opacity-0 text-white"
           >
-            <h4 className="text-2xl md:w-[45%] md:text-3xl font-semibold mb-4">
-              Creativity is the Foundation of what we do
-            </h4>
-            <p className="text-lg md:w-[55%] leading-relaxed flex items-end">
-              Heyfynix is a digital production studio that brings your ideas to
-              life through visually captivating designs and interactive
-              experiences. With our talented team, we push boundaries by solving
-              complex problems, delivering tailored solutions that exceed
-              expectations and engage audiences.
-            </p>
+            <span className="px-8">+</span>
+            <span className="px-90">+</span>
+            <span className="px-8">+</span>
+            <span className="px-90">+</span>
+            <span className="px-8">+</span>
           </div>
         </div>
-      </section>
-    </>
+
+        <div
+          ref={textContainerRef}
+          className="text-container md:w-[60%] flex justify-center gap-5 -mt-7"
+        >
+          <h4 className="text-3xl md:w-[40%] md:text-[2.5rem] leading-[2.75rem] font-regular text-[#ffffff]">
+            Creativity is the Foundation of what we do
+          </h4>
+          <p className="text-xl md:w-[60%] leading-[2.3rem] flex items-center mb-15">
+            Heyfynix is a digital production studio that brings your ideas to
+            life through visually captivating designs and interactive
+            experiences. With our talented team, we push boundaries by solving
+            complex problems, delivering tailored solutions that exceed
+            expectations and engage audiences.
+          </p>
+        </div>
+      </div>
+    </section>
   );
 };
 

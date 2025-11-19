@@ -6,10 +6,12 @@ import CreativeText from "@/components/Solar/CreativeText";
 import MyMainCode from "@/components/Solar/MyMainCode";
 import WhoWeAre from "@/components/Home/WhoWeAre/WhoWeAre";
 import WhatWeDo from "@/components/Home/WhatWeDo/WhatWeDo";
+import InfiniteCreativity from "@/components/Home/InfiniteCreativity/InfiniteCreativity";
+import Process from "@/components/Home/Process/Process";
 
 export default function Page() {
   return (
-    <main className="w-full bg-black text-white">
+    <main className=" bg-black text-white">
       <Navbar />
 
       {/* SECTION 1 */}
@@ -31,8 +33,10 @@ export default function Page() {
 
       {/* gap & following sections */}
       <div className="after-solar-gap" style={{ height: "5vh" }} />
+      <InfiniteCreativity />
       <WhoWeAre />
       <WhatWeDo />
+      <Process />
     </main>
   );
 }

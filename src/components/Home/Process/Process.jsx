@@ -188,26 +188,29 @@ const Process = () => {
   ];
 
   return (
-    <main>
-      <div className="text-white bg-black text-section flex items-center justify-between px-[5%] pt-16 pb-6">
+    <main className="w-full h-full bg-black">
+      <div className="text-white text-section flex items-center justify-between px-[4%] pt-16 pb-6">
         <div className="left text-left max-w-lg">
-          <h1 className="text-5xl font-bold italic leading-[1] mb-0 pb-0">
+          <h1 className="text-9xl font-bold italic leading-[1] mb-0 pb-0">
             PROCESS
           </h1>
-          <h4 className="text-2xl font-medium mt-[-15px]">
+          <h4 className="text-4xl font-normal whitespace-nowrap">
             How We Work, It's All About You
           </h4>
         </div>
 
-        <div className="right text-right max-w-lg">
-          <p className="text-lg">
+        <div className="right max-w-lg">
+          <p className="text-3xl font-light">
             Wondering how we turn your vision into something tangible? It's
             simple, collaborative, and a ton of fun. Here's the scoop:
           </p>
         </div>
       </div>
 
-      <section className="horizontal-slider-container pl-16" ref={containerRef}>
+      <section
+        className="horizontal-slider-container pl-[4%]"
+        ref={containerRef}
+      >
         <div className="slider-wrapper">
           <div className="slider" ref={sliderRef}>
             {images.map((img, i) => (
@@ -228,7 +231,7 @@ const Process = () => {
             position: relative;
             background-color: black;
             overflow: hidden;
-            margin-top: -3rem;
+            // margin-top: -3rem;
             cursor: grab;
           }
           .horizontal-slider-container:active {
