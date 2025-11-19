@@ -8,7 +8,8 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import {
   CSS2DRenderer,
   CSS2DObject,
-} from "three/examples/jsm/renderers/CSS2DRenderer";
+} from "three/examples/jsm/renderers/CSS2DRenderer.js";
+
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -52,7 +53,7 @@ export default function MyMainCode() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.domElement.className = "three-canvas";
     renderer.domElement.style.opacity = "0";
     renderer.domElement.style.transition = "opacity 0.35s linear";
@@ -468,6 +469,7 @@ export default function MyMainCode() {
       solarSystem.position.y = minY + (maxY - minY) * p;
       camera.position.z = (350 - 150 * p) * scaleFactor;
       camera.lookAt(0, 0, 0);
+      controls.update();
 
       const scrollOffset = p - 0.5;
       starsBg.position.set(
@@ -476,8 +478,8 @@ export default function MyMainCode() {
         scrollOffset * 300
       );
 
-      starsCamera.rotation.copy(camera.rotation);
       starsCamera.position.copy(camera.position);
+      starsCamera.rotation.set(0, 0, 0);
       starsCamera.position.z = 400;
 
       renderer.render(scene, camera);
