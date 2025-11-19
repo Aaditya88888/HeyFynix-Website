@@ -432,23 +432,23 @@ export default function MyMainCode() {
       // left reveal
       tl.to(
         leftCorner,
-        { autoAlpha: 1, y: 0, duration: 0.35, ease: "power2.out" },
+        { autoAlpha: 1, y: 0, duration: 0.4, ease: "power2.out" },
         0
       );
       tl.to(
         leftSpans,
-        { opacity: 1, y: 0, stagger: 0.03, duration: 0.32, ease: "power3.out" },
+        { opacity: 1, y: 0, stagger: 0.03, duration: 0.4, ease: "power3.out" },
         0.05
       );
       // right reveal slightly after
       tl.to(
         rightCorner,
-        { autoAlpha: 1, y: 0, duration: 0.35, ease: "power2.out" },
+        { autoAlpha: 1, y: 0, duration: 0.4, ease: "power2.out" },
         0.3
       );
       tl.to(
         rightSpans,
-        { opacity: 1, y: 0, stagger: 0.03, duration: 0.32, ease: "power3.out" },
+        { opacity: 1, y: 0, stagger: 0.03, duration: 0.4, ease: "power3.out" },
         0.35
       );
 
@@ -502,63 +502,74 @@ export default function MyMainCode() {
 
     const parentSection =
       wrapper.closest(".solar-section") || wrapper.parentElement;
+    // Is line ko replace kar do apne ScrollTrigger.create() ke andar
     const st = ScrollTrigger.create({
       trigger: parentSection,
-      start: "top 40%",
-      end: "bottom top+=200%",
+      start: "top top", // top of section → top of viewport
+      end: "+=1200", // 1200px pin duration (tune kar sakte ho)
+      pin: true,
+      pinSpacing: true, // ← Yeh zaroori hai smooth ke liye
       scrub: true,
-      pin: parentSection,
-      pinSpacing: true,
+      anticipatePin: 1,
+      invalidateOnRefresh: true,
+
       onUpdate: (self) => {
-        const progress = Math.min(Math.max(self.progress, 0), 1);
+        const progress = self.progress;
+
         solarSystem.userData.progress = progress;
 
-        // renderer visibility
-        const visible = progress > 0.01;
+        // Fade in canvases
+        const visible = progress > 0.02;
         renderer.domElement.style.opacity = visible ? "1" : "0";
         labelRenderer.domElement.style.opacity = visible ? "1" : "0";
         starsRenderer.domElement.style.opacity = visible ? "1" : "0";
-        controls.enableRotate = progress > 0.15;
-        renderer.domElement.style.pointerEvents = visible ? "auto" : "none";
 
-        // create corner texts when first visible
-        if (progress > 0.02 && !cornerCreatedRef.current) {
+        // Create corner texts
+        if (progress > 0.05 && !cornerCreatedRef.current) {
           createCornerTexts();
         }
 
-        // trigger timeline when progress crosses threshold
-        const showThreshold = 0.18; // tune as needed
-        const hideThreshold = 0.12;
+        // Corner text animation (0% → 50% scroll mein appear)
         const tl = cornerTimelineRef.current;
         if (tl) {
-          if (
-            progress >= showThreshold &&
-            !tl.isActive() &&
-            tl.progress() === 0
-          ) {
-            tl.play();
-          } else if (progress < hideThreshold && tl.progress() > 0) {
-            tl.reverse();
-          }
+          const textProgress = gsap.utils.clamp(0, 1, (progress - 0.05) / 0.5); // 5% → 55% = 0 → 1
+          tl.progress(textProgress);
         }
-      },
-      onEnter: () => {
-        // on enter ensure renderers visible
-        renderer.domElement.style.opacity = "1";
-        labelRenderer.domElement.style.opacity = "1";
-        starsRenderer.domElement.style.opacity = "1";
-      },
-      onLeaveBack: () => {
-        // hide labels and corner text when leaving back
-        planetMeshes.forEach(
-          (p) =>
-            p.mesh.userData.label && (p.mesh.userData.label.visible = false)
+
+        // Solar system scale & position (50% ke baad bada ho)
+        const scaleFactor = window.innerWidth < 768 ? 0.7 : 1;
+        const baseScale = 0.15 + 0.85 * Math.max(0, (progress - 0.3) / 0.7);
+        solarSystem.scale.setScalar(baseScale * scaleFactor);
+
+        solarSystem.position.y = gsap.utils.interpolate(
+          -window.innerHeight * 0.6,
+          100,
+          progress
         );
+
+        camera.position.z =
+          gsap.utils.interpolate(350, 180, progress) * scaleFactor;
+        controls.enableRotate = progress > 0.5;
+        renderer.domElement.style.pointerEvents = visible ? "auto" : "none";
+      },
+
+      onEnter: () => {
+        document.body.style.background = "#000";
+      },
+
+      onLeave: () => {
+        // Pin khatam → solar system thoda upar chale jaye (smooth exit)
+        gsap.to(solarSystem.position, {
+          y: 300,
+          duration: 1,
+          ease: "power2.out",
+        });
+      },
+
+      onLeaveBack: () => {
         renderer.domElement.style.opacity = "0";
         labelRenderer.domElement.style.opacity = "0";
         starsRenderer.domElement.style.opacity = "0";
-        const tl = cornerTimelineRef.current;
-        if (tl && tl.progress() > 0) tl.reverse();
       },
     });
 
@@ -578,7 +589,7 @@ export default function MyMainCode() {
       const scrollHeight =
         (parentSection?.offsetHeight || document.documentElement.scrollHeight) -
         window.innerHeight;
-      const step = Math.max(200, scrollHeight * 0.05);
+      const step = Math.max(100, scrollHeight * 0.1);
       let y = window.scrollY;
       if (e.key === "ArrowDown") y = Math.min(y + step, scrollHeight);
       if (e.key === "ArrowUp") y = Math.max(y - step, 0);
