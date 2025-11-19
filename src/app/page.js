@@ -2,7 +2,7 @@
 import React from "react";
 import Navbar from "@/components/Home/Navbar/Navbar";
 import HomeLanding from "@/components/Solar/HomeLanding";
-// import CreativeText from "@/components/Solar/CreativeText";
+import CreativeText from "@/components/Solar/CreativeText";
 import MyMainCode from "@/components/Solar/MyMainCode";
 import WhoWeAre from "@/components/Home/WhoWeAre/WhoWeAre";
 import WhatWeDo from "@/components/Home/WhatWeDo/WhatWeDo";
@@ -19,12 +19,11 @@ export default function Page() {
         <HomeLanding />
       </section>
 
-      {/* SECTION 2 (CreativeText Removed) */}
-      {/*
+      {/* SECTION 2*/}
       <section className="min-h-screen flex items-center justify-center bg-black">
         <CreativeText startOffset={0.87} />
       </section>
-      */}
+      
 
       {/* SOLAR SECTION */}
       <section className="solar-section min-h-screen flex items-center justify-center bg-black">
