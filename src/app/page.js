@@ -4,7 +4,6 @@ import Navbar from "@/components/Home/Navbar/Navbar";
 import HomeLanding from "@/components/Solar/HomeLanding";
 import CreativeText from "@/components/Solar/CreativeText";
 import MyMainCode from "@/components/Solar/MyMainCode";
-import WhoWeAre from "@/components/Home/WhoWeAre/WhoWeAre";
 import WhatWeDo from "@/components/Home/WhatWeDo/WhatWeDo";
 import InfiniteCreativity from "@/components/Home/InfiniteCreativity/InfiniteCreativity";
 import Process from "@/components/Home/Process/Process";
@@ -34,10 +33,6 @@ export default function Page() {
 
       {/* SECTION 4 */}
       <InfiniteCreativity />
-
-      <WhoWeAre />
-
-      {/* SECTION 5 */}
       <WhatWeDo />
       <Process />
     </main>
