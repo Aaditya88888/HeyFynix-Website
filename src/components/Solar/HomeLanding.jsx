@@ -42,7 +42,7 @@ export default function MyMainCode() {
     const scrollContainer = root.querySelector("#scrollContainer");
 
     // Scroll container
-    scrollContainer.style.height = window.innerWidth <= 768 ? "600vh" : "500vh";
+    scrollContainer.style.height = window.innerWidth <= 768 ? "600vh" : "550vh";
     scrollContainer.style.width = "100%";
     scrollContainer.style.position = "relative";
     scrollContainer.style.zIndex = "10";
