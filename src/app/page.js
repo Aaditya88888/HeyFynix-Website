@@ -19,9 +19,13 @@ export default function Page() {
         <HomeLanding />
       </section>
 
-      {/* SECTION 2 — CreativeText (StartOffset: 0.87) */}
+      {/* SECTION 2  */}
       <section className="min-h-screen flex items-center justify-center bg-black">
-        <CreativeText startOffset={0.87} />
+        <CreativeText
+          startOffset={1} 
+          revealRange={0.2} 
+          holdDuration={0.13} 
+        />
       </section>
 
       {/* SECTION 3 — Solar Canvas */}
