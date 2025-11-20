@@ -22,8 +22,8 @@ export default function Page() {
       {/* SECTION 2  */}
       <section className="min-h-screen flex items-center justify-center bg-black">
         <CreativeText
-          startOffset={1.3} 
-          revealRange={0.16} 
+          startOffset={1} 
+          revealRange={0.15} 
           holdDuration={0.07} 
         />
       </section>
