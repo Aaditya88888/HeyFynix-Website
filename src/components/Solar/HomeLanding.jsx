@@ -212,7 +212,7 @@ export default function MyMainCode() {
         const scrollPercent = Math.min(scrollY / scrollMax, 1);
 
         const movePhaseEnd = 0.09;
-        const fadeEnd = 0.20;
+        const fadeEnd = 0.21;
         const moveProgress = Math.min(scrollPercent / movePhaseEnd, 1);
 
         const weAreWidth = weAreSpan.offsetWidth || 100;
@@ -229,7 +229,7 @@ export default function MyMainCode() {
             const fadeProgress =
               (scrollPercent - movePhaseEnd) / (fadeEnd - movePhaseEnd);
             const scale = Math.max(0.4, 1 - fadeProgress * 0.8);
-            const opacity = Math.max(0, 1 - fadeProgress* 1.2);
+            const opacity = Math.max(0, 1 - fadeProgress* 1.3);
             textContainer.style.transform = `scale(${scale})`;
             textContainer.style.opacity = opacity;
             textContainer.style.visibility = "visible";
