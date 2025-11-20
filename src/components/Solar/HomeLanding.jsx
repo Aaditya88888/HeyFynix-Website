@@ -211,7 +211,8 @@ export default function MyMainCode() {
           document.documentElement.scrollHeight - window.innerHeight;
         const scrollPercent = Math.min(scrollY / scrollMax, 1);
 
-        const movePhaseEnd = 0.12;
+        const movePhaseEnd = 0.10;
+        const fadeEnd = 0.25;
         const moveProgress = Math.min(scrollPercent / movePhaseEnd, 1);
 
         const weAreWidth = weAreSpan.offsetWidth || 100;
@@ -227,8 +228,8 @@ export default function MyMainCode() {
           if (scrollPercent <= fadeEnd) {
             const fadeProgress =
               (scrollPercent - movePhaseEnd) / (fadeEnd - movePhaseEnd);
-            const scale = Math.max(0.3, 1 - fadeProgress * 0.7);
-            const opacity = Math.max(0, 1 - fadeProgress);
+            const scale = Math.max(0.4, 1 - fadeProgress * 0.8);
+            const opacity = Math.max(0, 1 - fadeProgress* 1.1);
             textContainer.style.transform = `scale(${scale})`;
             textContainer.style.opacity = opacity;
             textContainer.style.visibility = "visible";
