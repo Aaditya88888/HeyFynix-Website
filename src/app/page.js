@@ -7,6 +7,7 @@ import MyMainCode from "@/components/Solar/MyMainCode";
 import WhatWeDo from "@/components/Home/WhatWeDo/WhatWeDo";
 import InfiniteCreativity from "@/components/Home/InfiniteCreativity/InfiniteCreativity";
 import Process from "@/components/Home/Process/Process";
+import Work from "@/components/Home/Work/Work";
 
 export default function Page() {
   return (
@@ -33,6 +34,7 @@ export default function Page() {
 
       {/* SECTION 4 */}
       <InfiniteCreativity />
+      <Work />
       <WhatWeDo />
       <Process />
     </main>

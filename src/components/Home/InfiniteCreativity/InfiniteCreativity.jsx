@@ -1825,7 +1825,7 @@ const InfiniteCreativity = () => {
               ref={playReelRef}
               className="absolute inset-0 flex items-center justify-center text-white text-8xl font-medium opacity-0 z-[999] pointer-events-none"
             >
-              <div className="flex items-center gap-4">
+              {/* <div className="flex items-center gap-4">
                 <span>PLAY</span>
                 <button
                   ref={playButtonRef}
@@ -1839,6 +1839,26 @@ const InfiniteCreativity = () => {
                     <IoMdPlay className="relative z-10 text-black group-hover:text-white text-4xl" />
                   )}
                 </button>
+                <span>REEL</span>
+              </div> */}
+
+              <div className="flex items-center gap-4 group">
+                <span>PLAY</span>
+
+                <button
+                  ref={playButtonRef}
+                  onClick={handlePlayClick}
+                  className="pointer-events-auto relative overflow-hidden p-6 rounded-full bg-white flex items-center justify-center"
+                >
+                  <span className="absolute inset-0 bg-blue-500 z-0 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></span>
+
+                  {isPlayingFullVideo ? (
+                    <FaPause className="relative z-10 text-black group-hover:text-white text-4xl" />
+                  ) : (
+                    <IoMdPlay className="relative z-10 text-black group-hover:text-white text-4xl" />
+                  )}
+                </button>
+
                 <span>REEL</span>
               </div>
             </div>

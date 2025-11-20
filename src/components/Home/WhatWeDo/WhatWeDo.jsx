@@ -310,9 +310,9 @@ const WhatWeDo = () => {
 
           <div className="right w-[30%] flex flex-col justify-between items-end pb-3 ">
             <img
-              src="https://images.pexels.com/photos/596134/pexels-photo-596134.jpeg"
+              src="https://cdn.pixabay.com/photo/2019/07/03/12/14/saturn-4314403_1280.png"
               alt=""
-              className="w-[445px] h-[230px] object-cover"
+              className="w-[320px] h-[150px] object-cover"
             />
             <p className="text-xl">(and we're pretty darn good at it)</p>
           </div>
