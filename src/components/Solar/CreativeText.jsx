@@ -3,8 +3,9 @@ import { useEffect, useRef } from "react";
 import "../Solar/HomeLanding.css";
 
 export default function CreativeText({
-  startOffset = 0.9,
+  startOffset = 0.99,
   revealRange = 0.12,
+  holdDuration = 0.5,
 }) {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
@@ -36,7 +37,7 @@ export default function CreativeText({
     window.addEventListener("resize", resizeCanvas);
 
     const stars = [];
-    const starCount = window.innerWidth < 768 ? 80 : 150;
+    const starCount = window.innerWidth < 768 ? 80 : 500;
 
     for (let i = 0; i < starCount; i++) {
       stars.push({
@@ -84,7 +85,8 @@ export default function CreativeText({
     let retryInterval = null;
     let lastScrollY = 0;
 
-    const findScrollContainer = () => document.querySelector("#scrollContainer");
+    const findScrollContainer = () =>
+      document.querySelector("#scrollContainer");
 
     const buildDOM = () => {
       const container = containerRef.current;
@@ -117,7 +119,9 @@ export default function CreativeText({
         lineDiv.style.cssText = `
           text-align:center;
           margin-bottom:${i === 0 ? "0.1em" : "0"};
-          font-size:${i === 0 ? "clamp(2.5rem,7vw,7rem)" : "clamp(1.4rem,4vw,3.5rem)"};
+          font-size:${
+            i === 0 ? "clamp(2.5rem,7vw,7rem)" : "clamp(1.4rem,4vw,3.5rem)"
+          };
           font-weight:${i === 0 ? "900" : "500"};
           font-style:italic;
           letter-spacing:1.5px;
@@ -142,12 +146,15 @@ export default function CreativeText({
 
     const computeContainerProgress = (scrollContainer) => {
       const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-      const containerHeight = Math.max(
-        0,
-        (scrollContainer.offsetHeight || 0) - window.innerHeight
-      );
-      if (containerHeight <= 0) return 0;
-      return Math.max(0, Math.min(1, scrollY / containerHeight));
+      const containerHeight = scrollContainer.offsetHeight || 0;
+      const windowHeight = window.innerHeight;
+
+      // Ye line badal di → ab 1 se aage bhi ja sakta hai!
+      const maxScroll = containerHeight - windowHeight;
+      if (maxScroll <= 0) return 0;
+
+      const progress = scrollY / maxScroll;
+      return Math.max(0, progress); // ← Yaha Math.min(1, ...) hata diya!
     };
 
     const pinElement = () => {
@@ -202,13 +209,31 @@ export default function CreativeText({
       const el = containerRef.current;
       if (!el) return;
 
-      const localProgress = Math.max(
-        0,
-        Math.min(1, (prog - startOffset) / revealRange)
-      );
+      // Ye part replace kar de (checkPinStatus ke andar)
+      const revealStart = startOffset; // 1.2 bhi allowed
+      const revealEnd = revealStart + revealRange; // 1.2 + 0.18 = 1.38
+      const holdEnd = revealEnd + holdDuration; // 1.38 + 0.1 = 1.48
+
+      let localProgress = 0;
+
+      if (prog >= revealStart) {
+        if (prog < revealEnd) {
+          localProgress = (prog - revealStart) / revealRange;
+        } else if (prog < holdEnd) {
+          localProgress = 1; // hold phase
+        } else {
+          localProgress = 1; // ready to unpin
+        }
+      }
+
+      localProgress = Math.max(0, Math.min(1, localProgress));
       const isFullyRevealed = localProgress >= 1;
 
-      if (isFullyRevealed && direction === "down" && stateRef.current.isPinned) {
+      // Unpin only after hold
+      const shouldUnpin =
+        prog >= holdEnd && direction === "down" && stateRef.current.isPinned;
+
+      if (shouldUnpin && !stateRef.current.wasFullyRevealed) {
         stateRef.current.wasFullyRevealed = true;
         unpinElement();
       }
@@ -242,7 +267,8 @@ export default function CreativeText({
     };
 
     const onScroll = () => {
-      if (!rafRef.current) rafRef.current = requestAnimationFrame(checkPinStatus);
+      if (!rafRef.current)
+        rafRef.current = requestAnimationFrame(checkPinStatus);
     };
 
     const startWatching = () => {
@@ -286,7 +312,7 @@ export default function CreativeText({
         opacity: 0,
         visibility: "hidden",
         transition: "opacity 0.3s ease",
-        height: "100vh",
+        height: "300vh",
         position: "fixed",
         top: "50%",
         left: "50%",

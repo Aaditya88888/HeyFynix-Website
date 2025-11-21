@@ -42,8 +42,7 @@ export default function MyMainCode() {
     const scrollContainer = root.querySelector("#scrollContainer");
 
     // Scroll container
-    scrollContainer.style.height =
-      window.innerWidth <= 768 ? "1200vh" : "800vh";
+    scrollContainer.style.height = window.innerWidth <= 768 ? "600vh" : "480vh";
     scrollContainer.style.width = "100%";
     scrollContainer.style.position = "relative";
     scrollContainer.style.zIndex = "10";
@@ -212,7 +211,8 @@ export default function MyMainCode() {
           document.documentElement.scrollHeight - window.innerHeight;
         const scrollPercent = Math.min(scrollY / scrollMax, 1);
 
-        const movePhaseEnd = 0.12;
+        const movePhaseEnd = 0.09;
+        const fadeEnd = 0.21;
         const moveProgress = Math.min(scrollPercent / movePhaseEnd, 1);
 
         const weAreWidth = weAreSpan.offsetWidth || 100;
@@ -228,8 +228,8 @@ export default function MyMainCode() {
           if (scrollPercent <= fadeEnd) {
             const fadeProgress =
               (scrollPercent - movePhaseEnd) / (fadeEnd - movePhaseEnd);
-            const scale = Math.max(0.3, 1 - fadeProgress * 0.7);
-            const opacity = Math.max(0, 1 - fadeProgress);
+            const scale = Math.max(0.4, 1 - fadeProgress * 0.8);
+            const opacity = Math.max(0, 1 - fadeProgress* 1.3);
             textContainer.style.transform = `scale(${scale})`;
             textContainer.style.opacity = opacity;
             textContainer.style.visibility = "visible";
