@@ -1,107 +1,13 @@
-import { Poppins, Inter } from "next/font/google";
-import localFont from "next/font/local";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import CursorEffect from "@/components/CursorEffect/CursorEffect";
-
-// Google Font (Poppins)
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-poppins",
-});
+import StarsBackground from "@/components/StarsBackground/StarsBackground";
 
 // Google Font (Inter)
 const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-inter",
-});
-
-// Local Font (Neue Haas Display)
-const neueHaas = localFont({
-  src: [
-    {
-      path: "../../public/fonts/NeueHaasDisplayBlack.ttf",
-      weight: "900",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/NeueHaasDisplayBlackItalic.ttf",
-      weight: "900",
-      style: "italic",
-    },
-    {
-      path: "../../public/fonts/NeueHaasDisplayBold.ttf",
-      weight: "700",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/NeueHaasDisplayBoldItalic.ttf",
-      weight: "700",
-      style: "italic",
-    },
-    {
-      path: "../../public/fonts/NeueHaasDisplayLight.ttf",
-      weight: "300",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/NeueHaasDisplayLightItalic.ttf",
-      weight: "300",
-      style: "italic",
-    },
-    {
-      path: "../../public/fonts/NeueHaasDisplayMediu.ttf",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/NeueHaasDisplayMediumItalic.ttf",
-      weight: "500",
-      style: "italic",
-    },
-    {
-      path: "../../public/fonts/NeueHaasDisplayRoman.ttf",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/NeueHaasDisplayRomanItalic.ttf",
-      weight: "400",
-      style: "italic",
-    },
-    {
-      path: "../../public/fonts/NeueHaasDisplayThin.ttf",
-      weight: "200",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/NeueHaasDisplayThinItalic.ttf",
-      weight: "200",
-      style: "italic",
-    },
-    {
-      path: "../../public/fonts/NeueHaasDisplayXThin.ttf",
-      weight: "100",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/NeueHaasDisplayXThinItalic.ttf",
-      weight: "100",
-      style: "italic",
-    },
-    {
-      path: "../../public/fonts/NeueHaasDisplayXXThin.ttf",
-      weight: "100",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/NeueHaasDisplayXXThinItalic.ttf",
-      weight: "100",
-      style: "italic",
-    },
-  ],
-  variable: "--font-neuehaas",
 });
 
 export const metadata = {
@@ -112,10 +18,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.variable} ${neueHaas.variable} ${poppins.variable}  antialiased`}
-      >
+      <body className={`${inter.variable} antialiased`}>
         {/* 👇 This makes the hover canvas global (on all pages) */}
+        <StarsBackground />
         <CursorEffect />
 
         {/* 👇 Your actual website content */}

@@ -30,7 +30,7 @@ export default function Button() {
           id="home-featured-cta-text"
           className="font-medium text-[15px] tracking-[0.5px] relative z-[1] transition-colors duration-300"
         >
-          About Us
+          View More
         </span>
 
         <span

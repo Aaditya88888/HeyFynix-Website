@@ -1776,7 +1776,7 @@ const InfiniteCreativity = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative px-[4%] py-10 bg-black text-white overflow-hidden h-[130vh]"
+      className="relative px-[4%] py-10 bg-transparent text-white overflow-hidden h-[130vh]"
     >
       <div ref={headingContainerRef} className="heading-container mb-20">
         <h1 className="text-7xl md:text-8xl font-medium ml-50">
@@ -1880,10 +1880,10 @@ const InfiniteCreativity = () => {
           ref={textContainerRef}
           className="text-container md:w-[60%] flex justify-center gap-5 -mt-7"
         >
-          <h4 className="text-3xl md:w-[40%] md:text-[2.5rem] leading-[2.75rem] font-regular text-[#ffffff]">
+          <h4 className="text-2xl md:w-[40%] md:text-3xl leading-[2.75rem] font-regular text-[#ffffff]">
             Creativity is the Foundation of what we do
           </h4>
-          <p className="text-xl md:w-[60%] leading-[2.3rem] flex items-center mb-15">
+          <p className="text-xl md:w-[60%] leading-[2.3rem] flex items-center mb-15 text-justify">
             Heyfynix is a digital production studio that brings your ideas to
             life through visually captivating designs and interactive
             experiences. With our talented team, we push boundaries by solving

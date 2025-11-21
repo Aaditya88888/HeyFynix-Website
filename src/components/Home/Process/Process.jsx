@@ -511,7 +511,7 @@ const Process = () => {
   ];
 
   return (
-    <main className="w-full h-full bg-black">
+    <main className="w-full h-full bg-transparent">
       <div className="text-white text-section flex items-center justify-between px-[4%] pt-16 pb-6">
         <div className="left text-left max-w-lg">
           <h1 className="text-9xl font-bold italic leading-[1] mb-0 pb-0">
@@ -552,7 +552,7 @@ const Process = () => {
         <style jsx>{`
           .horizontal-slider-container {
             position: relative;
-            background-color: black;
+            background-color: transparent;
             overflow: visible; /* ✅ Updated */
             cursor: grab;
           }

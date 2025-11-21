@@ -11,7 +11,7 @@ import Work from "@/components/Home/Work/Work";
 
 export default function Page() {
   return (
-    <main className="w-full bg-black text-white">
+    <main className="w-full bg-transparent text-white">
       <Navbar />
 
       {/* SECTION 1 — Home intro */}

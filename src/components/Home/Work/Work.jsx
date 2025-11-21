@@ -540,18 +540,23 @@ const Work = () => {
   };
 
   return (
-    <div className="overflow-x-hidden bg-black text-white">
+    <div className="overflow-x-hidden w-full h-full bg-transparent text-white mt-50">
       {/* Header */}
-      <div className="text-center py-16 px-6 md:px-12">
-        <h1 className="text-[4vw] font-bold mb-4">Work</h1>
-        <h2 className="text-[2.5vw] font-semibold mb-4">
-          Stuff We’re Super Proud Of
-        </h2>
-        <p className="text-[1vw] text-gray-300 max-w-4xl mx-auto leading-relaxed">
-          We’re proud of the problems we’ve solved and the stories we’ve told.
-          From bold branding to immersive films, our portfolio reflects our
-          commitment to excellence.
-        </p>
+
+      <div className="flex px-[4%] h-[50vh]">
+        <div className="left w-[40%] ">
+          <h1 className="text-8xl whitespace-nowrap">Our Portfolio</h1>
+        </div>
+        <div className="center w-[30%] flex items-center justify-center text-center">
+          <p className="text-2xl text-justify">
+            We're proud of the problems we've solved and the stories we've told.
+            Our portfolio reflects our commitment to excellence.
+          </p>
+        </div>
+
+        <div className="right w-[30%]  text-xl flex items-end justify-end">
+          <p>Here's a peek at what we've been up to:</p>
+        </div>
       </div>
 
       {/* Images */}
@@ -613,6 +618,9 @@ const Work = () => {
                 className="w-full h-full object-cover select-none pointer-events-none"
                 loading="lazy"
               />
+              {/* <div className="flex justify-center py-1 ">
+                <Button />
+              </div> */}
             </div>
           );
         })}
@@ -638,7 +646,7 @@ const Work = () => {
       </div>
 
       {/* Bottom Button */}
-      <div className="flex justify-center py-1 mt-[-6vh]">
+      <div className="flex justify-center py-1 ">
         <Button />
       </div>
     </div>

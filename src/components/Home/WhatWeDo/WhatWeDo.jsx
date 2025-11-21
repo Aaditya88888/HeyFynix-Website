@@ -261,7 +261,7 @@ const WhatWeDo = () => {
   ];
 
   return (
-    <div className="font-poppins bg-black text-white overflow-x-hidden relative">
+    <div className="font-poppins bg-transparent text-white overflow-x-hidden relative">
       {/* === STAR CANVAS BACKGROUND === */}
       <canvas
         ref={canvasRef}
