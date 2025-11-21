@@ -35,7 +35,7 @@ html::-webkit-scrollbar {
   align-items: center;
   justify-content: center;
   background: #000;
-  z-index: 100;
+  z-index: 1000;
   transition: opacity 0.5s ease;
 }
 
@@ -65,7 +65,6 @@ html::-webkit-scrollbar {
   position: fixed;
   top: 40%;
   left: 50%;
-  pointer-events: auto !important;
   transform: translateX(-50%);
   font-family: var(--font-inter) !important;
   font-size: clamp(2.5rem, 10vw, 8rem);
@@ -73,7 +72,7 @@ html::-webkit-scrollbar {
   color: #fff;
   letter-spacing: -0.02em;
   z-index: 900;
-  pointer-events: auto;
+  pointer-events: none; /* ← Text select disable (tumhara requirement) */
   user-select: none;
   white-space: nowrap;
   text-align: center;
@@ -81,6 +80,16 @@ html::-webkit-scrollbar {
   -webkit-user-drag: none;
   filter: drop-shadow(0 0 0 var(--shadow));
   transition: filter 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ← YE 3 LINE DAAL DO (GAME CHANGER) */
+#topText > div {
+  pointer-events: auto !important; /* Hover work karega */
+  pointer-events: all; /* Extra safe */
+}
+
+#topText > div > span {
+  pointer-events: auto !important; /* Hey, we are, Fynix sab par hover */
 }
 
 #topText.hover-hey {
@@ -128,7 +137,7 @@ canvas.three-canvas,
   width: 100% !important;
   height: 100% !important;
   opacity: 0;
-  z-index: 8 !important;
+  z-index: 1 !important;
   pointer-events: none !important;
   transition: opacity 0.3s ease;
 }
