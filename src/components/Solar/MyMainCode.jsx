@@ -467,7 +467,7 @@ export default function MyMainCode() {
       const minY = -window.innerHeight * 0.6; // start somewhat lower but not way offscreen
       const maxY = 0; // final y
       solarSystem.position.y = minY + (maxY - minY) * p;
-      camera.position.z = (350 - 150 * p) * scaleFactor;
+      camera.position.z = (350 - 145 * p) * scaleFactor;
       camera.lookAt(0, 0, 0);
       controls.update();
 
@@ -636,7 +636,7 @@ export default function MyMainCode() {
   return (
     <div
       ref={wrapperRef}
-      style={{ width: "100%", height: "100%", position: "relative" }}
+      style={{ width: "100%", height: "100vh", position: "relative" }}
     />
   );
 }
