@@ -37,13 +37,13 @@ export default function CreativeText({
     window.addEventListener("resize", resizeCanvas);
 
     const stars = [];
-    const starCount = window.innerWidth < 768 ? 80 : 500;
+    const starCount = window.innerWidth < 768 ? 80 : 1000;
 
     for (let i = 0; i < starCount; i++) {
       stars.push({
         x: Math.random() * canvas.offsetWidth,
         y: Math.random() * canvas.offsetHeight,
-        radius: Math.random() * 1.3 + 0.4,
+        radius: Math.random() * 1.4 + 0.4,
         opacity: Math.random() * 0.5 + 0.3,
         twinkleSpeed: Math.random() * 0.02 + 0.01,
         twinklePhase: Math.random() * Math.PI * 2,
@@ -312,7 +312,7 @@ export default function CreativeText({
         opacity: 0,
         visibility: "hidden",
         transition: "opacity 0.3s ease",
-        height: "300vh",
+        height: "360vh",
         position: "fixed",
         top: "50%",
         left: "50%",
@@ -320,7 +320,7 @@ export default function CreativeText({
         pointerEvents: "none",
         fontFamily: "var(--font-inter), sans-serif",
         color: "#fff",
-        zIndex: 900,
+        zIndex: 9,
         overflow: "hidden",
       }}
     >
