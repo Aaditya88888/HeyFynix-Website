@@ -52,7 +52,10 @@ export default function StarsBackground() {
 
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      // ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      // ctx.fillStyle = "rgba(50, 24, 3400, 0.15)";
+      ctx.fillStyle = "black";
+
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       stars.forEach((star) => star.update());
@@ -73,8 +76,8 @@ export default function StarsBackground() {
         left: 0,
         width: "100%",
         height: "100%",
-        zIndex: -1, // IMPORTANT: Keep background behind content
-        background: "black",
+        zIndex: -1,
+        background: "#000000",
       }}
     />
   );
