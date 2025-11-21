@@ -36,7 +36,7 @@ html,
   position: fixed;
   font-weight: 200;
   color: rgba(226, 223, 223, 0.7);
-  z-index: 9999;
+  z-index: 999;
   font-family: var(--font-inter) !important;
   pointer-events: auto !important;
   white-space: nowrap;
@@ -46,12 +46,12 @@ html,
   font-size: clamp(11px, 1.8vw, 20px);
 }
 .corner-text.left {
-  top: 20vh;
+  top: 25vh;
   left: 3vw;
   transform: translateY(20px);
 }
 .corner-text.right {
-  top: 20vh;
+  top: 25vh;
   right: 5vw;
   transform: translateY(20px);
 }
@@ -61,20 +61,20 @@ html,
   border: 2px solid rgba(167, 165, 165, 0.25);
   border-radius: 25px;
   padding: 24px;
-  z-index: 999999;
+  z-index: 99999;
 }
 .corner-box.left {
-  transform: skew(-25deg);
+  transform: skew(25deg);
 }
 .corner-box.right {
-  transform: skew(25deg);
+  transform: skew(-25deg);
 }
 .corner-content {
   display: inline-block;
-  transform: skew(25deg);
+  transform: skew(-25deg);
 }
 .corner-box.right .corner-content {
-  transform: skew(-25deg);
+  transform: skew(25deg);
 }
 .corner-box::before {
   content: "";
@@ -99,8 +99,13 @@ html,
   filter: brightness(0) invert(0.3);
   z-index: 2;
 }
-.corner-box.left::after {
+.corner-box.right::after {
   transform: translateX(-50%) scaleX(-1);
+}
+
+/* Pehle normal image RIGHT par thi — ab LEFT par aayegi */
+.corner-box.left::after {
+  transform: translateX(-50%) scaleX(1);
 }
 
 /* Planet label */
@@ -158,13 +163,21 @@ html,
 
 /* When scene visible we set pointer-events auto on main canvas via JS */
 .three-canvas {
+  position: absolute !important;
+  inset: 0;
+  pointer-events: auto !important; /* ← Sirf ye interactive */
   z-index: 6;
 }
 .label-renderer {
+  pointer-events: none !important; /* labels sirf dikhe, click na kare */
   z-index: 7;
-  pointer-events: auto !important;
 }
 .stars-canvas {
+  position: absolute !important;
+  inset: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  pointer-events: none !important; /* ← SIRF YE ADD KARO */
   z-index: 4;
 }
 
