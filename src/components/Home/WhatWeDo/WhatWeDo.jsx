@@ -272,29 +272,6 @@ const WhatWeDo = () => {
       <div className="relative z-10 px-20">
         {/* Centered Heading Section */}
 
-        {/* <div className="flex items-center justify-center text-center min-h-[60vh]  relative z-20">
-          <div className="left w-1/2  h-full text-left">
-            <div className="w-fit">
-              <h1 className="text-9xl font-medium">What We do</h1>
-              <p className="text-2xl font-medium text-right">
-                (and we're pretty darn good at it)
-              </p>
-            </div>
-          </div>
-
-          <div className="right w-1/2  flex flex-col items-end text-right gap-20">
-            <img
-              src="https://images.pexels.com/photos/596134/pexels-photo-596134.jpeg"
-              alt=""
-              className="w-[445px] h-[230px] object-cover"
-            />
-            <p className="text-2xl font-normal text-left">
-              Your challenges are our playground. Here’s how we can team up to
-              make things happen
-            </p>
-          </div>
-        </div> */}
-
         <div className="flex h-[40vh]">
           <div className="left w-[40%]  flex justify-start items-center pb-15">
             <h1 className="text-8xl font-medium whitespace-nowrap ">
@@ -346,15 +323,15 @@ const WhatWeDo = () => {
                   hoveredIndex === idx ? "-translate-y-6" : "translate-y-0"
                 }`}
               >
-                <h3 className="text-3xl md:text-4xl font-semibold mb-4 text-white transition-all duration-500">
+                <h3 className="text-3xl md:text-3xl font-semibold mb-2 text-white transition-all duration-500">
                   {section.title}
                 </h3>
-                <p className="text-lg md:text-xl leading-8 text-gray-300 max-w-[450px] mx-auto transition-all duration-500">
+                <p className="text-lg md:text-xl  text-gray-300 max-w-[450px] mx-auto transition-all duration-500">
                   {section.desc}
                 </p>
 
                 <div
-                  className={`text-base md:text-lg leading-8 text-gray-400 max-w-[450px] mx-auto mt-4 transition-all duration-500 ease-out ${
+                  className={`text-base md:text-lg text-gray-400 max-w-[450px] mx-auto mt-4 transition-all duration-500 ease-out ${
                     hoveredIndex === idx
                       ? "opacity-100 translate-y-0"
                       : "opacity-0 translate-y-5"
