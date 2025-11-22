@@ -532,7 +532,7 @@ export default function MyMainCode() {
         // Corner text animation (0% → 50% scroll mein appear)
         const tl = cornerTimelineRef.current;
         if (tl) {
-          const textProgress = gsap.utils.clamp(0, 1, (progress - 0.05) / 0.5); // 5% → 55% = 0 → 1
+          const textProgress = gsap.utils.clamp(0, 1, (progress - 0.02) / 0.5); // 5% → 55% = 0 → 1
           tl.progress(textProgress);
         }
 
