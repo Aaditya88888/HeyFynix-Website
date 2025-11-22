@@ -8,6 +8,7 @@ import WhatWeDo from "@/components/Home/WhatWeDo/WhatWeDo";
 import InfiniteCreativity from "@/components/Home/InfiniteCreativity/InfiniteCreativity";
 import Process from "@/components/Home/Process/Process";
 import Work from "@/components/Home/Work/Work";
+import MakesUsDifferent from "@/components/Home/MakesUsDifferent/MakesUsDifferent";
 
 export default function Page() {
   return (
@@ -37,6 +38,7 @@ export default function Page() {
       <Work />
       <WhatWeDo />
       <Process />
+      <MakesUsDifferent />
     </main>
   );
 }
