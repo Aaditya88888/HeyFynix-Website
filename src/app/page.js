@@ -31,7 +31,7 @@ export default function Page() {
       </section>
 
       {/* GAP */}
-      <div style={{ height: "10vh" }} />
+      <div style={{ height: "20vh" }} />
 
       {/* SECTION 4 */}
       <InfiniteCreativity />
