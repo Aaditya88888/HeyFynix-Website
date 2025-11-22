@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useRef } from "react";
-import CursorEffect from "../CursorEffect/CursorEffect";
 import { gsap } from "gsap";
 import { Inter } from "next/font/google";
 import * as THREE from "three";
@@ -10,7 +9,6 @@ const inter = Inter({ subsets: ["latin"] });
 
 export default function MyMainCode() {
   const rootRef = useRef(null);
-  const cursorContainerRef = useRef(null);
   const starsRendererRef = useRef(null);
   const starsSceneRef = useRef(null);
   const starsCameraRef = useRef(null);
@@ -42,7 +40,7 @@ export default function MyMainCode() {
     const scrollContainer = root.querySelector("#scrollContainer");
 
     // Scroll container
-    scrollContainer.style.height = window.innerWidth <= 768 ? "600vh" : "480vh";
+    scrollContainer.style.height = window.innerWidth <= 768 ? "900vh" : "650vh";
     scrollContainer.style.width = "100%";
     scrollContainer.style.position = "relative";
     scrollContainer.style.zIndex = "10";
@@ -58,7 +56,7 @@ export default function MyMainCode() {
       0.1,
       10000
     );
-    starsCamera.position.z = 400;
+    starsCamera.position.z = 600;
     starsCameraRef.current = starsCamera;
 
     const starsRenderer = new THREE.WebGLRenderer({
@@ -70,10 +68,16 @@ export default function MyMainCode() {
     starsRenderer.domElement.style.position = "fixed";
     starsRenderer.domElement.style.top = "0";
     starsRenderer.domElement.style.left = "0";
-    starsRenderer.domElement.style.zIndex = "8";
+    starsRenderer.domElement.style.width = "100%";
+    starsRenderer.domElement.style.height = "relative";
+    starsRenderer.domElement.style.zIndex = "60";
     starsRenderer.domElement.style.opacity = "0";
-    starsRenderer.domElement.style.pointerEvents = "auto"; // <-- IMPORTANT: allow OrbitControls
-
+    starsRenderer.domElement.style.pointerEvents = "none";
+    starsRenderer.domElement.style.setProperty(
+      "pointer-events",
+      "none",
+      "important"
+    );
     starsRendererRef.current = starsRenderer;
     const existingCanvas = root.querySelector("canvas");
     if (existingCanvas) existingCanvas.remove();
@@ -105,6 +109,7 @@ export default function MyMainCode() {
     const starMaterial = new THREE.PointsMaterial({
       color: 0xffffff,
       size: 2.5,
+      sizeAttenuation: true,
       map: starTexture,
       transparent: true,
       opacity: 0.8,
@@ -211,8 +216,9 @@ export default function MyMainCode() {
           document.documentElement.scrollHeight - window.innerHeight;
         const scrollPercent = Math.min(scrollY / scrollMax, 1);
 
-        const movePhaseEnd = 0.09;
-        const fadeEnd = 0.21;
+        // const movePhaseEnd = 0.12;
+        const movePhaseEnd = 0.09; // ← const laga do!
+        const fadeEnd = 0.2;
         const moveProgress = Math.min(scrollPercent / movePhaseEnd, 1);
 
         const weAreWidth = weAreSpan.offsetWidth || 100;
@@ -228,8 +234,10 @@ export default function MyMainCode() {
           if (scrollPercent <= fadeEnd) {
             const fadeProgress =
               (scrollPercent - movePhaseEnd) / (fadeEnd - movePhaseEnd);
-            const scale = Math.max(0.4, 1 - fadeProgress * 0.8);
-            const opacity = Math.max(0, 1 - fadeProgress* 1.3);
+            // const scale = Math.max(0.3, 1 - fadeProgress * 0.7);
+            // const opacity = Math.max(0, 1 - fadeProgress);
+            const scale = Math.max(0.4, 1 - fadeProgress * 0.9);
+            const opacity = Math.max(0, 1 - fadeProgress * 1.4);
             textContainer.style.transform = `scale(${scale})`;
             textContainer.style.opacity = opacity;
             textContainer.style.visibility = "visible";
@@ -470,16 +478,6 @@ export default function MyMainCode() {
 
   return (
     <>
-      <div
-        ref={cursorContainerRef}
-        className="fixed inset-0 pointer-events-none z-[100000000]"
-        style={{ width: "100vw", height: "100vh" }}
-      >
-        {cursorContainerRef.current && (
-          <CursorEffect container={cursorContainerRef.current} />
-        )}
-      </div>
-
       <div
         ref={rootRef}
         style={{

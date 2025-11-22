@@ -15,17 +15,13 @@ export default function Page() {
       <Navbar />
 
       {/* SECTION 1 — Home intro */}
-      <section className="min-h-screen flex items-center justify-center bg-black">
+      <section className="relative min-h-screen bg-black overflow-hidden">
         <HomeLanding />
       </section>
 
       {/* SECTION 2  */}
-      <section className="min-h-screen flex items-center justify-center bg-black">
-        <CreativeText
-          startOffset={1.13} 
-          revealRange={0.15} 
-          holdDuration={0.07} 
-        />
+      <section className="h-100vh flex items-center justify-center bg-black">
+        <CreativeText startOffset={0.84} revealRange={0.2} holdDuration={0.1} />
       </section>
 
       {/* SECTION 3 — Solar Canvas */}
