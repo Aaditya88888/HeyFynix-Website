@@ -228,7 +228,7 @@ export default function MyMainCode() {
         const scrollPercent = Math.min(scrollY / scrollMax, 1);
 
         const movePhaseEnd = 0.09;
-        const fadeEnd = 0.3;
+        const fadeEnd = 0.32;
         const moveProgress = Math.min(scrollPercent / movePhaseEnd, 1);
         const eased = Math.pow(moveProgress, 0.7);
 
@@ -397,51 +397,52 @@ export default function MyMainCode() {
     }
 
     function mainLoop() {
-      // Smooth lerp
-      currentProgress += (targetProgress - currentProgress) * smoothTime;
+      const maxScroll = 0.7;
+      const clampedTarget = Math.min(targetProgress, maxScroll);
 
-      // FORCE EXACT LOCK WHEN SCROLL STOPS
-      if (Math.abs(targetProgress - currentProgress) < 0.001) {
-        currentProgress = targetProgress; // Snap to exact
+      currentProgress += (clampedTarget - currentProgress) * smoothTime;
+
+      if (Math.abs(clampedTarget - currentProgress) < 0.001) {
+        currentProgress = clampedTarget;
       }
 
-      // Force bounds
-      if (targetProgress === 0) currentProgress = 0;
-      if (targetProgress === 1) currentProgress = 1;
+      if (clampedTarget === 0) currentProgress = 0;
+      if (clampedTarget === maxScroll) currentProgress = maxScroll;
 
-      // === VIDEO PROGRESS ===
-      const videoProgress = Math.min(currentProgress / 0.7, 1);
-      const videoOpacity = Math.max(0, 1 - videoProgress * 1.2);
+      // === VIDEO PROGRESS (0 - 0.7 maps to full video) ===
+      const smoothVideoProgress = currentProgress / maxScroll;
+      const videoProgress = Math.min(smoothVideoProgress, 1);
+
+      const videoOpacity = Math.max(0, 1 - videoProgress);
 
       if (astronautVideo.readyState >= 2 && videoDuration > 0) {
         const desiredTime = videoDuration * videoProgress;
         const timeDiff = desiredTime - astronautVideo.currentTime;
 
-        // Ignore micro-changes
-        if (Math.abs(timeDiff) > 0.01) {
-          astronautVideo.currentTime += timeDiff * 0.22;
+        if (Math.abs(timeDiff) > 0.015) {
+          astronautVideo.currentTime += timeDiff * 0.44;
         } else {
-          // LOCK EXACTLY when close
           astronautVideo.currentTime = desiredTime;
         }
       }
 
       astronautVideo.style.opacity = videoOpacity;
-      astronautVideo.style.visibility = videoOpacity > 0 ? "visible" : "hidden";
-      videoSection.style.display = videoOpacity > 0 ? "flex" : "none";
+      astronautVideo.style.visibility =
+        videoOpacity > 0.05 ? "visible" : "hidden";
+      videoSection.style.display = videoOpacity > 0.05 ? "flex" : "none";
 
       // === STARS OPACITY ===
       let starsOpacity = 0;
-      if (currentProgress >= 0.1 && currentProgress <= 1.0) {
+
+      if (currentProgress >= 0.1 && currentProgress <= maxScroll) {
         if (currentProgress <= 0.3)
           starsOpacity = (currentProgress - 0.1) / 0.2;
         else if (currentProgress < 0.7) starsOpacity = 1;
-        else starsOpacity = 1 - (currentProgress - 0.7) / 0.3;
       }
-      starsOpacity = Math.max(0, Math.min(1, starsOpacity));
+
       starsRendererRef.current.domElement.style.opacity = starsOpacity;
 
-      // === STARS SMOOTH PARALLAX ===
+      // === STARS PARALLAX ===
       if (starsOpacity > 0.01) {
         const offset = currentProgress - 0.5;
         const targetX = offset * 350;
