@@ -228,7 +228,7 @@ export default function MyMainCode() {
         const scrollPercent = Math.min(scrollY / scrollMax, 1);
 
         const movePhaseEnd = 0.09;
-        const fadeEnd = 0.32;
+        const fadeEnd = 0.3;
         const moveProgress = Math.min(scrollPercent / movePhaseEnd, 1);
         const eased = Math.pow(moveProgress, 0.7);
 
