@@ -1,3 +1,4 @@
+//homelanding/solar/HomeLanding.jsx
 "use client";
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
@@ -183,6 +184,7 @@ export default function MyMainCode() {
       heySpan.style.display = "inline-block";
       heySpan.style.transition = "transform 0.5s ease-out";
       heySpan.style.pointerEvents = "auto"; // <-- allow hover on span
+      heySpan.style.marginRight = "-0.1em";
       heySpan.textContent = before;
 
       const weAreSpan = document.createElement("span");
@@ -203,6 +205,13 @@ export default function MyMainCode() {
 
       textContainer.append(heySpan, weAreSpan, fynixSpan);
       topText.appendChild(textContainer);
+      let frozenWeAreWidth = 0;
+
+      requestAnimationFrame(() => {
+        frozenWeAreWidth = weAreSpan.offsetWidth;
+        weAreSpan.style.width = frozenWeAreWidth + "px";
+        weAreSpan.style.display = "inline-block";
+      });
 
       gsap.fromTo(
         [heySpan, fynixSpan],
@@ -211,41 +220,44 @@ export default function MyMainCode() {
       );
 
       const handleScroll = () => {
+        if (!frozenWeAreWidth) return; // wait until width freeze happens
+
         const scrollY = window.scrollY;
         const scrollMax =
           document.documentElement.scrollHeight - window.innerHeight;
         const scrollPercent = Math.min(scrollY / scrollMax, 1);
 
-        // const movePhaseEnd = 0.12;
-        const movePhaseEnd = 0.09; // ← const laga do!
-        const fadeEnd = 0.2;
+        const movePhaseEnd = 0.09;
+        const fadeEnd = 0.3;
         const moveProgress = Math.min(scrollPercent / movePhaseEnd, 1);
-
-        const weAreWidth = weAreSpan.offsetWidth || 100;
         const eased = Math.pow(moveProgress, 0.7);
-        const moveAmount = (weAreWidth / 2) * eased;
+
+        const moveAmount = (frozenWeAreWidth / 2) * eased;
 
         if (scrollPercent <= movePhaseEnd) {
+          heySpan._finalMove = moveAmount;
+          fynixSpan._finalMove = moveAmount;
+
           heySpan.style.transform = `translateX(${moveAmount}px)`;
           fynixSpan.style.transform = `translateX(-${moveAmount}px)`;
           weAreSpan.style.opacity = `${1 - moveProgress}`;
         } else {
-          const fadeEnd = 0.3;
-          if (scrollPercent <= fadeEnd) {
-            const fadeProgress =
-              (scrollPercent - movePhaseEnd) / (fadeEnd - movePhaseEnd);
-            // const scale = Math.max(0.3, 1 - fadeProgress * 0.7);
-            // const opacity = Math.max(0, 1 - fadeProgress);
-            const scale = Math.max(0.4, 1 - fadeProgress * 0.9);
-            const opacity = Math.max(0, 1 - fadeProgress * 1.4);
-            textContainer.style.transform = `scale(${scale})`;
-            textContainer.style.opacity = opacity;
-            textContainer.style.visibility = "visible";
-          } else {
-            textContainer.style.visibility = "hidden";
-          }
+          heySpan.style.transform = `translateX(${heySpan._finalMove}px)`;
+          fynixSpan.style.transform = `translateX(-${fynixSpan._finalMove}px)`;
+
+          const fadeProgress =
+            (scrollPercent - movePhaseEnd) / (fadeEnd - movePhaseEnd);
+
+          const scale = Math.max(0.4, 1 - fadeProgress * 0.9);
+          const opacity = Math.max(0, 1 - fadeProgress * 1.4);
+
+          textContainer.style.transform = `scale(${scale})`;
+          textContainer.style.opacity = opacity;
+          textContainer.style.visibility =
+            scrollPercent <= fadeEnd ? "visible" : "hidden";
         }
       };
+
       window.addEventListener("resize", resizeHandler);
       window.addEventListener("scroll", handleScroll);
 
