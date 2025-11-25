@@ -25,8 +25,8 @@ export default function BTSGallery() {
   return (
     <div style={{ minHeight: '100vh', padding: '40px 20px', fontFamily: 'Arial, sans-serif' }}>
       {/* Title */}
-      <div style={{ textAlign: 'left', marginBottom: '20px' }}>
-        <h1 style={{ marginLeft:'40px',fontSize: '128px', fontWeight: 'extrabold', color: '#fff', margin: 0, letterSpacing: '-1px' }}>
+      <div style={{ textAlign: 'left', marginBottom: '-20px' }}>
+        <h1 style={{ marginLeft:'60px',fontSize: '128px', fontWeight: '800', color: '#fff', margin: 0, letterSpacing: '-3px' }}>
           BTS
         </h1>
       </div>

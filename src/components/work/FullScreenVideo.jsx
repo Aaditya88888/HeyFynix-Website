@@ -77,7 +77,7 @@ export default function FullScreenVideo() {
         width: '100vw',
         height: '100vh',
         overflow: 'hidden',
-        marginTop: '100px',
+        marginTop: '90px',
       }}
     >
       {/* Full-screen background video with poster */}

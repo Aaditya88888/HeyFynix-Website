@@ -17,7 +17,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" >
       <body className={`${inter.variable} antialiased`}>
         {/* 👇 This makes the hover canvas global (on all pages) */}
         <StarsBackground />
