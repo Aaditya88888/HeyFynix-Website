@@ -321,8 +321,4 @@ export default function LusionNavbar() {
 //       )}
 //     </div>
 //   );
-<<<<<<< HEAD
 // }
-=======
-// }
->>>>>>> 495e59338c339bd907e4182124f33b1618fda183
