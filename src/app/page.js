@@ -8,6 +8,8 @@ import WhatWeDo from "@/components/Home/WhatWeDo/WhatWeDo";
 import InfiniteCreativity from "@/components/Home/InfiniteCreativity/InfiniteCreativity";
 import Process from "@/components/Home/Process/Process";
 import Work from "@/components/Home/Work/Work";
+import MakesUsDifferent from "@/components/Home/MakesUsDifferent/MakesUsDifferent";
+import Footer from "@/components/Home/Footer/Footer";
 
 export default function Page() {
   return (
@@ -30,13 +32,15 @@ export default function Page() {
       </section>
 
       {/* GAP */}
-      <div style={{ height: "10vh" }} />
+      <div style={{ height: "25vh" }} />
 
       {/* SECTION 4 */}
       <InfiniteCreativity />
-      <Work />
       <WhatWeDo />
+      <Work />
       <Process />
+      <MakesUsDifferent />
+      <Footer />
     </main>
   );
 }

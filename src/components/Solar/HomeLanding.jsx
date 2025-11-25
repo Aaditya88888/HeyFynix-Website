@@ -1,3 +1,4 @@
+//homelanding/solar/HomeLanding.jsx
 "use client";
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
@@ -183,6 +184,7 @@ export default function MyMainCode() {
       heySpan.style.display = "inline-block";
       heySpan.style.transition = "transform 0.5s ease-out";
       heySpan.style.pointerEvents = "auto"; // <-- allow hover on span
+      heySpan.style.marginRight = "-0.1em";
       heySpan.textContent = before;
 
       const weAreSpan = document.createElement("span");
@@ -203,6 +205,13 @@ export default function MyMainCode() {
 
       textContainer.append(heySpan, weAreSpan, fynixSpan);
       topText.appendChild(textContainer);
+      let frozenWeAreWidth = 0;
+
+      requestAnimationFrame(() => {
+        frozenWeAreWidth = weAreSpan.offsetWidth;
+        weAreSpan.style.width = frozenWeAreWidth + "px";
+        weAreSpan.style.display = "inline-block";
+      });
 
       gsap.fromTo(
         [heySpan, fynixSpan],
@@ -211,41 +220,44 @@ export default function MyMainCode() {
       );
 
       const handleScroll = () => {
+        if (!frozenWeAreWidth) return; // wait until width freeze happens
+
         const scrollY = window.scrollY;
         const scrollMax =
           document.documentElement.scrollHeight - window.innerHeight;
         const scrollPercent = Math.min(scrollY / scrollMax, 1);
 
-        // const movePhaseEnd = 0.12;
-        const movePhaseEnd = 0.09; // ← const laga do!
-        const fadeEnd = 0.2;
+        const movePhaseEnd = 0.09;
+        const fadeEnd = 0.3;
         const moveProgress = Math.min(scrollPercent / movePhaseEnd, 1);
-
-        const weAreWidth = weAreSpan.offsetWidth || 100;
         const eased = Math.pow(moveProgress, 0.7);
-        const moveAmount = (weAreWidth / 2) * eased;
+
+        const moveAmount = (frozenWeAreWidth / 2) * eased;
 
         if (scrollPercent <= movePhaseEnd) {
+          heySpan._finalMove = moveAmount;
+          fynixSpan._finalMove = moveAmount;
+
           heySpan.style.transform = `translateX(${moveAmount}px)`;
           fynixSpan.style.transform = `translateX(-${moveAmount}px)`;
           weAreSpan.style.opacity = `${1 - moveProgress}`;
         } else {
-          const fadeEnd = 0.3;
-          if (scrollPercent <= fadeEnd) {
-            const fadeProgress =
-              (scrollPercent - movePhaseEnd) / (fadeEnd - movePhaseEnd);
-            // const scale = Math.max(0.3, 1 - fadeProgress * 0.7);
-            // const opacity = Math.max(0, 1 - fadeProgress);
-            const scale = Math.max(0.4, 1 - fadeProgress * 0.9);
-            const opacity = Math.max(0, 1 - fadeProgress * 1.4);
-            textContainer.style.transform = `scale(${scale})`;
-            textContainer.style.opacity = opacity;
-            textContainer.style.visibility = "visible";
-          } else {
-            textContainer.style.visibility = "hidden";
-          }
+          heySpan.style.transform = `translateX(${heySpan._finalMove}px)`;
+          fynixSpan.style.transform = `translateX(-${fynixSpan._finalMove}px)`;
+
+          const fadeProgress =
+            (scrollPercent - movePhaseEnd) / (fadeEnd - movePhaseEnd);
+
+          const scale = Math.max(0.4, 1 - fadeProgress * 0.9);
+          const opacity = Math.max(0, 1 - fadeProgress * 1.4);
+
+          textContainer.style.transform = `scale(${scale})`;
+          textContainer.style.opacity = opacity;
+          textContainer.style.visibility =
+            scrollPercent <= fadeEnd ? "visible" : "hidden";
         }
       };
+
       window.addEventListener("resize", resizeHandler);
       window.addEventListener("scroll", handleScroll);
 
@@ -385,51 +397,52 @@ export default function MyMainCode() {
     }
 
     function mainLoop() {
-      // Smooth lerp
-      currentProgress += (targetProgress - currentProgress) * smoothTime;
+      const maxScroll = 0.7;
+      const clampedTarget = Math.min(targetProgress, maxScroll);
 
-      // FORCE EXACT LOCK WHEN SCROLL STOPS
-      if (Math.abs(targetProgress - currentProgress) < 0.001) {
-        currentProgress = targetProgress; // Snap to exact
+      currentProgress += (clampedTarget - currentProgress) * smoothTime;
+
+      if (Math.abs(clampedTarget - currentProgress) < 0.001) {
+        currentProgress = clampedTarget;
       }
 
-      // Force bounds
-      if (targetProgress === 0) currentProgress = 0;
-      if (targetProgress === 1) currentProgress = 1;
+      if (clampedTarget === 0) currentProgress = 0;
+      if (clampedTarget === maxScroll) currentProgress = maxScroll;
 
-      // === VIDEO PROGRESS ===
-      const videoProgress = Math.min(currentProgress / 0.7, 1);
-      const videoOpacity = Math.max(0, 1 - videoProgress * 1.2);
+      // === VIDEO PROGRESS (0 - 0.7 maps to full video) ===
+      const smoothVideoProgress = currentProgress / maxScroll;
+      const videoProgress = Math.min(smoothVideoProgress, 1);
+
+      const videoOpacity = Math.max(0, 1 - videoProgress);
 
       if (astronautVideo.readyState >= 2 && videoDuration > 0) {
         const desiredTime = videoDuration * videoProgress;
         const timeDiff = desiredTime - astronautVideo.currentTime;
 
-        // Ignore micro-changes
-        if (Math.abs(timeDiff) > 0.01) {
-          astronautVideo.currentTime += timeDiff * 0.22;
+        if (Math.abs(timeDiff) > 0.015) {
+          astronautVideo.currentTime += timeDiff * 0.44;
         } else {
-          // LOCK EXACTLY when close
           astronautVideo.currentTime = desiredTime;
         }
       }
 
       astronautVideo.style.opacity = videoOpacity;
-      astronautVideo.style.visibility = videoOpacity > 0 ? "visible" : "hidden";
-      videoSection.style.display = videoOpacity > 0 ? "flex" : "none";
+      astronautVideo.style.visibility =
+        videoOpacity > 0.05 ? "visible" : "hidden";
+      videoSection.style.display = videoOpacity > 0.05 ? "flex" : "none";
 
       // === STARS OPACITY ===
       let starsOpacity = 0;
-      if (currentProgress >= 0.1 && currentProgress <= 1.0) {
+
+      if (currentProgress >= 0.1 && currentProgress <= maxScroll) {
         if (currentProgress <= 0.3)
           starsOpacity = (currentProgress - 0.1) / 0.2;
         else if (currentProgress < 0.7) starsOpacity = 1;
-        else starsOpacity = 1 - (currentProgress - 0.7) / 0.3;
       }
-      starsOpacity = Math.max(0, Math.min(1, starsOpacity));
+
       starsRendererRef.current.domElement.style.opacity = starsOpacity;
 
-      // === STARS SMOOTH PARALLAX ===
+      // === STARS PARALLAX ===
       if (starsOpacity > 0.01) {
         const offset = currentProgress - 0.5;
         const targetX = offset * 350;
