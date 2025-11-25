@@ -848,7 +848,7 @@ useEffect(() => {
   const totalItems = duplicatedImages.length;
 
   // Speed control — slow & premium feel
-  const SCROLL_SPEED = 2.9; // Perfect balance (adjust 1.5–4)
+  const SCROLL_SPEED = 2.4; // Perfect balance (adjust 1.5–4)
 
   // Find which image is truly closest to the viewport center
   const updateCenterImage = () => {
@@ -1030,7 +1030,7 @@ useEffect(() => {
                   height: '280px',
                   // borderRadius: '1.2rem',
                   overflow: 'hidden',
-                    // border: isCenter ? '3px solid rgba(255,255,255,0.5)' : 'none',
+                  // border: isCenter ? '3px solid rgba(255,255,255,0.5)' : 'none',
                 }}>
                   <Image
                     src={img.src}

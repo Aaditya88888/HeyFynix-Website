@@ -75,53 +75,92 @@ export default function FullScreenVideo() {
       style={{
         position: 'relative',
         width: '100vw',
-        height: '100vh',
+        minHeight: '100vh',
         overflow: 'hidden',
-        marginTop: '90px',
+         display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+        padding: '2rem 0'  // Add some padding
+
       }}
     >
-      {/* Full-screen background video with poster */}
-      <video
-        // autoPlay
-        muted
-        loop
-        playsInline
-        poster="/videos/fullScreenPoster.png"   /* ← Add your poster image here */
-        onClick={() => window.open('/videos/video.mp4', '_blank')}
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          width: '1159px',
-          height: '518px',
-          objectFit: 'cover',
-          transform: 'translate(-50%, -50%)',
-          zIndex: 1,
-          background: '#000', // fallback color while poster loads
-          cursor: 'pointer', // show pointer cursor on hover
-        }}
-      >
-        <source src="/videos/video.mp4" type="video/mp4" />
-      </video>
+     <div style={{ 
+  position: 'relative',
+  width: '100%',
+  margin: '0 auto',
+  maxWidth: '1159px',  // Match video width
+  paddingTop: '2rem'   // Space from top
+}}>
+  <h1 style={{
+    color: 'white',
+    fontSize: '5rem',
+    fontWeight: '900',
+    textAlign: 'center',
+    textShadow: '0 2px 10px rgba(0,0,0,0.5)',
+    margin: '0 0 -0.5rem 0',  // Remove all margins except bottom
+    padding: 0,
+    lineHeight: 1.1
+  }}>
+    SVEEP ELECTION CAMPAIGN
+  </h1>
+  <p style={{
+    color: 'white',
+    fontSize: '1.4rem',
+    fontWeight: '500',
+    textAlign: 'center',
+    textShadow: '0 2px 5px rgba(0,0,0,0.5)',
+    margin: '0 0 0.5rem 0',  // Remove all margins except bottom
+    padding: 0,
+    marginRight:'-990px',
+  }}>
+    Cinema Film
+  </p>
+</div>
+
+{/* Video container */}
+<div style={{
+  position: 'relative',
+  width: '1159px',
+  height: '518px',
+  margin: '0 auto'
+}}>
+  <video
+    muted
+    loop
+    playsInline
+    poster="/videos/fullScreenPoster.png"
+    onClick={() => window.open('/videos/video.mp4', '_blank')}
+    style={{
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover',
+      display: 'block'
+    }}
+  >
+    <source src="/videos/video.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+</div>
 
       {/* Image stuck to the bottom center */}
       <div
         style={{
           position: 'absolute',
-          bottom: '-180px',           // tweak as needed
+          bottom: '-240px',           // tweak as needed
           left: '50%',
           transform: 'translateX(-50%)',
           zIndex: 10,
           pointerEvents: 'none',
         }}
       >
-        <div style={{ position: 'relative', maxWidth: '100vw', height: '60vh' }}>
+        <div style={{ position: 'relative', maxWidth: '100vw', height: '70vh' }}>
           <Image
             src="/images/work/chair.png"
             alt="Bottom overlay image"
             width={1800}
             height={700}
-          style={{ maxWidth: '100vw', height: '60vh' }}
+          style={{ maxWidth: '100vw', height: '70vh' }}
             priority // optional: load this important image early
           />
           <div

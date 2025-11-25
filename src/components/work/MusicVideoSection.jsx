@@ -11,6 +11,7 @@ export default function MusicVideoSection() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
+      marginTop:'100px'
     }}>
       {/* Your astronaut text */}
       

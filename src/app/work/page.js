@@ -32,11 +32,12 @@ export default function Home() {
       {introComplete && (
         <div style={{ position: 'relative' }}>
           <WorkNavbar />
+           <FullScreenVideo />
           <MusicVideoSection />
           <VideoGallerySection />
           <WorkGallerySection />
         <Government />
-        <FullScreenVideo />
+       
         <VideoMasonryGallery />
         <GymReelsSection />
         <BTSGallery />

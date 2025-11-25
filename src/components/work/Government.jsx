@@ -149,7 +149,7 @@ export default function Government() {
   return (
     <>
       {/* ==== UPPER SECTION – ASTRONAUT WITH OVERFLOW ==== */}
-      <div className="relative h-screen w-full overflow-hidden bg-black">
+      <div className="relative h-screen w-full overflow-hidden " style={{ zIndex: 30 }}>
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="relative">
             <Image
@@ -176,9 +176,11 @@ export default function Government() {
           backgroundImage: 'url(/images/work/eventVideoBackground.png)',
           backgroundSize: 'cover',
           backgroundPosition: 'center bottom',
-          marginTop: '-40vh', 
+          marginTop: '-41vh', 
           height:'80vh',
           width:'100vw',// Creates the overlap with astronaut hands
+              zIndex: 20  /* Lower z-index than astronaut */
+
         }}
       >
         {/* Dark gradient overlay */}
