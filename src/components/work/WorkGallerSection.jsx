@@ -840,15 +840,13 @@ const HorizontalGallery = ({ images }) => {
   const itemRefs = useRef([]);                    // One ref per image
   const animationRef = useRef(null);
   const [centerIndex, setCenterIndex] = useState(0);
-useEffect(() => {
-    itemRefs.current = new Array(duplicatedImages.length).fill(null);
-  }, [images.length]);
+
   // Triple duplicate for seamless infinite scroll
   const duplicatedImages = [...images, ...images, ...images];
   const totalItems = duplicatedImages.length;
 
   // Speed control — slow & premium feel
-  const SCROLL_SPEED = 2.9; // Perfect balance (adjust 1.5–4)
+  const SCROLL_SPEED = 3.2; // Perfect balance (adjust 1.5–4)
 
   // Find which image is truly closest to the viewport center
   const updateCenterImage = () => {
@@ -937,6 +935,7 @@ useEffect(() => {
         onMouseEnter={() => startScrolling('left')}
         onMouseLeave={stopScrolling}
         style={{
+     
           position: 'absolute',
           left: '30px',
           top: '50%',
@@ -948,15 +947,14 @@ useEffect(() => {
           borderRadius: '50%',
           display: 'flex',
           alignItems: 'center',
-        
-         justifyContent:'center',
+          justifyContent: 'center',
           cursor: 'pointer',
           zIndex: 100,
-          fontSize: '18px',
+          fontSize: '28px',
           color: 'white',
           boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
           border: '2px solid rgba(255,255,255,0.2)',
-          paddingRight:'10px'
+            paddingRight:'10px',
         }}
       >
         〈
@@ -979,10 +977,11 @@ useEffect(() => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-        paddingLeft:'10px',
+         
+            paddingLeft:'10px',
           cursor: 'pointer',
           zIndex: 100,
-          fontSize: '18px',
+          fontSize: '28px',
           color: 'white',
           boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
           border: '2px solid rgba(255,255,255,0.2)',
@@ -997,7 +996,6 @@ useEffect(() => {
           overflowX: 'hidden',
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
-           
         }}
         className="hide-scrollbar"
       >
@@ -1019,7 +1017,7 @@ useEffect(() => {
                   flex: 'none',
                   transition: 'all 0.7s cubic-bezier(0.4, 0, 0.2, 1)',
                  transform: isCenter 
-  ? 'scale(1.22) translateY(5px)'   // ← Only 20px lift (feels premium & balanced)
+  ? 'scale(1.22) translateY(-5px)'   // ← Only 20px lift (feels premium & balanced)
   : 'scale(0.92) translateY(10px)',   // ← Side images slightly lower
                   zIndex: isCenter ? 50 : 10,
                   filter: isCenter ? 'brightness(1.1)' : 'brightness(0.85)',
@@ -1028,10 +1026,8 @@ useEffect(() => {
                 <div style={{
                   width: '408px',
                   height: '280px',
-                  // borderRadius: '1.2rem',
                   overflow: 'hidden',
-                    // border: isCenter ? '3px solid rgba(255,255,255,0.5)' : 'none',
-                }}>
+ }}>
                   <Image
                     src={img.src}
                     alt={img.alt || `Image ${originalIndex + 1}`}
@@ -1039,7 +1035,6 @@ useEffect(() => {
                     height={500}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     priority={isCenter}
-              
                   />
                 </div>
 
@@ -1048,17 +1043,17 @@ useEffect(() => {
                   <div style={{
   marginTop: isCenter ? '-0.2rem' : '0.3rem',  // Reduced top margin for centered item
                     textAlign: 'center',
-                    opacity: isCenter ? 0.9 : 0.8,
+                    opacity: isCenter ? 1 : 0.8,
                     transition: 'all 0.5s',
                   }}>
                     <div style={{
                       display: 'flex',
                       justifyContent: 'space-between',
                       padding: '0 2rem',
-                      fontSize: isCenter ? '1rem' : '0.95rem',
+                      fontSize: isCenter ? '1.1rem' : '0.95rem',
                     }}>
                       {img.leftText && (
-                        <span style={{ fontWeight: isCenter ? '600' : '500', color: 'white',marginLeft:'-25px' }}>
+                        <span style={{ fontWeight: isCenter ? '700' : '500', color: 'white',marginLeft:'-25px' }}>
                           {img.leftText}
                         </span>
                       )}
@@ -1091,7 +1086,7 @@ export default function GalleriesPage() {
         <div key={gallery.id} style={{ marginBottom: '6rem' }}>
           {/* Hero Section - Only for first gallery */}
           {gallery.id === 1 && (
-            <div style={{ position: 'relative', height: '90vh', minHeight: '500px', marginBottom: '-2rem' }}>
+            <div style={{ position: 'relative', height: '90vh', minHeight: '500px', marginBottom: '-3rem' }}>
               <Image
                 src="/images/work/eventVideoBackground.png"
                 alt="Event Video Hero"
