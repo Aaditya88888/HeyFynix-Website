@@ -870,14 +870,21 @@ const HorizontalGallery = ({ images }) => {
   }, []);
 
   return (
-    <div style={{ position: 'relative', padding: '4rem 0' }}>
+    <div style={{ 
+      position: 'relative', 
+      padding: '1.8rem 50px', 
+      width: '100%',
+      boxSizing: 'border-box',
+      maxWidth: '100vw',
+      overflow: 'hidden'
+    }}>
       {/* Left Arrow */}
       <div
         onMouseEnter={() => startScrolling('left')}
         onMouseLeave={stopScrolling}
         style={{
           position: 'absolute',
-          left: '30px',
+          left: '10px',
           top: '45%',
           transform: 'translateY(-50%)',
           width: '40px',
@@ -890,13 +897,13 @@ const HorizontalGallery = ({ images }) => {
           textAlign:'left',
           // justifyContent: 'center',
           cursor: 'pointer',
-          zIndex: 30,
-          fontSize: '20px',
-          fontWeight: 'bold',
+          zIndex: 40,
+          fontSize: '24px',
           color: 'white',
-          opacity: 0.7,
-          transition: 'all 0.4s ease',
-          boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+          opacity: 0.9,
+          transition: 'all 0.3s ease',
+          boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
+          border: '1px solid rgba(255,255,255,0.2)',
         }}
         onMouseOver={(e) => (e.currentTarget.style.opacity = '1')}
       >
@@ -909,7 +916,7 @@ const HorizontalGallery = ({ images }) => {
         onMouseLeave={stopScrolling}
         style={{
           position: 'absolute',
-          right: '15px',
+          right: '10px',
           top: '45%',
           transform: 'translateY(-50%)',
           width: '40px',
@@ -922,13 +929,13 @@ const HorizontalGallery = ({ images }) => {
           // textAlign:'right',
          justifyContent:'end',
           cursor: 'pointer',
-          zIndex: 30,
-          fontSize: '20px',
-          fontWeight: 'bold',
+          zIndex: 40,
+          fontSize: '24px',
           color: 'white',
-          opacity: 0.7,
-          transition: 'all 0.4s ease',
-          boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+          opacity: 0.9,
+          transition: 'all 0.3s ease',
+          boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
+          border: '1px solid rgba(255,255,255,0.2)',
         }}
       >
         〉
@@ -939,9 +946,13 @@ const HorizontalGallery = ({ images }) => {
         ref={scrollContainerRef}
         style={{
           overflowX: 'auto',
-          padding: '0 1.8rem',
+          padding: '0 10px',
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
+          width: '100%',
+          boxSizing: 'border-box',
+          scrollPadding: '0 20px',
+          WebkitOverflowScrolling: 'touch'
         }}
         className="hide-scrollbar"
       >
@@ -949,7 +960,7 @@ const HorizontalGallery = ({ images }) => {
           style={{
             display: 'flex',
             gap: '1.2rem',
-            padding: '2rem 0',
+            padding: '1rem 30px', 
             minWidth: 'max-content',
             alignItems: 'flex-start',
           }}
@@ -1030,17 +1041,19 @@ const HorizontalGallery = ({ images }) => {
         }
       `}</style>
     </div>
-  );
+ 
+);
+
 };
 
 export default function GalleriesPage() {
   return (
-    <section style={{ padding: '5rem 0' }}>
+    <section style={{ padding: '2rem 0' }}>
       {galleries.map((gallery) => (
-        <div key={gallery.id} style={{ marginBottom: '12rem' }}>
+        <div key={gallery.id} style={{ marginBottom: '6rem' }}>
           {/* Hero Section - Only for first gallery */}
           {gallery.id === 1 && (
-            <div style={{ position: 'relative', height: '100vh', minHeight: '600px' ,marginBottom:'-40px'}}>
+            <div style={{ position: 'relative', height: '90vh', minHeight: '500px', marginBottom: '2rem' }}>
               <Image
                 src="/images/work/eventVideoBackground.png"
                 alt="Event Video Hero"
@@ -1069,7 +1082,7 @@ export default function GalleriesPage() {
                     color: 'white',
                     letterSpacing: '-0.06em',
                     marginBottom: '1.5rem',
-                    lineHeight:'1.9rem',
+                    lineHeight:'3.9rem',
                     marginTop:'15.2rem',
                     fontStyle:'italic'
                   }}
@@ -1082,6 +1095,7 @@ export default function GalleriesPage() {
                     color: 'white',
                     maxWidth: '90rem',
                     lineHeight: '1.2',
+                    marginBottom: '2rem',
                   }}
                 >
                   {gallery.text}
@@ -1112,8 +1126,8 @@ export default function GalleriesPage() {
                   fontSize: '1.4rem',
                   color: 'rgba(255,255,255,0.9)',
                   maxWidth: '900px',
-                  margin: '2rem auto 0',
-                  lineHeight: '1.6',
+                  margin: '1.5rem auto 2rem',
+                  lineHeight: '1.4',
                   whiteSpace:'nowrap'
                 }}
               >

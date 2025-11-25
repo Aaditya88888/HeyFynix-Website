@@ -15,11 +15,16 @@ import WorkNavbar from '../../components/work/WorkNavbar';
 import GymReelsSection from '../../components/work/GymReelSection';
 import FullScreenVideo from '../../components/work/FullScreenVideo';
 import BTSGallery from '../../components/work/BTSGallery';
+import Navbar from '../../components/Home/Navbar/Navbar'
 export default function Home() {
   const [introComplete, setIntroComplete] = useState(false);
 
   return (
-    <div style={{ height: '100vh', overflowY: 'scroll' }}>
+   <main className='bg-transparent w-full text-white relative'>
+    <div className="fixed top-0 left-0 w-full z-50">
+      <Navbar />
+    </div>
+    <div style={{ height: '100vh', overflowY: 'scroll', paddingTop: '80px' }}>
       <EarthSection onComplete={() => setIntroComplete(true)} />
 
       <div style={{ height: introComplete ? '1vh' : '0vh' }} /> {/* Spacer for scroll */}
@@ -39,5 +44,6 @@ export default function Home() {
         </div>
       )}
     </div>
+   </main>
   );
 }

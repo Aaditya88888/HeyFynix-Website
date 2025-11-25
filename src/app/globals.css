@@ -9,3 +9,19 @@ body {
 * {
   font-family: var(--font-inter), sans-serif;
 }
+/* Smooth scrolling for the entire page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Performance optimization */
+.parallax-section {
+  will-change: transform;
+  transform-style: preserve-3d;
+}
+
+/* Ensure sections have a stacking context */
+section {
+  position: relative;
+  z-index: 1;
+}

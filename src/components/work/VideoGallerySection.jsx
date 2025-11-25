@@ -375,8 +375,8 @@ export default function VideoGallerySection() {
     <button
       onClick={() => setShowCarousel(true)}
       style={{
-        padding: "0.6rem 2rem",
-        fontSize: "1.5rem",
+        padding: "0.3rem 1rem",
+        fontSize: "1.1rem",
         fontWeight: 700,
         color: "white",
         background: "transparent",

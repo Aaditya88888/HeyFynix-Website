@@ -195,7 +195,7 @@ export default function Government() {
                 textShadow: '0 4px 40px rgba(0,0,0,0.9)',
                 color:'white',
                 marginTop:'90px',
-                marginLeft:'50px',
+                marginLeft:'40px',
                 marginBottom:'-240px',
                 fontStyle:'italic'
               }}

@@ -251,7 +251,7 @@ export default function EarthSection({ onComplete }) {
           left: '50%',
           transform: 'translateX(-50%)',
           color: '#fff',
-          fontSize: '4rem',
+          fontSize: '6rem',
           fontWeight: 'bold',
           textAlign: 'center',
           pointerEvents: 'none',
@@ -262,7 +262,7 @@ export default function EarthSection({ onComplete }) {
           whiteSpace: 'nowrap',
         }}
       >
-        We tell Stories the world remembers
+           Our Featured Work
       </div>
 
       <div
@@ -272,7 +272,7 @@ export default function EarthSection({ onComplete }) {
           left: '50%',
           transform: 'translateX(-50%)',
           color: '#fff',
-          fontSize: '5.5rem',
+          fontSize: '4rem',
           fontWeight: 'bold',
           textAlign: 'center',
           pointerEvents: 'none',
@@ -283,7 +283,8 @@ export default function EarthSection({ onComplete }) {
           whiteSpace: 'nowrap',
         }}
       >
-        Our Featured Work
+     
+        We tell Stories the world remembers
       </div>
     </div>
   );
