@@ -16,6 +16,7 @@ import GymReelsSection from '../../components/work/GymReelSection';
 import FullScreenVideo from '../../components/work/FullScreenVideo';
 import BTSGallery from '../../components/work/BTSGallery';
 import Navbar from '../../components/Home/Navbar/Navbar'
+
 export default function Home() {
   const [introComplete, setIntroComplete] = useState(false);
 
@@ -32,14 +33,16 @@ export default function Home() {
       {introComplete && (
         <div style={{ position: 'relative' }}>
           <WorkNavbar />
+           <FullScreenVideo />
           <MusicVideoSection />
           <VideoGallerySection />
           <WorkGallerySection />
         <Government />
-        <FullScreenVideo />
+       
         <VideoMasonryGallery />
         <GymReelsSection />
         <BTSGallery />
+        
         {/* <VideoCarousel /> */}
         </div>
       )}
