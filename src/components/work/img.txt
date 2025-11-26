@@ -846,7 +846,7 @@ const HorizontalGallery = ({ images }) => {
   const totalItems = duplicatedImages.length;
 
   // Speed control — slow & premium feel
-  const SCROLL_SPEED = 2.8; // Perfect balance (adjust 1.5–4)
+  const SCROLL_SPEED = 3.2; // Perfect balance (adjust 1.5–4)
 
   // Find which image is truly closest to the viewport center
   const updateCenterImage = () => {
@@ -935,12 +935,13 @@ const HorizontalGallery = ({ images }) => {
         onMouseEnter={() => startScrolling('left')}
         onMouseLeave={stopScrolling}
         style={{
+     
           position: 'absolute',
           left: '30px',
           top: '50%',
           transform: 'translateY(-50%)',
-          width: '60px',
-          height: '60px',
+          width: '40px',
+          height: '40px',
           background: 'rgba(255,255,255,0.15)',
           backdropFilter: 'blur(20px)',
           borderRadius: '50%',
@@ -949,10 +950,11 @@ const HorizontalGallery = ({ images }) => {
           justifyContent: 'center',
           cursor: 'pointer',
           zIndex: 100,
-          fontSize: '32px',
+          fontSize: '28px',
           color: 'white',
           boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
           border: '2px solid rgba(255,255,255,0.2)',
+            paddingRight:'10px',
         }}
       >
         〈
@@ -967,17 +969,19 @@ const HorizontalGallery = ({ images }) => {
           right: '30px',
           top: '50%',
           transform: 'translateY(-50%)',
-          width: '60px',
-          height: '60px',
+          width: '40px',
+          height: '40px',
           background: 'rgba(255,255,255,0.15)',
           backdropFilter: 'blur(20px)',
           borderRadius: '50%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+         
+            paddingLeft:'10px',
           cursor: 'pointer',
           zIndex: 100,
-          fontSize: '32px',
+          fontSize: '28px',
           color: 'white',
           boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
           border: '2px solid rgba(255,255,255,0.2)',
@@ -1013,27 +1017,22 @@ const HorizontalGallery = ({ images }) => {
                   flex: 'none',
                   transition: 'all 0.7s cubic-bezier(0.4, 0, 0.2, 1)',
                  transform: isCenter 
-  ? 'scale(1.22) translateY(-20px)'   // ← Only 20px lift (feels premium & balanced)
+  ? 'scale(1.22) translateY(-5px)'   // ← Only 20px lift (feels premium & balanced)
   : 'scale(0.92) translateY(10px)',   // ← Side images slightly lower
                   zIndex: isCenter ? 50 : 10,
                   filter: isCenter ? 'brightness(1.1)' : 'brightness(0.85)',
                 }}
               >
                 <div style={{
-                  width: '420px',
+                  width: '408px',
                   height: '280px',
-                  borderRadius: '1.2rem',
                   overflow: 'hidden',
-                  boxShadow: isCenter 
-                    ? '0 30px 60px rgba(0,0,0,0.6), 0 0 30px rgba(255,255,255,0.1)' 
-                    : '0 15px 35px rgba(0,0,0,0.4)',
-                  border: isCenter ? '3px solid rgba(255,255,255,0.5)' : 'none',
-                }}>
+ }}>
                   <Image
                     src={img.src}
                     alt={img.alt || `Image ${originalIndex + 1}`}
-                    width={900}
-                    height={600}
+                    width={600}
+                    height={500}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     priority={isCenter}
                   />
@@ -1042,7 +1041,7 @@ const HorizontalGallery = ({ images }) => {
                 {/* Text */}
                 {(img.leftText || img.rightText) && (
                   <div style={{
-                    marginTop: '1.5rem',
+  marginTop: isCenter ? '-0.2rem' : '0.3rem',  // Reduced top margin for centered item
                     textAlign: 'center',
                     opacity: isCenter ? 1 : 0.8,
                     transition: 'all 0.5s',
@@ -1054,12 +1053,12 @@ const HorizontalGallery = ({ images }) => {
                       fontSize: isCenter ? '1.1rem' : '0.95rem',
                     }}>
                       {img.leftText && (
-                        <span style={{ fontWeight: isCenter ? '700' : '500', color: 'white' }}>
+                        <span style={{ fontWeight: isCenter ? '700' : '500', color: 'white',marginLeft:'-25px' }}>
                           {img.leftText}
                         </span>
                       )}
                       {img.rightText && (
-                        <span style={{ color: 'rgba(255,255,255,0.7)' }}>
+                        <span style={{ color: 'rgba(255,255,255,0.7)',marginRight:'-20px' }}>
                           {img.rightText}
                         </span>
                       )}
@@ -1087,7 +1086,7 @@ export default function GalleriesPage() {
         <div key={gallery.id} style={{ marginBottom: '6rem' }}>
           {/* Hero Section - Only for first gallery */}
           {gallery.id === 1 && (
-            <div style={{ position: 'relative', height: '90vh', minHeight: '500px', marginBottom: '-2rem' }}>
+            <div style={{ position: 'relative', height: '90vh', minHeight: '500px', marginBottom: '-3rem' }}>
               <Image
                 src="/images/work/eventVideoBackground.png"
                 alt="Event Video Hero"
