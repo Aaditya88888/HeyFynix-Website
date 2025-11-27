@@ -1698,6 +1698,361 @@
 
 // ********************************************
 
+// "use client";
+
+// import { useEffect, useState, useRef } from "react";
+// import gsap from "gsap";
+// import { ScrollTrigger } from "gsap/ScrollTrigger";
+// import { ChevronLeft, ChevronRight } from "lucide-react";
+
+// gsap.registerPlugin(ScrollTrigger);
+
+// const Work = () => {
+//   const [imgs, setImgs] = useState([
+//     "/images/home/makeUsDifferent-1.jpg",
+//     "/images/home/makeUsDifferent-2.jpg",
+//     "/images/home/makeUsDifferent-3.jpg",
+//     "/images/home/makeUsDifferent-4.jpg",
+//     "/images/home/makeUsDifferent-5.jpg",
+//     "/images/home/makeUsDifferent-6.jpg",
+//     "/images/home/makeUsDifferent-7.jpg",
+//     "/images/home/makeUsDifferent-8.jpg",
+//     "/images/home/makeUsDifferent-9.jpg",
+//     "/images/home/makeUsDifferent-10.jpg",
+//     "/images/home/process-1.jpg",
+//     "/images/home/process-2.jpg",
+//     "/images/home/process-3.jpg",
+//     "/images/home/process-4.jpg",
+//     "/images/home/process-5.jpg",
+//   ]);
+
+//   const containerRef = useRef(null);
+//   const slidesRef = useRef([]);
+//   const leftBtnRef = useRef(null);
+//   const rightBtnRef = useRef(null);
+//   const isAnimating = useRef(false);
+//   const dragStartX = useRef(0);
+//   const dragOffset = useRef(0);
+//   const astronautRef = useRef(null);
+
+//   // 🧭 Pin + Scroll Animations
+//   useEffect(() => {
+//     const ctx = gsap.context(() => {
+//       const duration = 2500;
+
+//       // 👇 stabilize layout before pinning
+//       gsap.set(containerRef.current, {
+//         y: 0,
+//         force3D: true,
+//         transformOrigin: "center center",
+//         willChange: "transform",
+//       });
+
+//       // 🟢 pin section
+//       ScrollTrigger.create({
+//         trigger: containerRef.current,
+//         start: "top top",
+//         end: `+=${duration}`,
+//         pin: true,
+//         scrub: 1.2,
+//         pinSpacing: true,
+//         anticipatePin: 1,
+//         invalidateOnRefresh: true,
+//       });
+
+//       // 🟢 image resize on scroll
+//       gsap.fromTo(
+//         slidesRef.current,
+//         { width: "100vw", height: "100vh" },
+//         {
+//           width: "33.33vw",
+//           height: "35vh",
+//           ease: "power2.inOut",
+//           scrollTrigger: {
+//             trigger: containerRef.current,
+//             start: "top top",
+//             end: `+=${duration}`,
+//             scrub: 1.2,
+//           },
+//         }
+//       );
+
+//       // 🟢 buttons inward motion
+//       gsap.fromTo(
+//         [leftBtnRef.current, rightBtnRef.current],
+//         {
+//           x: (i) => (i === 0 ? "-42vw" : "42vw"),
+//           scale: 1,
+//         },
+//         {
+//           x: (i) => (i === 0 ? "-12vw" : "12vw"),
+//           scale: 0.5,
+//           ease: "power2.inOut",
+//           scrollTrigger: {
+//             trigger: containerRef.current,
+//             start: "top top",
+//             end: `+=${duration}`,
+//             scrub: 1.2,
+//           },
+//         }
+//       );
+//     });
+
+//     return () => {
+//       ctx.revert();
+//     };
+//   }, [imgs]);
+
+//   useEffect(() => {
+//     const ctx = gsap.context(() => {
+//       gsap.fromTo(
+//         astronautRef.current,
+//         { opacity: 1 },
+//         {
+//           opacity: 0,
+//           ease: "power1.out",
+//           scrollTrigger: {
+//             trigger: containerRef.current,
+//             start: "top 0%",
+//             end: "+=100",
+//             scrub: 1,
+//           },
+//         }
+//       );
+//     });
+
+//     return () => ctx.revert();
+//   }, []);
+
+//   // 🖱️ Drag to slide
+//   useEffect(() => {
+//     const container = containerRef.current;
+//     if (!container) return;
+//     let isDragging = false;
+
+//     const handleStart = (e) => {
+//       if (isAnimating.current) return;
+//       isDragging = true;
+//       dragStartX.current = e.clientX;
+//       dragOffset.current = 0;
+//       gsap.killTweensOf(slidesRef.current);
+//       container.style.cursor = "grabbing";
+//     };
+
+//     const handleMove = (e) => {
+//       if (!isDragging) return;
+//       const diff = e.clientX - dragStartX.current;
+//       dragOffset.current = diff;
+//       gsap.set(slidesRef.current, { x: diff });
+//     };
+
+//     const handleEnd = () => {
+//       if (!isDragging) return;
+//       isDragging = false;
+//       container.style.cursor = "grab";
+//       const threshold = window.innerWidth * 0.2;
+//       const slideWidth = slidesRef.current[0]?.offsetWidth || 0;
+//       const gap = 34;
+
+//       if (Math.abs(dragOffset.current) > threshold) {
+//         const direction = dragOffset.current > 0 ? "left" : "right";
+//         const moveX =
+//           direction === "right" ? -(slideWidth + gap) : slideWidth + gap;
+
+//         isAnimating.current = true;
+//         gsap.to(slidesRef.current, {
+//           x: moveX,
+//           duration: 0.5,
+//           ease: "power2.inOut",
+//           onComplete: () => {
+//             setImgs((prev) => {
+//               const updated = [...prev];
+//               if (direction === "right") updated.push(updated.shift());
+//               else updated.unshift(updated.pop());
+//               return updated;
+//             });
+//             requestAnimationFrame(() => {
+//               gsap.set(slidesRef.current, { x: 0 });
+//               isAnimating.current = false;
+//               dragOffset.current = 0;
+//             });
+//           },
+//         });
+//       } else {
+//         gsap.to(slidesRef.current, {
+//           x: 0,
+//           duration: 0.3,
+//           ease: "power2.out",
+//           onComplete: () => (dragOffset.current = 0),
+//         });
+//       }
+//     };
+
+//     container.addEventListener("mousedown", handleStart);
+//     container.addEventListener("mousemove", handleMove);
+//     container.addEventListener("mouseup", handleEnd);
+//     container.addEventListener("mouseleave", handleEnd);
+
+//     return () => {
+//       container.removeEventListener("mousedown", handleStart);
+//       container.removeEventListener("mousemove", handleMove);
+//       container.removeEventListener("mouseup", handleEnd);
+//       container.removeEventListener("mouseleave", handleEnd);
+//     };
+//   }, []);
+
+//   // ▶️ Manual Button Slide
+//   const slide = (direction) => {
+//     if (isAnimating.current) return;
+//     isAnimating.current = true;
+//     const slideWidth = slidesRef.current[0]?.offsetWidth || 0;
+//     const gap = 34;
+//     const moveX =
+//       direction === "right" ? -(slideWidth + gap) : slideWidth + gap;
+
+//     gsap.to(slidesRef.current, {
+//       x: moveX,
+//       duration: 0.5,
+//       ease: "power2.inOut",
+//       onComplete: () => {
+//         setImgs((prev) => {
+//           const updated = [...prev];
+//           if (direction === "right") updated.push(updated.shift());
+//           else updated.unshift(updated.pop());
+//           return updated;
+//         });
+//         requestAnimationFrame(() => {
+//           gsap.set(slidesRef.current, { x: 0 });
+//           isAnimating.current = false;
+//         });
+//       },
+//     });
+//   };
+
+//   return (
+//     <div className="overflow-x-hidden w-full h-full bg-transparent text-white mt-60">
+//       {/* Header */}
+
+//       <div className="flex px-[4%] h-[50vh]">
+//         <div className="left w-[45%] flex flex-col justify-between ">
+//           <h1 className="text-9xl h-[25%] whitespace-nowrap ">Our Portfolio</h1>
+
+//           <div className="w-full h-[75%] mt-23 z-[100]">
+//             <img
+//               ref={astronautRef}
+//               src="/images/home/astronaut.png"
+//               alt=""
+//               className="w-full h-full object-cover object-left"
+//             />
+//           </div>
+//         </div>
+
+//         <div className="center w-[30%] flex items-center justify-center text-center ">
+//           <p className="text-2xl text-justify leading-[1.37] pt-12">
+//             We're proud of the problems we've solved and the stories we've told.
+//             Our portfolio reflects our commitment to excellence.
+//           </p>
+//         </div>
+
+//         <div className="right w-[25%]  text-xl flex items-end justify-end  ">
+//           {/* <p className="-translate-x-10 transform">
+//             Here's a peek at what we've been up to:
+//           </p> */}
+//           <p className="leading-[119%]">
+//             Here's a peek at what we've been up to:
+//           </p>
+//         </div>
+//       </div>
+
+//       {/* Images */}
+//       <div
+//         ref={containerRef}
+//         // className="relative flex justify-center items-center gap-8 h-screen overflow-hidden"
+//         className="relative flex justify-center items-center h-screen overflow-hidden gap-[2rem]"
+//         style={{
+//           contain: "layout",
+//           backfaceVisibility: "hidden",
+//           transformStyle: "preserve-3d",
+//           perspective: "1000px",
+//           cursor: "grab",
+//         }}
+//       >
+//         {imgs.map((src, i) => {
+//           const centerIndex = Math.floor(imgs.length / 2);
+
+//           const handleEnter = () => {
+//             if (i === centerIndex) {
+//               gsap.to([leftBtnRef.current, rightBtnRef.current], {
+//                 opacity: 1,
+//                 duration: 0.3,
+//                 ease: "power2.out",
+//                 pointerEvents: "auto",
+//               });
+//             }
+//           };
+
+//           const handleLeave = (e) => {
+//             const related = e.relatedTarget;
+//             if (
+//               related === leftBtnRef.current ||
+//               related === rightBtnRef.current ||
+//               leftBtnRef.current.contains(related) ||
+//               rightBtnRef.current.contains(related)
+//             )
+//               return;
+//             gsap.to([leftBtnRef.current, rightBtnRef.current], {
+//               opacity: 0,
+//               duration: 0.3,
+//               ease: "power2.out",
+//               pointerEvents: "none",
+//             });
+//           };
+
+//           return (
+//             <div
+//               key={src}
+//               ref={(el) => (slidesRef.current[i] = el)}
+//               className="slide flex-shrink-0 w-[100vw] h-[100vh] relative overflow-hidden"
+//               onMouseEnter={handleEnter}
+//               onMouseLeave={handleLeave}
+//             >
+//               <img
+//                 src={src}
+//                 alt={`Slide ${i}`}
+//                 className="w-full h-full object-cover select-none pointer-events-none"
+//                 loading="lazy"
+//               />
+//             </div>
+//           );
+//         })}
+
+//         {/* Buttons */}
+//         <div className="absolute inset-0 flex items-center justify-center z-50 pointer-events-none">
+//           <button
+//             ref={leftBtnRef}
+//             onClick={() => slide("left")}
+//             className="pointer-events-auto p-0 m-0 bg-transparent border-none outline-none opacity-0 transition-opacity duration-300"
+//           >
+//             <ChevronLeft size={48} className="text-white" />
+//           </button>
+
+//           <button
+//             ref={rightBtnRef}
+//             onClick={() => slide("right")}
+//             className="pointer-events-auto p-0 m-0 bg-transparent border-none outline-none opacity-0 transition-opacity duration-300"
+//           >
+//             <ChevronRight size={48} className="text-white" />
+//           </button>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Work;
+
+// ************************************************************
+
 "use client";
 
 import { useEffect, useState, useRef } from "react";
@@ -1763,10 +2118,12 @@ const Work = () => {
       // 🟢 image resize on scroll
       gsap.fromTo(
         slidesRef.current,
-        { width: "100vw", height: "100vh" },
+        { width: "83vw", height: "83vh" },
         {
-          width: "33.33vw",
-          height: "35vh",
+          // width: "33.33vw",
+          // height: "35vh",
+          width: "27.66vw",
+          height: "27.66vh",
           ease: "power2.inOut",
           scrollTrigger: {
             trigger: containerRef.current,
@@ -1930,10 +2287,10 @@ const Work = () => {
   };
 
   return (
-    <div className="overflow-x-hidden w-full h-full bg-transparent text-white mt-60">
+    <div className="overflow-x-hidden w-full h-full px-[4%] bg-transparent text-white mt-60">
       {/* Header */}
 
-      <div className="flex px-[4%] h-[50vh]">
+      <div className="flex h-[50vh]">
         <div className="left w-[45%] flex flex-col justify-between ">
           <h1 className="text-9xl h-[25%] whitespace-nowrap ">Our Portfolio</h1>
 
@@ -2012,7 +2369,7 @@ const Work = () => {
             <div
               key={src}
               ref={(el) => (slidesRef.current[i] = el)}
-              className="slide flex-shrink-0 w-[100vw] h-[100vh] relative overflow-hidden"
+              className="slide flex-shrink-0 w-[83vw] h-[83vh] relative overflow-hidden"
               onMouseEnter={handleEnter}
               onMouseLeave={handleLeave}
             >
