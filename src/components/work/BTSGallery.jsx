@@ -145,28 +145,28 @@ const BTSGallery = () => {
   }, []);
 
   const videos = [
-    { poster: "/images/work/BTS1.png", video: "/videos/bts1.mp4" },
-    { poster: "/images/work/BTS2.png", video: "/videos/bts2.mp4" },
-    { poster: "/images/work/BTS3.png", video: "/videos/bts3.mp4" },
-    { poster: "/images/work/BTS4.png", video: "/videos/bts4.mp4" },
-    { poster: "/images/work/BTS5.png", video: "/videos/bts5.mp4" },
-    { poster: "/images/work/BTS6.png", video: "/videos/bts6.mp4" },
-    { poster: "/images/work/BTS7.png", video: "/videos/bts7.mp4" },
-    { poster: "/images/work/BTS8.png", video: "/videos/bts8.mp4" },
-    { poster: "/images/work/BTS9.png", video: "/videos/bts9.mp4" },
-    { poster: "/images/work/BTS10.png", video: "/videos/bts10.mp4" },
-    { poster: "/images/work/BTS11.png", video: "/videos/bts11.mp4" },
-    { poster: "/images/work/BTS12.png", video: "/videos/bts12.mp4" },
-    { poster: "/images/work/BTS13.png", video: "/videos/bts13.mp4" },
-    { poster: "/images/work/BTS14.png", video: "/videos/bts14.mp4" },
-    { poster: "/images/work/BTS15.png", video: "/videos/bts15.mp4" },
-    { poster: "/images/work/BTS16.png", video: "/videos/bts16.mp4" },
+    { poster: "/images/work/BTS1.png", video: "/videos/video.mp4" },
+    { poster: "/images/work/BTS2.png", video: "/videos/video.mp4" },
+    { poster: "/images/work/BTS3.png", video: "/videos/video.mp4" },
+    { poster: "/images/work/BTS4.png", video: "/videos/video.mp4" },
+    { poster: "/images/work/BTS5.png", video: "/videos/video.mp4" },
+    { poster: "/images/work/BTS6.png", video: "/videos/video.mp4" },
+    { poster: "/images/work/BTS7.png", video: "/videos/video.mp4" },
+    { poster: "/images/work/BTS8.png", video: "/videos/video.mp4" },
+    { poster: "/images/work/BTS9.png", video: "/videos/video.mp4" },
+    { poster: "/images/work/BTS10.png", video: "/videos/video.mp4" },
+    { poster: "/images/work/BTS11.png", video: "/videos/video.mp4" },
+    { poster: "/images/work/BTS12.png", video: "/videos/video.mp4" },
+    { poster: "/images/work/BTS13.png", video: "/videos/video.mp4" },
+    { poster: "/images/work/BTS14.png", video: "/videos/video.mp4" },
+    { poster: "/images/work/BTS15.png", video: "/videos/video.mp4" },
+    { poster: "/images/work/BTS16.png", video: "/videos/video.mp4" },
   ];
 
   return (
     <section
       ref={sectionRef}
-      className="min-h-screen py-32 px-6 bg-black text-white"
+      className="min-h-screen py-32 px-6 text-white"
     >
       {/* Title */}
       <div className="max-w-7xl mx-auto mb-20 flex flex-col ">
@@ -189,21 +189,29 @@ const BTSGallery = () => {
             className="group relative overflow-hidden rounded-xl shadow-2xl cursor-pointer bg-black/40 backdrop-blur-md border border-white/10"
             onClick={() => window.open(item.video, "_blank")}
           >
-            <video
-              poster={item.poster}
-              src={item.video}
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              className="w-full h-48 md:h-74 object-cover transition-transform duration-700 group-hover:scale-110"
-              onMouseEnter={(e) => e.currentTarget.play()}
-              onMouseLeave={(e) => {
-                e.currentTarget.currentTime = 0;
-                e.currentTarget.pause();
-              }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+<video
+  poster={item.poster}
+  src={item.video}
+ muted
+  loop
+  playsInline
+  preload="metadata"
+  className="w-full h-48 md:h-74 object-cover transition-transform duration-700 group-hover:scale-110"
+  onMouseEnter={(e) => {
+    e.currentTarget.play();
+  }}
+  onMouseLeave={(e) => {
+    e.currentTarget.pause();
+    setTimeout(() => {
+      e.currentTarget.currentTime = 0;
+    }, 100);
+  }}
+ onEnded={(e) => {
+    // Ensure it shows the first frame when video ends
+    e.currentTarget.currentTime = 0;
+  }}
+/>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
           </div>
         ))}
       </div>

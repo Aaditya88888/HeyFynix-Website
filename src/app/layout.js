@@ -2,7 +2,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import CursorEffect from "@/components/CursorEffect/CursorEffect";
 import StarsBackground from "@/components/StarsBackground/StarsBackground";
-
+import ClientParallaxProvider from './ParallaxProvider';
 // Google Font (Inter)
 const inter = Inter({
   subsets: ["latin"],
@@ -24,7 +24,9 @@ export default function RootLayout({ children }) {
         <CursorEffect />
 
         {/* 👇 Your actual website content */}
-        {children}
+       <ClientParallaxProvider>
+          {children}
+        </ClientParallaxProvider>
       </body>
     </html>
   );

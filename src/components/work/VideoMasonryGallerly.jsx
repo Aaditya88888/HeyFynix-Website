@@ -15,7 +15,7 @@ export default function GovernmentVideoGallery() {
   ];
 
   return (
-    <section style={{ padding: '100px 20px', minHeight: '100vh' ,marginTop:'-100px'}}>
+    <section style={{ padding: '100px 20px', minHeight: '100vh' ,marginTop:'-200px'}}>
       <div style={{ maxWidth: '1600px', margin: '0 auto', position: 'relative' }}>
 
         {/* Heading */}
