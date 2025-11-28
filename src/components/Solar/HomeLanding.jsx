@@ -42,7 +42,7 @@ export default function MyMainCode() {
 
     // Scroll container
     scrollContainer.style.height =
-      window.innerWidth <= 768 ? "1100vh" : "900vh";
+      window.innerWidth <= 768 ? "1100vh" : "800vh";
     scrollContainer.style.width = "100%";
     scrollContainer.style.position = "relative";
     scrollContainer.style.zIndex = "10";
