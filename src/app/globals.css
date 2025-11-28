@@ -1,3 +1,29 @@
+/* @import "tailwindcss";
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-neuehaas), sans-serif;
+}
+
+* {
+  font-family: var(--font-inter), sans-serif;
+} */
+
+/* @import "tailwindcss";
+
+/* Make body transparent so the stars canvas becomes visible */
+/* body {
+  background: transparent !important;
+  color: var(--foreground);
+  font-family: var(--font-neuehaas), sans-serif;
+}
+
+/* Keep your font override */
+/* * {
+  font-family: var(--font-inter), sans-serif;
+}   */
+
 @import "tailwindcss";
 
 body {
@@ -9,20 +35,4 @@ body {
 * {
   font-family: var(--font-inter), sans-serif;
 }
-/* Smooth scrolling for the entire page */
-html {
-  scroll-behavior: smooth;
-}
 
-/* Performance optimization */
-.parallax-section {
-  will-change: transform;
-  transform-style: preserve-3d;
-}
-
-/* Ensure sections have a stacking context */
-section {
-  position: relative;
-  z-index: 1;
-}
-/* Add this to your global CSS or in a style tag */
