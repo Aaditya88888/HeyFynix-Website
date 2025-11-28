@@ -16,25 +16,25 @@ export default function Page() {
     <main className="w-full bg-transparent text-white">
       <Navbar />
 
-      {/* SECTION 1 — Home intro */}
-      <section className="relative min-h-screen bg-black overflow-hidden">
+      {/* SECTION 1 — Landing with fake long scroll */}
+      <section className="relative bg-black overflow-hidden">
+        {/* Yeh wrapper daal diya */}
         <HomeLanding />
       </section>
-
-      {/* SECTION 2  */}
-      <section className="h-100vh flex items-center justify-center bg-black">
-        <CreativeText startOffset={0.84} revealRange={0.2} holdDuration={0.1} />
+      {/* CreativeText ab landing ke andar hai → perfect sync */}
+      <section className="flex items-center justify-center">
+        <CreativeText
+          startOffset={0.79}
+          revealRange={0.21}
+          holdDuration={0.1}
+        />
       </section>
 
-      {/* SECTION 3 — Solar Canvas */}
       <section className="min-h-screen bg-black">
         <MyMainCode />
       </section>
 
-      {/* GAP */}
-      <div style={{ height: "25vh" }} />
-
-      {/* SECTION 4 */}
+      {/* Baaki sab sections normal flow mein */}
       <InfiniteCreativity />
       <WhatWeDo />
       <Work />

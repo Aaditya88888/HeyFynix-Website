@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export default function GymReelsSection() {
   return (
-    <div style={{  color: '#fff', minHeight: '100vh', padding: '40px 0' ,marginTop:'-800px'}}>
+    <div style={{  color: '#fff', minHeight: '100vh', padding: '40px 0' ,marginTop:'-900px'}}>
       {/* Top Navigation */}
       <div style={{ textAlign: 'center', marginBottom: '30px', padding: '0 20px' }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '40px', fontSize: '20px', fontWeight: '500' }}>
