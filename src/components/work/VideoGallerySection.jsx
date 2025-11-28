@@ -226,7 +226,16 @@ const VideoCard = ({ video, index }) => {
   }, [index]);
 
   return (
-    <div style={{ width: "90%", display: "flex", flexDirection: "column", gap: "0.2rem" ,marginLeft:'30px'}}>
+    // ONLY THIS DIV CHANGED
+    <div style={{
+      width: "100%",
+      maxWidth: "100%",
+      display: "flex",
+      flexDirection: "column",
+      gap: "0.5rem",
+      padding: "0 8px",           // remove this line completely if you want zero gap
+      boxSizing: "border-box"
+    }}>
       <div
         style={{
           position: "relative",
@@ -235,15 +244,8 @@ const VideoCard = ({ video, index }) => {
           borderRadius: "16px",
           overflow: "hidden",
           boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.6)",
-          transition: "transform 0.5s ease",
         }}
-        onMouseEnter={() => videoRef.current?.play()}
-        onMouseLeave={() => {
-          if (videoRef.current) {
-            videoRef.current.pause();
-            videoRef.current.currentTime = 0;
-          }
-        }}
+      
       >
         {!isPlaying && (
           <img
@@ -264,7 +266,6 @@ const VideoCard = ({ video, index }) => {
             height: "100%",
             objectFit: "cover",
             display: isPlaying ? "block" : "none",
-            cursor: "pointer",
           }}
         />
       </div>
@@ -278,7 +279,6 @@ const VideoCard = ({ video, index }) => {
     </div>
   );
 };
-
 // YOUR EXACT LISA CAMBOURS CAROUSEL (using local posters)
 const LisaCamboursCarousel = () => {
   const items = [
@@ -304,7 +304,7 @@ const LisaCamboursCarousel = () => {
   const prev = () => setIndex(i => (i - 1 + items.length) % items.length);
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100vh', background: '#000', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{ position: 'relative', width: '100%', height: '80vh', background: '#000', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 
       {/* Top Row */}
       <div style={{ position: 'absolute', top: '7%', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '2px', zIndex: 0, alignItems: 'flex-end' }}>
@@ -361,10 +361,10 @@ export default function VideoGallerySection() {
         
         <div style={{ maxWidth: "1600px", margin: "0 auto" }}>
           {/* Your existing grid */}
-          <div style={{ display: "grid", gap: "0.1rem", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", padding: "0 2rem" }}>
+          <div style={{ display: "grid", gap: "0", gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))", padding: "0 3rem" }}>
             {allVideos.slice(0, 2).map((v, i) => <VideoCard key={v.id} video={v} index={i} />)}
           </div>
-          <div style={{ display: "grid", gap: "0.1rem", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", padding: "0 2rem", margin: "5rem 0" }}>
+          <div style={{ display: "grid", gap: "0", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", padding: "0 3rem", margin: "1.5rem 0" }}>
             {allVideos.slice(2, 5).map((v, i) => <VideoCard key={v.id} video={v} index={i + 2} />)}
           </div>
 
@@ -375,7 +375,7 @@ export default function VideoGallerySection() {
     <button
       onClick={() => setShowCarousel(true)}
       style={{
-        padding: "0.3rem 1rem",
+        padding: "0.3rem 0.5rem",
         fontSize: "1.1rem",
         fontWeight: 700,
         color: "white",

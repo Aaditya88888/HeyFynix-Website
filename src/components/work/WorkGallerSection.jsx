@@ -772,15 +772,15 @@
 
 
 
-
 'use client';
 
 import Image from 'next/image';
-import { useState,useRef, useEffect } from 'react';
-import { SplitText } from 'gsap/SplitText';
+import { useState, useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
+import { SplitText } from 'gsap/SplitText';
 import { Parallax } from 'react-scroll-parallax';
 gsap.registerPlugin(SplitText);
+
 
 const galleries = [
   {
@@ -835,24 +835,16 @@ const galleries = [
   },
 ];
 
-
-
-
-
 const HorizontalGallery = ({ images }) => {
   const scrollContainerRef = useRef(null);
-  const itemRefs = useRef([]);                    // One ref per image
+  const itemRefs = useRef([]);
   const animationRef = useRef(null);
   const [centerIndex, setCenterIndex] = useState(0);
 
-  // Triple duplicate for seamless infinite scroll
   const duplicatedImages = [...images, ...images, ...images];
   const totalItems = duplicatedImages.length;
+  const SCROLL_SPEED = 3;
 
-  // Speed control — slow & premium feel
-  const SCROLL_SPEED = 3; // Perfect balance (adjust 1.5–4)
-
-  // Find which image is truly closest to the viewport center
   const updateCenterImage = () => {
     if (!scrollContainerRef.current || itemRefs.current.length === 0) return;
 
@@ -868,7 +860,6 @@ const HorizontalGallery = ({ images }) => {
         const rect = el.getBoundingClientRect();
         const itemCenter = rect.left + rect.width / 2;
         const distance = Math.abs(itemCenter - containerCenter);
-
         if (distance < minDistance) {
           minDistance = distance;
           closestIndex = idx;
@@ -889,13 +880,9 @@ const HorizontalGallery = ({ images }) => {
       container.scrollLeft += speed;
       updateCenterImage();
 
-      // Seamless infinite loop
       const maxScroll = container.scrollWidth / 3;
-      if (container.scrollLeft <= 0) {
-        container.scrollLeft += maxScroll;
-      } else if (container.scrollLeft >= maxScroll * 2) {
-        container.scrollLeft -= maxScroll;
-      }
+      if (container.scrollLeft <= 0) container.scrollLeft += maxScroll;
+      else if (container.scrollLeft >= maxScroll * 2) container.scrollLeft -= maxScroll;
 
       animationRef.current = requestAnimationFrame(step);
     };
@@ -911,19 +898,13 @@ const HorizontalGallery = ({ images }) => {
     const container = scrollContainerRef.current;
     if (!container) return;
 
-    // Start in the middle section
     container.scrollLeft = container.scrollWidth / 3;
 
     const handleScroll = () => {
       updateCenterImage();
-
-      // Keep within middle third for infinite loop
       const maxScroll = container.scrollWidth / 3;
-      if (container.scrollLeft <= 100) {
-        container.scrollLeft += maxScroll;
-      } else if (container.scrollLeft >= maxScroll * 2 - 100) {
-        container.scrollLeft -= maxScroll;
-      }
+      if (container.scrollLeft <= 100) container.scrollLeft += maxScroll;
+      else if (container.scrollLeft >= maxScroll * 2 - 100) container.scrollLeft -= maxScroll;
     };
 
     container.addEventListener('scroll', handleScroll);
@@ -933,19 +914,18 @@ const HorizontalGallery = ({ images }) => {
   }, []);
 
   return (
-    <div style={{ position: 'relative', padding: '3rem 80px', overflow: 'hidden' }}>
+    <div style={{ position: 'relative', padding: '3rem 80px',margin:'-2rem', overflow: 'hidden' }}>
       {/* Left Arrow */}
       <div
         onMouseEnter={() => startScrolling('left')}
         onMouseLeave={stopScrolling}
         style={{
-     
           position: 'absolute',
-          left: '30px',
+          left: '45px',
           top: '50%',
           transform: 'translateY(-50%)',
-          width: '40px',
-          height: '40px',
+          width: '30px',
+          height: '30px',
           background: 'rgba(255,255,255,0.15)',
           backdropFilter: 'blur(20px)',
           borderRadius: '50%',
@@ -954,11 +934,11 @@ const HorizontalGallery = ({ images }) => {
           justifyContent: 'center',
           cursor: 'pointer',
           zIndex: 100,
-          fontSize: '28px',
+          fontSize: '14px',
           color: 'white',
           boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
           border: '2px solid rgba(255,255,255,0.2)',
-            paddingRight:'10px',
+          paddingRight: '10px',
         }}
       >
         〈
@@ -970,22 +950,21 @@ const HorizontalGallery = ({ images }) => {
         onMouseLeave={stopScrolling}
         style={{
           position: 'absolute',
-          right: '30px',
+          right: '40px',
           top: '50%',
           transform: 'translateY(-50%)',
-          width: '40px',
-          height: '40px',
+          width: '30px',
+          height: '30px',
           background: 'rgba(255,255,255,0.15)',
           backdropFilter: 'blur(20px)',
           borderRadius: '50%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-         
-            paddingLeft:'10px',
+          paddingLeft: '10px',
           cursor: 'pointer',
           zIndex: 100,
-          fontSize: '28px',
+          fontSize: '14px',
           color: 'white',
           boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
           border: '2px solid rgba(255,255,255,0.2)',
@@ -996,19 +975,10 @@ const HorizontalGallery = ({ images }) => {
 
       <div
         ref={scrollContainerRef}
-        style={{
-          overflowX: 'hidden',
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
-        }}
+        style={{ overflowX: 'hidden', scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         className="hide-scrollbar"
       >
-        <div style={{
-          display: 'flex',
-          gap: '1.3rem',
-          padding: '2rem 0',
-          alignItems: 'center',
-        }}>
+        <div style={{ display: 'flex', gap: '0.5rem', padding: '1rem 0', alignItems: 'center' }}>
           {duplicatedImages.map((img, idx) => {
             const originalIndex = idx % images.length;
             const isCenter = originalIndex === centerIndex;
@@ -1016,75 +986,78 @@ const HorizontalGallery = ({ images }) => {
             return (
               <div
                 key={idx}
-                ref={el => itemRefs.current[idx] = el}   // Critical: track each item
+                ref={(el) => (itemRefs.current[idx] = el)}
                 style={{
                   flex: 'none',
                   transition: 'all 0.7s cubic-bezier(0.4, 0, 0.2, 1)',
-                 transform: isCenter 
-  ? 'scale(1.05) translateY(5px)'   // ← Only 20px lift (feels premium & balanced)
-  : 'scale(0.92) translateY(10px)',   // ← Side images slightly lower
+                  transform: isCenter
+                    ? 'scale(1.05) translateY(5px)'
+                    : 'scale(0.92) translateY(10px)',
                   zIndex: isCenter ? 50 : 10,
                   filter: isCenter ? 'brightness(0.85)' : 'brightness(0.95)',
                 }}
               >
-               <div style={{
-  width: '408px',
-  height: '280px',
-  overflow: 'hidden',
-  position: 'relative',
-  borderRadius: '12px', // optional: nice touch
-}}>
-  <Image
-    src={img.src}
-    alt={img.alt || `Image ${originalIndex + 1}`}
-    width={600}
-    height={500}
-    style={{
-      width: '100%',
-      height: '100%',
-      objectFit: 'cover',
-      transition: 'filter 0.7s cubic-bezier(0.4, 0, 0.2, 1)',
-      // This is the key: grayscale + reduced brightness for non-center
-      filter: isCenter 
-        ?'grayscale(50%) brightness(0.65) contrast(1.1)': 'brightness(1.1) saturate(1.1)',
-    }}
-    priority={isCenter}
-  />
-  
-  {/* Optional: Subtle dark overlay on non-center images for richer blacks */}
-  {isCenter && (
-    <div style={{
-      position: 'absolute',
-      inset: 0,
-      background: 'rgba(0, 0, 0, 0.25)',
-      pointerEvents: 'none',
-      transition: 'opacity 0.7s',
-      opacity: 1,
-    }} />
-  )}
-</div>
+                <div
+                  style={{
+                    width: '408px',
+                    height: '280px',
+                    overflow: 'hidden',
+                    position: 'relative',
+                    borderRadius: '12px',
+                  }}
+                >
+                  <Image
+                    src={img.src}
+                    alt={img.alt || `Image ${originalIndex + 1}`}
+                    width={600}
+                    height={500}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      transition: 'filter 0.7s cubic-bezier(0.4, 0, 0.2, 1)',
+                      filter: isCenter
+                        ? 'grayscale(50%) brightness(0.65) contrast(1.1)'
+                        : 'brightness(1.1) saturate(1.1)',
+                    }}
+                    priority={isCenter}
+                  />
+                  {isCenter && (
+                    <div
+                      style={{
+                        position: 'absolute',
+                        inset: 0,
+                        background: 'rgba(0, 0, 0, 0.25)',
+                        pointerEvents: 'none',
+                      }}
+                    />
+                  )}
+                </div>
 
-                {/* Text */}
                 {(img.leftText || img.rightText) && (
-                  <div style={{
-  marginTop: isCenter ? '-0.2rem' : '0.3rem',  // Reduced top margin for centered item
-                    textAlign: 'center',
-                    opacity: isCenter ? 1 : 0.8,
-                    transition: 'all 0.5s',
-                  }}>
-                    <div style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      padding: '0 2rem',
-                      fontSize: isCenter ? '1.1rem' : '0.95rem',
-                    }}>
+                  <div
+                    style={{
+                      marginTop: isCenter ? '-0.2rem' : '0.3rem',
+                      textAlign: 'center',
+                      opacity: isCenter ? 1 : 0.8,
+                      transition: 'all 0.5s',
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        padding: '0 2rem',
+                        fontSize: isCenter ? '1.1rem' : '0.95rem',
+                      }}
+                    >
                       {img.leftText && (
-                        <span style={{ fontWeight: isCenter ? '700' : '500', color: 'white',marginLeft:'-25px' }}>
+                        <span style={{ fontWeight: isCenter ? '700' : '500', color: 'white', marginLeft: '-25px' }}>
                           {img.leftText}
                         </span>
                       )}
                       {img.rightText && (
-                        <span style={{ color: 'rgba(255,255,255,0.7)',marginRight:'-20px' }}>
+                        <span style={{ color: 'rgba(255,255,255,0.7)', marginRight: '-20px' }}>
                           {img.rightText}
                         </span>
                       )}
@@ -1098,101 +1071,63 @@ const HorizontalGallery = ({ images }) => {
       </div>
 
       <style jsx>{`
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
       `}</style>
     </div>
   );
 };
 
+/* Simplified Hero – no text animation */
 const EventVideoHero = () => {
-  const containerRef = useRef(null);
-  const headingRef = useRef(null);
-  const paragraphRef = useRef(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-
-          // Animate heading first
-          const split = new SplitText(headingRef.current, { type: "chars" });
-          tl.from(split.chars, {
-            y: 100,
-            opacity: 0,
-            duration: 0.8,
-            stagger: 0.05,
-            ease: "power2.out"
-          });
-
-          // Then animate paragraph
-          tl.to(paragraphRef.current, {
-            y: 0,
-            opacity: 1,
-            duration: 0.7,
-            ease: "power3.out"
-          }, "+=0.2");
-
-          observer.unobserve(entry.target);
-        }
-      },
-      { threshold: 0.6 }
-    );
-
-    if (containerRef.current) observer.observe(containerRef.current);
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <Parallax y={[-60, 60]} easing="easeOutQuad">
-      <div ref={containerRef} style={{ position: 'relative', height: '90vh', minHeight: '500px', marginBottom: '-6rem' }}>
-        <Image 
-          src="/images/work/eventVideoBackground.png" 
-          alt="Event Video Hero" 
-          fill 
-          style={{ objectFit: 'cover' }} 
-          priority 
+      <div style={{ position: 'relative', height: '699px',  marginBottom: '-5rem' }}>
+        <Image
+          src="/images/work/eventVideoBackground.png"
+          alt="Event Video Hero"
+          fill
+          style={{ objectFit: 'cover' }}
+          priority
         />
         <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)' }} />
 
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          textAlign: 'center',
-          padding: '0 2rem',
-        }}>
-          <h1 
-            ref={headingRef}
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            textAlign: 'center',
+            padding: '0 2rem',
+          }}
+        >
+          <h1
             style={{
               fontSize: 'clamp(4.5rem, 9vw, 10rem)',
               fontWeight: '900',
               color: 'white',
               letterSpacing: '-0.06em',
               margin: 0,
-              lineHeight: '3.9rem',
+              lineHeight: '0.9',
               marginTop: '15.2rem',
               fontStyle: 'italic',
-              marginBottom: '1rem'
+              marginBottom: '1rem',
             }}
           >
             EVENT VIDEO
           </h1>
 
           <p
-            ref={paragraphRef}
             style={{
               fontSize: 'clamp(1.1rem, 1.8vw, 2.2rem)',
               color: 'white',
               maxWidth: '90rem',
               lineHeight: '1.2',
               marginBottom: '2rem',
-              opacity: 0,
-              transform: 'translateY(20px)',
-              willChange: 'transform, opacity'
             }}
           >
             An event video captures the highlights, emotions, and key moments of a special occasion, preserving memories and sharing the experience with a wider audience.
@@ -1202,49 +1137,51 @@ const EventVideoHero = () => {
     </Parallax>
   );
 };
+
 export default function GalleriesPage() {
   return (
     <section style={{ padding: '2rem 0' }}>
       {galleries.map((gallery) => (
         <div key={gallery.id} style={{ marginBottom: '6rem' }}>
-
-          {/* === PARALLAX HERO - ONLY FOR FIRST GALLERY === */}
+          {/* Hero only for first gallery */}
           {gallery.id === 1 && <EventVideoHero />}
 
-          {/* === NORMAL HEADINGS FOR OTHER GALLERIES (unchanged) === */}
+          {/* Static headings for the rest */}
           {gallery.id !== 1 && (
             <div style={{ textAlign: 'center', padding: '0 2rem', marginBottom: '-3rem' }}>
-              <h1 style={{
-                fontSize: 'clamp(4rem, 8vw, 7rem)',
-                fontWeight: '900',
-                color: 'white',
-                letterSpacing: '-0.04em',
-                lineHeight: '1.8',
-                marginBottom:'-5rem',
-                marginTop:'-6rem',
-                fontStyle:'italic'
-              }}>
+              <h1
+                style={{
+                  fontSize: 'clamp(4rem, 8vw, 7rem)',
+                  fontWeight: '900',
+                  color: 'white',
+                  letterSpacing: '-0.04em',
+                  lineHeight: '1.8',
+                  marginBottom: '-5rem',
+                  marginTop: '-6rem',
+                  fontStyle: 'italic',
+                }}
+              >
                 {gallery.heading}
               </h1>
-              <p style={{
-                fontSize: '1.4rem',
-                color: 'rgba(255,255,255,0.9)',
-                maxWidth: '900px',
-                margin: '1.5rem auto 2rem',
-                lineHeight: '1.4',
-                marginBottom:'-4rem',
-                whiteSpace:'nowrap'
-              }}>
+              <p
+                style={{
+                  fontSize: '1.4rem',
+                  color: 'rgba(255,255,255,0.9)',
+                  maxWidth: '900px',
+                  margin: '1.5rem auto 2rem',
+                  lineHeight: '1.4',
+                  marginBottom: '-3rem',
+                  whiteSpace: 'nowrap',
+                }}
+              >
                 {gallery.text}
               </p>
             </div>
           )}
 
-          {/* Gallery */}
           <HorizontalGallery images={gallery.images} />
         </div>
       ))}
     </section>
   );
 }
-

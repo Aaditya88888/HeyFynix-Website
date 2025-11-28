@@ -225,57 +225,15 @@
 //   );
 // }
 
-
 'use client';
 
 import Image from 'next/image';
-import { useRef, useEffect } from 'react';
 import { Parallax } from 'react-scroll-parallax';
-import { gsap } from 'gsap';
-import { SplitText } from 'gsap/SplitText';
-gsap.registerPlugin(SplitText);
 
 export default function Government() {
-  const containerRef = useRef(null);
-  const headingRef = useRef(null);
-  const paragraphRef = useRef(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-
-          // Heading — letter by letter (cinematic!)
-          const split = new SplitText(headingRef.current, { type: "chars" });
-          tl.from(split.chars, {
-            y: 100,
-            opacity: 0,
-            duration: 1.2,
-            stagger: 0.05,
-            ease: "power2.out",
-          });
-           tl.to(paragraphRef.current, {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          ease: "power3.out"
-        }, "+=0.5"); // Slight overlap with the end of heading animation
-
-
-          observer.unobserve(entry.target);
-        }
-      },
-      { threshold: 0.4 }
-    );
-
-    if (containerRef.current) observer.observe(containerRef.current);
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <>
-      {/* ==== ASTRONAUT UPPER SECTION (unchanged) ==== */}
+      {/* ==== ASTRONAUT UPPER SECTION (Full Screen) ==== */}
       <div className="relative h-screen w-full overflow-hidden" style={{ zIndex: 30 }}>
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="relative">
@@ -297,30 +255,27 @@ export default function Government() {
         </div>
       </div>
 
-      {/* ==== PARALLAX + GSAP LOWER SECTION ==== */}
+      {/* ==== LOWER SECTION – Overlap + Static Text + Parallax ==== */}
       <Parallax y={[-80, 80]} easing="easeOutQuad">
         <div
-          ref={containerRef}
           className="relative w-full min-h-screen"
           style={{
             backgroundImage: 'url(/images/work/eventVideoBackground.png)',
             backgroundSize: 'cover',
             backgroundPosition: 'center bottom',
             marginTop: '-51vh',
-            height: '80vh',
+            height: '708px',
             width: '100vw',
             zIndex: 20
           }}
         >
-          {/* Dark gradient */}
+          {/* Dark gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/60 to-black/90" />
 
-          {/* Text — animated with GSAP */}
+          {/* Text Content – Fully Static */}
           <div className="absolute inset-0 flex flex-col justify-end pb-16 md:pb-24 lg:pb-32">
             <div className="text-center text-white px-6 max-w-7xl mx-auto">
-              {/* Heading — letter by letter */}
               <h1
-                ref={headingRef}
                 className="font-black tracking-tighter"
                 style={{
                   fontSize: 'clamp(4rem, 7vw, 11rem)',
@@ -329,16 +284,13 @@ export default function Government() {
                   color: 'white',
                   marginTop: '90px',
                   marginLeft: '40px',
-                 
                   fontStyle: 'italic'
                 }}
               >
                 Government & NGO Videos
               </h1>
 
-              {/* Paragraph — slides up */}
               <p
-                ref={paragraphRef}
                 className="font-light max-w-2xl mx-auto"
                 style={{
                   fontSize: 'clamp(1.2rem, 2vw, 2.8rem)',
@@ -346,11 +298,7 @@ export default function Government() {
                   maxWidth: '900px',
                   color: 'white',
                   textAlign: 'center',
-                  marginLeft: '150px',
-                  opacity: 0,
-                  transform: 'translateY(20px)',
-                      willChange: 'transform, opacity' // Improves performance
-
+                  marginLeft: '150px'
                 }}
               >
                 When purpose meets creativity. We produce impactful films that not only inform but inspire collective change.

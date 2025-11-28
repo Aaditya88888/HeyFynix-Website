@@ -1,72 +1,72 @@
 // // // app/video-section/page.js   (or any component file)
-// // import Image from 'next/image';
+//  import Image from 'next/image';
 
-// // export default function FullScreenVideo() {
-// //   return (
-// //     <section style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden',marginTop:'100px' }}>
-// //       {/* Full-screen background video */}
-// //       <video
-// //         autoPlay
-// //         muted
-// //         loop
-// //         playsInline
-// //         style={{
-// //           position: 'absolute',
-// //           top: '50%',
-// //           left: '50%',
-// //           width: '70%',
-// //           height: '100%',
-// //           objectFit: 'cover',
-// //           transform: 'translate(-50%, -50%)',
-// //           zIndex: 1,
-// //         }}
-// //       >
-// //         {/* Replace with your own video file or URL */}
-// //         <source src="/videos/video.mp4" type="video/mp4" />
-// //         {/* <source src="/videos/your-background-video.webm" type="video/webm" /> */}
-// //         Your browser does not support the video tag.
-// //       </video>
+// export default function FullScreenVideo() {
+//   return (
+//     <section style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden',marginTop:'100px' }}>
+//       {/* Full-screen background video */}
+//       <video
+//         autoPlay
+//         muted
+//         loop
+//         playsInline
+//         style={{
+//           position: 'absolute',
+//           top: '50%',
+//           left: '50%',
+//           width: '70%',
+//           height: '100%',
+//           objectFit: 'cover',
+//           transform: 'translate(-50%, -50%)',
+//           zIndex: 1,
+//         }}
+//       >
+//         {/* Replace with your own video file or URL */}
+//         <source src="/videos/video.mp4" type="video/mp4" />
+//         {/* <source src="/videos/your-background-video.webm" type="video/webm" /> */}
+//         Your browser does not support the video tag.
+//       </video>
 
-// //       {/* Image stuck to the bottom center of the section */}
-// //       <div
-// //         style={{
-// //           position: 'absolute',
-// //           bottom: '-12px',       // adjust distance from bottom
-// //           left: '50%',
-// //           transform: 'translateX(-50%)',
-// //           zIndex: 10,
-// //           pointerEvents: 'none', // optional: let clicks pass through the image
-// //         }}
-// //       >
-// //         <Image
-// //           src="/images/work/chair.png"   // ← put your image in public/images/
-// //           alt="Bottom overlay image"
-// //           width={1800}   // adjust size as needed
-// //           height={500}
-// //           style={{ maxWidth: '100vw', height: 'auto'}}
-// //         />
-// //       </div>
+//       {/* Image stuck to the bottom center of the section */}
+//       <div
+//         style={{
+//           position: 'absolute',
+//           bottom: '-12px',       // adjust distance from bottom
+//           left: '50%',
+//           transform: 'translateX(-50%)',
+//           zIndex: 10,
+//           pointerEvents: 'none', // optional: let clicks pass through the image
+//         }}
+//       >
+//         <Image
+//           src="/images/work/chair.png"   // ← put your image in public/images/
+//           alt="Bottom overlay image"
+//           width={1800}   // adjust size as needed
+//           height={500}
+//           style={{ maxWidth: '100vw', height: 'auto'}}
+//         />
+//       </div>
 
-// //       {/* Global styles for this page/component only */}
-// //       <style jsx global>{`
-// //         html,
-// //         body,
-// //         #__next {
-// //           margin: 0;
-// //           padding: 0;
-// //           height: 100%;
-// //           overflow: hidden;
-// //         }
-// //       `}</style>
-// //     </section>
-// //   );
-// // }
-
-
+//       {/* Global styles for this page/component only */}
+//       <style jsx global>{`
+//         html,
+//         body,
+//         #__next {
+//           margin: 0;
+//           padding: 0;
+//           height: 100%;
+//           overflow: hidden;
+//         }
+//       `}</style>
+//     </section>
+//   );
+// }
 
 
 
-// // app/video-section/page.js (or any component)
+
+
+// app/video-section/page.js (or any component)
 // import Image from 'next/image';
 
 // export default function FullScreenVideo() {
@@ -197,7 +197,7 @@
 'use client';
 
 import Image from 'next/image';
-import { Parallax } from 'react-scroll-parallax';
+
 
 export default function FullScreenVideo() {
   return (
@@ -211,7 +211,8 @@ export default function FullScreenVideo() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '2rem 0'
+        padding: '2rem 0',
+        marginTop:'-5rem'
       }}
     >
       {/* Title & Subtitle - EXACTLY as you had */}
@@ -219,16 +220,17 @@ export default function FullScreenVideo() {
         position: 'relative',
         width: '100%',
         margin: '0 auto',
-        maxWidth: '1159px',
-        paddingTop: '-2rem'
+        maxWidth: '961px',
+        paddingTop: '-2rem',
+        whiteSpace:'nowrap'
       }}>
         <h1 style={{
           color: 'white',
-          fontSize: '5rem',
-          fontWeight: '900',
+          fontSize: '4.2rem',
+          fontWeight: '700',
           textAlign: 'center',
           textShadow: '0 2px 10px rgba(0,0,0,0.5)',
-          margin: '0 0 -0.5rem 0',
+       
           padding: 0,
           lineHeight: 1.1
         }}>
@@ -236,13 +238,13 @@ export default function FullScreenVideo() {
         </h1>
         <p style={{
           color: 'white',
-          fontSize: '1.4rem',
+          fontSize: '1.2rem',
           fontWeight: '500',
           textAlign: 'center',
           textShadow: '0 2px 5px rgba(0,0,0,0.5)',
           margin: '0 0 0.5rem 0',
           padding: 0,
-          marginRight: '-990px',
+          marginRight: '-840px',
         }}>
           Cinema Film
         </p>
@@ -251,8 +253,8 @@ export default function FullScreenVideo() {
       {/* Video - EXACT size and position */}
       <div style={{
         position: 'relative',
-        width: '1059px',
-        height: '518px',
+        width: '961px',
+        height: '430px',
         margin: '0 auto'
       }}>
         <video
@@ -275,29 +277,24 @@ export default function FullScreenVideo() {
       </div>
 
       {/* CHAIR WITH PARALLAX + SUBTLE SCALE ON SCROLL */}
-      <Parallax
-        y={[0, -100]}           // Moves up slower than page (parallax)
-        scale={[1, 1.18]}        // Grows from 100% → 118% as you scroll
-        easing="easeOutQuad"
-        style={{ position: 'absolute' }}
-      >
+     
         <div
           style={{
             position: 'absolute',
-            bottom: '-240px',
+            bottom: '760px',
             left: '50%',
             transform: 'translateX(-50%)',
             zIndex: 10,
             pointerEvents: 'none',
           }}
         >
-          <div style={{ position: 'relative', maxWidth: '100vw', height: '70vh' }}>
+          <div style={{ position: 'relative', maxWidth: '100vw', height: '50vh' }}>
             <Image
               src="/images/work/chair.png"
               alt="Bottom overlay image"
               width={1800}
-              height={700}
-              style={{ maxWidth: '100vw', height: '70vh' }}
+              height={500}
+              style={{ maxWidth: '100vw', height: '50vh' }}
               priority
             />
             {/* Your gradient overlay - unchanged */}
@@ -314,7 +311,7 @@ export default function FullScreenVideo() {
             />
           </div>
         </div>
-      </Parallax>
+    
 
       {/* Force page height so user can scroll */}
       <div style={{ height: '150vh' }} />
