@@ -312,7 +312,7 @@ export default function CreativeText({
         opacity: 0,
         visibility: "hidden",
         transition: "opacity 0.3s ease",
-        height: "400vh",
+        height: "360vh",
         position: "fixed",
         top: "50%",
         left: "50%",
