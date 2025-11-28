@@ -38,7 +38,7 @@ export default function Page() {
       <InfiniteCreativity />
       <WhatWeDo />
       <Work />
-      <Process />
+      {/* <Process /> */}
       <MakesUsDifferent />
       <Footer />
     </main>
