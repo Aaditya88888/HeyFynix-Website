@@ -1,4 +1,4 @@
-/* ---------- Fonts (keep your original font-face) ---------- */
+/* ---------- Fonts ---------- */
 @font-face {
   font-family: "NeueHaasDisplay";
   src: url("/neue-haas-grotesk-display-pro-cufonfonts/NeueHaasDisplaymediu.ttf")
@@ -13,48 +13,54 @@
   font-weight: bold;
   font-style: normal;
 }
+
 :root {
   --font-inter: "Inter", Arial, sans-serif;
   --bg: #000;
 }
 
-/* Reset */
+/* ---------- Reset ---------- */
 * {
   box-sizing: border-box;
 }
-body,
 html,
+body,
 #root {
   margin: 0;
   padding: 0;
   background: var(--bg);
   color: #fff;
+  overflow-x: hidden;
 }
 
-/* Corner texts (kept from your file) */
+/* ---------- Corner Text ---------- */
 .corner-text {
   position: fixed;
   font-weight: 200;
   color: rgba(226, 223, 223, 0.7);
   z-index: 999;
   font-family: var(--font-inter) !important;
-  pointer-events: auto !important;
+  pointer-events: none !important; /* ← fix */
   white-space: nowrap;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.6s ease, transform 0.6s ease;
   font-size: clamp(11px, 1.8vw, 20px);
 }
+
 .corner-text.left {
   top: 25vh;
   left: 3vw;
   transform: translateY(20px);
 }
+
 .corner-text.right {
   top: 25vh;
   right: 5vw;
   transform: translateY(20px);
 }
+
+/* ---------- Corner Box ---------- */
 .corner-box {
   position: relative;
   display: inline-block;
@@ -63,19 +69,28 @@ html,
   padding: 24px;
   z-index: 99999;
 }
+
+/* left box tilts left */
 .corner-box.left {
-  transform: skew(25deg);
-}
-.corner-box.right {
   transform: skew(-25deg);
 }
+
+/* right box tilts right */
+.corner-box.right {
+  transform: skew(25deg);
+}
+
 .corner-content {
   display: inline-block;
-  transform: skew(-25deg);
-}
-.corner-box.right .corner-content {
   transform: skew(25deg);
 }
+
+/* reverse skew for right box inner content */
+.corner-box.right .corner-content {
+  transform: skew(-25deg);
+}
+
+/* top dot behind quote icon */
 .corner-box::before {
   content: "";
   position: absolute;
@@ -87,6 +102,8 @@ html,
   background: black;
   border-radius: 50%;
 }
+
+/* quote icon */
 .corner-box::after {
   content: "";
   position: absolute;
@@ -99,39 +116,39 @@ html,
   filter: brightness(0) invert(0.3);
   z-index: 2;
 }
+
+/* right box flips icon */
 .corner-box.right::after {
   transform: translateX(-50%) scaleX(-1);
 }
 
-/* Pehle normal image RIGHT par thi — ab LEFT par aayegi */
+/* left box icon normal */
 .corner-box.left::after {
   transform: translateX(-50%) scaleX(1);
 }
 
-/* Planet label */
+/* ---------- Planet Label ---------- */
 .planet-label {
   color: white;
   font-family: NeueHaasDisplay, Arial, sans-serif;
   font-size: clamp(10px, 1.2vw, 16px);
   font-weight: bold;
-  pointer-events: auto !important;
+  pointer-events: none !important; /* labels never clickable */
   text-shadow: 0 0 5px black;
 }
 
-/* ---------- Solar section layout ---------- */
-/* The parent section (in page.jsx) should have class .solar-section */
+/* ---------- Solar Section Layout ---------- */
 .solar-section {
   position: relative;
   width: 100vw;
-  /* This controls how long the pinned phase lasts (increase -> longer pin) */
-  height: 100vh; /* leave enough room for pin + release; tweak as needed */
+  height: 100vh;
   display: block;
-  margin: 0; /* ← extra margin hata do */
-  padding: 0;
   overflow: visible !important;
+  margin: 0;
+  padding: 0;
 }
 
-/* The inner area that gets pinned (100vh viewport area) */
+/* area that gets pinned */
 .solar-section .solar-inner {
   position: relative;
   width: 100vw;
@@ -139,18 +156,18 @@ html,
   overflow: visible !important;
 }
 
-/* Canvas container inside solar-inner */
+/* canvas container */
 .solar-canvas-container {
   position: absolute;
   inset: 0;
   width: 100vw;
   height: 100vh;
-  pointer-events: auto !important; /* enable later when visible */
+  pointer-events: auto !important;
   z-index: 5;
   overflow: visible !important;
 }
 
-/* canvas elements (main + stars) are absolute inside container */
+/* All canvases */
 .three-canvas,
 .stars-canvas,
 .label-renderer {
@@ -158,42 +175,39 @@ html,
   inset: 0;
   width: 100vw !important;
   height: 100vh !important;
-  pointer-events: auto !important;
 }
 
-/* When scene visible we set pointer-events auto on main canvas via JS */
+/* Main 3D canvas — INTERACTIVE */
 .three-canvas {
-  position: absolute !important;
-  inset: 0;
-  pointer-events: auto !important; /* ← Sirf ye interactive */
+  pointer-events: auto !important;
   z-index: 6;
 }
+
+/* CSS2D label renderer — non-interactive */
 .label-renderer {
-  pointer-events: none !important; /* labels sirf dikhe, click na kare */
+  pointer-events: none !important;
   z-index: 7;
 }
+
+/* Stars canvas — never clickable */
 .stars-canvas {
-  position: absolute !important;
-  inset: 0;
-  width: 100vw !important;
-  height: 100vh !important;
-  pointer-events: none !important; /* ← SIRF YE ADD KARO */
+  pointer-events: none !important;
   z-index: 4;
 }
 
-/* ensure next sections not overlapped visually */
+/* Gap below */
 .after-solar-gap {
-  height: 1vh; /* optional extra gap after solar section */
+  height: 1vh;
 }
 
-/* hide scrollbars on WebKit if you want */
+/* hide scrollbar on WebKit */
 html::-webkit-scrollbar {
   display: none;
 }
 
-/* responsive: reduce star count (already handled in JS), maintain heights */
+/* ---------- Mobile Adjustments ---------- */
 @media (max-width: 768px) {
   .solar-section {
-    min-height: 300vh; /* allow longer pin on mobile */
+    min-height: 300vh;
   }
 }
