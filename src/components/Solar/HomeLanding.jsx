@@ -228,8 +228,8 @@ export default function MyMainCode() {
           document.documentElement.scrollHeight - window.innerHeight;
         const scrollPercent = Math.min(scrollY / scrollMax, 1);
 
-        const movePhaseEnd = 0.08;
-        const fadeEnd = 0.28;
+        const movePhaseEnd = 0.09;
+        const fadeEnd = 0.32;
         const moveProgress = Math.min(scrollPercent / movePhaseEnd, 1);
         const eased = Math.pow(moveProgress, 0.7);
 
