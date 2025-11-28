@@ -41,7 +41,7 @@ export default function MyMainCode() {
     const scrollContainer = root.querySelector("#scrollContainer");
 
     // Scroll container
-    scrollContainer.style.height = window.innerWidth <= 768 ? "900vh" : "650vh";
+    scrollContainer.style.height = window.innerWidth <= 768 ? "900vh" : "750vh";
     scrollContainer.style.width = "100%";
     scrollContainer.style.position = "relative";
     scrollContainer.style.zIndex = "10";
@@ -397,7 +397,7 @@ export default function MyMainCode() {
     }
 
     function mainLoop() {
-      const maxScroll = 0.7;
+      const maxScroll = 0.8;
       const clampedTarget = Math.min(targetProgress, maxScroll);
 
       currentProgress += (clampedTarget - currentProgress) * smoothTime;
@@ -416,13 +416,22 @@ export default function MyMainCode() {
       const videoOpacity = Math.max(0, 1 - videoProgress);
 
       if (astronautVideo.readyState >= 2 && videoDuration > 0) {
-        const desiredTime = videoDuration * videoProgress;
-        const timeDiff = desiredTime - astronautVideo.currentTime;
+        const targetTime = videoDuration * (currentProgress / maxScroll);
+        const currentTime = astronautVideo.currentTime;
+        const diff = targetTime - currentTime;
 
-        if (Math.abs(timeDiff) > 0.015) {
-          astronautVideo.currentTime += timeDiff * 0.44;
-        } else {
-          astronautVideo.currentTime = desiredTime;
+        // Agar scroll UP hai (targetTime < currentTime) → slow & smooth reverse
+        if (diff < -0.02) {
+          // Smooth reverse — jaise real rewind lagta hai
+          astronautVideo.currentTime += diff * 0.52; // 0.42 = perfect reverse feel
+        }
+        // Agar scroll DOWN hai → thoda fast chase (pro feel)
+        else if (diff > 0.02) {
+          astronautVideo.currentTime += diff * 0.78; // thoda tez forward
+        }
+        // Agar bilkul close hai → exact snap
+        else {
+          astronautVideo.currentTime = targetTime;
         }
       }
 
