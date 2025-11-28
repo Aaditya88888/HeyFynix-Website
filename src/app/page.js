@@ -18,20 +18,18 @@ export default function Page() {
 
       {/* SECTION 1 — Landing with fake long scroll */}
       <section className="relative bg-black overflow-hidden">
-        <div id="scrollContainer">
-          {" "}
-          {/* Yeh wrapper daal diya */}
-          <HomeLanding />
-          {/* CreativeText ab landing ke andar hai → perfect sync */}
-          <div className="h-screen flex items-center justify-center">
-            <CreativeText
-              startOffset={0.7}
-              revealRange={0.21}
-              holdDuration={0.1}
-            />
-          </div>
-        </div>
+        {/* Yeh wrapper daal diya */}
+        <HomeLanding />
       </section>
+      {/* CreativeText ab landing ke andar hai → perfect sync */}
+      <section className="flex items-center justify-center">
+        <CreativeText
+          startOffset={0.79}
+          revealRange={0.21}
+          holdDuration={0.1}
+        />
+      </section>
+
       <section className="min-h-screen bg-black">
         <MyMainCode />
       </section>
