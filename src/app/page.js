@@ -40,7 +40,7 @@ export default function Page() {
       <Work />
       {/* <Process /> */}
       <MakesUsDifferent />
-      <Footer />
+      // <Footer />
     </main>
   );
 }
