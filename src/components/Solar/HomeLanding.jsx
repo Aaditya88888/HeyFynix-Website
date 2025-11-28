@@ -41,7 +41,8 @@ export default function MyMainCode() {
     const scrollContainer = root.querySelector("#scrollContainer");
 
     // Scroll container
-    scrollContainer.style.height = window.innerWidth <= 768 ? "900vh" : "750vh";
+    scrollContainer.style.height =
+      window.innerWidth <= 768 ? "1100vh" : "900vh";
     scrollContainer.style.width = "100%";
     scrollContainer.style.position = "relative";
     scrollContainer.style.zIndex = "10";
@@ -227,8 +228,8 @@ export default function MyMainCode() {
           document.documentElement.scrollHeight - window.innerHeight;
         const scrollPercent = Math.min(scrollY / scrollMax, 1);
 
-        const movePhaseEnd = 0.07;
-        const fadeEnd = 0.26;
+        const movePhaseEnd = 0.08;
+        const fadeEnd = 0.28;
         const moveProgress = Math.min(scrollPercent / movePhaseEnd, 1);
         const eased = Math.pow(moveProgress, 0.7);
 
@@ -397,7 +398,7 @@ export default function MyMainCode() {
     }
 
     function mainLoop() {
-      const maxScroll = 0.8;
+      const maxScroll = 0.7;
       const clampedTarget = Math.min(targetProgress, maxScroll);
 
       currentProgress += (clampedTarget - currentProgress) * smoothTime;
@@ -409,7 +410,6 @@ export default function MyMainCode() {
       if (clampedTarget === 0) currentProgress = 0;
       if (clampedTarget === maxScroll) currentProgress = maxScroll;
 
-      // === VIDEO PROGRESS (0 - 0.7 maps to full video) ===
       const smoothVideoProgress = currentProgress / maxScroll;
       const videoProgress = Math.min(smoothVideoProgress, 1);
 
@@ -439,17 +439,36 @@ export default function MyMainCode() {
       astronautVideo.style.visibility =
         videoOpacity > 0.05 ? "visible" : "hidden";
       videoSection.style.display = videoOpacity > 0.05 ? "flex" : "none";
-
-      // === STARS OPACITY ===
+      // === STARS OPACITY (SMOOTH BOTH DIRECTIONS) ===
       let starsOpacity = 0;
 
-      if (currentProgress >= 0.1 && currentProgress <= maxScroll) {
-        if (currentProgress <= 0.3)
-          starsOpacity = (currentProgress - 0.1) / 0.2;
-        else if (currentProgress < 0.7) starsOpacity = 1;
+      // Fade IN smoothly between 0.1 → 0.3
+      if (currentProgress >= 0.1 && currentProgress <= 0.3) {
+        starsOpacity = (currentProgress - 0.1) / 0.2; // 0 → 1
       }
 
-      starsRendererRef.current.domElement.style.opacity = starsOpacity;
+      // FULL visible between 0.3 → 0.6
+      else if (currentProgress > 0.3 && currentProgress < 0.6) {
+        starsOpacity = 1;
+      }
+
+      // Fade OUT smoothly between 0.6 → 0.7
+      else if (currentProgress >= 0.6 && currentProgress <= 0.7) {
+        starsOpacity = 1 - (currentProgress - 0.6) / 0.1; // 1 → 0
+      }
+
+      // Otherwise hidden
+      else {
+        starsOpacity = 0;
+      }
+
+      // Apply to DOM with smooth easing
+      gsap.to(starsRendererRef.current.domElement, {
+        opacity: starsOpacity,
+        duration: 0.3, // VERY smooth
+        ease: "power2.out",
+        overwrite: true,
+      });
 
       // === STARS PARALLAX ===
       if (starsOpacity > 0.01) {
