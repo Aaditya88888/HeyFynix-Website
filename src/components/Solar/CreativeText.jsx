@@ -37,7 +37,7 @@ export default function CreativeText({
     window.addEventListener("resize", resizeCanvas);
 
     const stars = [];
-    const starCount = window.innerWidth < 768 ? 80 : 1000;
+    const starCount = window.innerWidth < 768 ? 80 : 700;
 
     for (let i = 0; i < starCount; i++) {
       stars.push({
@@ -331,7 +331,7 @@ export default function CreativeText({
         opacity: 0,
         visibility: "hidden",
         transition: "opacity 0.3s ease",
-        height: "360vh",
+        height: "300vh",
         position: "fixed",
         top: "50%",
         left: "50%",
