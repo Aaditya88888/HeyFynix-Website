@@ -35,3 +35,18 @@ body {
 * {
   font-family: var(--font-inter), sans-serif;
 }
+
+html {
+  overflow-x: hidden;
+}
+
+/* Mac + Windows dono pe left wala scrollbar gayab */
+::-webkit-scrollbar {
+  display: none;
+}
+
+html,
+body {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
