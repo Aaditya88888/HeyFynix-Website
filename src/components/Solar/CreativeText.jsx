@@ -19,7 +19,7 @@ export default function CreativeText({
     centerTolerance: 30,
   });
 
-  // ============ STARS BACKGROUND EFFECT ============
+  // ============ STARS BACKGROUND EFFECT (Floating + Twinkling) ============
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -47,27 +47,46 @@ export default function CreativeText({
         opacity: Math.random() * 0.5 + 0.3,
         twinkleSpeed: Math.random() * 0.02 + 0.01,
         twinklePhase: Math.random() * Math.PI * 2,
+        // Floating speed — yeh naye hain
+        vx: (Math.random() - 0.5) * 0.15, // left-right drift
+        vy: Math.random() * 0.3 + 0.1, // slow downward (ya upward bhi chalega)
+        driftRadius: Math.random() * 100 + 50, // circular/parallax feel ke liye
+        driftSpeed: Math.random() * 0.005 + 0.002,
+        driftAngle: Math.random() * Math.PI * 2,
       });
     }
 
     let time = 0;
     const animate = () => {
       ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+
       stars.forEach((star) => {
+        // Floating movement (slow drift + slight circular motion)
+        star.driftAngle += star.driftSpeed;
+        star.x += Math.cos(star.driftAngle) * 0.3 + star.vx;
+        star.y += Math.sin(star.driftAngle) * 0.2 + star.vy;
+
+        // Wrap around screen (infinite space feel)
+        if (star.x < 0) star.x = canvas.offsetWidth;
+        if (star.x > canvas.offsetWidth) star.x = 0;
+        if (star.y < 0) star.y = canvas.offsetHeight;
+        if (star.y > canvas.offsetHeight) star.y = 0;
+
+        // Twinkle effect
         const twinkle =
-          Math.sin(time * star.twinkleSpeed + star.twinklePhase) * 0.2 + 0.4;
+          Math.sin(time * star.twinkleSpeed + star.twinklePhase) * 0.3 + 0.7;
         const opacity = star.opacity * twinkle;
 
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
-        ctx.shadowBlur = 10;
+        ctx.shadowBlur = 8;
         ctx.shadowColor = "#ffffff";
         ctx.fill();
       });
 
       ctx.shadowBlur = 0;
-      time += 0.8;
+      time += 1;
       animationFrame = requestAnimationFrame(animate);
     };
 

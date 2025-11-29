@@ -9,7 +9,7 @@ import InfiniteCreativity from "@/components/Home/InfiniteCreativity/InfiniteCre
 import Process from "@/components/Home/Process/Process";
 import Work from "@/components/Home/Work/Work";
 import MakesUsDifferent from "@/components/Home/MakesUsDifferent/MakesUsDifferent";
-// import Footer from "@/components/Home/Footer/Footer";
+import Footer from "@/components/Home/Footer/Footer";
 
 export default function Page() {
   return (
@@ -40,7 +40,7 @@ export default function Page() {
       <Work />
       {/* <Process /> */}
       <MakesUsDifferent />
-       {/* <Footer /> */}
+       <Footer />
     </main>
   );
 }
