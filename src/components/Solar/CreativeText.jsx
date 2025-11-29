@@ -37,21 +37,23 @@ export default function CreativeText({
     window.addEventListener("resize", resizeCanvas);
 
     const stars = [];
-    const starCount = window.innerWidth < 768 ? 80 : 700;
+    const starCount = window.innerWidth < 768 ? 400 : 1000;
 
     for (let i = 0; i < starCount; i++) {
       stars.push({
-        x: Math.random() * canvas.offsetWidth,
-        y: Math.random() * canvas.offsetHeight,
-        radius: Math.random() * 1.4 + 0.4,
-        opacity: Math.random() * 0.5 + 0.3,
-        twinkleSpeed: Math.random() * 0.02 + 0.01,
+        x: Math.random() * canvas.offsetWidth * 1.2, // more spacing
+        y: Math.random() * canvas.offsetHeight * 1.2, // more spacing
+        radius: Math.random() * 0.9 + 0.2, // smaller stars
+        opacity: Math.random() * 0.4 + 0.2,
+        twinkleSpeed: Math.random() * 0.02 + 0.005,
         twinklePhase: Math.random() * Math.PI * 2,
-        // Floating speed — yeh naye hain
-        vx: (Math.random() - 0.5) * 0.15, // left-right drift
-        vy: Math.random() * 0.3 + 0.1, // slow downward (ya upward bhi chalega)
-        driftRadius: Math.random() * 100 + 50, // circular/parallax feel ke liye
-        driftSpeed: Math.random() * 0.005 + 0.002,
+
+        // Slower, subtle movement
+        vx: (Math.random() - 0.5) * 0.05,
+        vy: Math.random() * 0.15 + 0.05,
+
+        driftRadius: Math.random() * 80 + 30,
+        driftSpeed: Math.random() * 0.004 + 0.001,
         driftAngle: Math.random() * Math.PI * 2,
       });
     }
@@ -331,7 +333,7 @@ export default function CreativeText({
         opacity: 0,
         visibility: "hidden",
         transition: "opacity 0.3s ease",
-        height: "300vh",
+        height: "360vh",
         position: "fixed",
         top: "50%",
         left: "50%",
