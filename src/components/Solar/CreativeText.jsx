@@ -43,7 +43,7 @@ export default function CreativeText({
       stars.push({
         x: Math.random() * canvas.offsetWidth * 1.2, // more spacing
         y: Math.random() * canvas.offsetHeight * 1.2, // more spacing
-        radius: Math.random() * 0.9 + 0.2, // smaller stars
+        radius: Math.random() * 0.9 + 0.3, // smaller stars
         opacity: Math.random() * 0.4 + 0.2,
         twinkleSpeed: Math.random() * 0.02 + 0.005,
         twinklePhase: Math.random() * Math.PI * 2,
