@@ -841,6 +841,8 @@ const HorizontalGallery = ({ images }) => {
   const itemRefs = useRef([]);
   const animationRef = useRef(null);
   const [centerIndex, setCenterIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+
 
   const duplicatedImages = [...images, ...images, ...images];
   const totalItems = duplicatedImages.length;
@@ -918,17 +920,21 @@ const HorizontalGallery = ({ images }) => {
     <div style={{ position: 'relative', padding: '3rem 80px',margin:'-2rem', overflow: 'hidden' }}>
       {/* Left Arrow */}
       <div
-        onMouseEnter={() => startScrolling('left')}
-        onMouseLeave={stopScrolling}
+       onMouseEnter={() => {
+    setIsHovered('left');
+    startScrolling('left');
+  }}
+  onMouseLeave={() => {
+    setIsHovered(null);
+    stopScrolling();
+  }}
         style={{
           position: 'absolute',
           left: '45px',
           top: '50%',
-          transform: 'translateY(-50%)',
-          width: '30px',
+transform: `translateY(-50%) ${isHovered === 'left' ? 'scale(0.9)' : 'scale(1)'}`,          width: '30px',
           height: '30px',
-          background: 'rgba(255,255,255,0.15)',
-          backdropFilter: 'blur(20px)',
+background: isHovered === 'left' ? 'white' : 'rgba(255,255,255,0.15)',          backdropFilter: 'blur(20px)',
           borderRadius: '50%',
           display: 'flex',
           alignItems: 'center',
@@ -936,10 +942,13 @@ const HorizontalGallery = ({ images }) => {
           cursor: 'pointer',
           zIndex: 100,
           fontSize: '14px',
-          color: 'white',
-          boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
-          border: '2px solid rgba(255,255,255,0.2)',
+color: isHovered === 'left' ? 'black' : 'white',         
+        boxShadow: isHovered === 'left' 
+      ? '0 18px 35px rgba(0,0,0,0.4), 0 0 0 4px rgba(255,255,255,0.15)' 
+      : '0 12px 30px rgba(0,0,0,0.3)',
+    border: isHovered === 'left' ? '3px solid white' : '2px solid rgba(255,255,255,0.25)',
           paddingRight: '10px',
+transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',    
         }}
       >
         〈
@@ -947,17 +956,21 @@ const HorizontalGallery = ({ images }) => {
 
       {/* Right Arrow */}
       <div
-        onMouseEnter={() => startScrolling('right')}
-        onMouseLeave={stopScrolling}
+       onMouseEnter={() => {
+    setIsHovered('right');
+    startScrolling('right');
+  }}
+  onMouseLeave={() => {
+    setIsHovered(null);
+    stopScrolling();
+  }}
         style={{
           position: 'absolute',
           right: '40px',
           top: '50%',
-          transform: 'translateY(-50%)',
-          width: '30px',
+transform: `translateY(-50%) ${isHovered === 'right' ? 'scale(0.9)' : 'scale(1)'}`,          width: '30px',
           height: '30px',
-          background: 'rgba(255,255,255,0.15)',
-          backdropFilter: 'blur(20px)',
+background: isHovered === 'right' ? 'white' : 'rgba(255,255,255,0.15)',          backdropFilter: 'blur(20px)',
           borderRadius: '50%',
           display: 'flex',
           alignItems: 'center',
@@ -966,9 +979,13 @@ const HorizontalGallery = ({ images }) => {
           cursor: 'pointer',
           zIndex: 100,
           fontSize: '14px',
-          color: 'white',
-          boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
-          border: '2px solid rgba(255,255,255,0.2)',
+color: isHovered === 'right' ? 'black' : 'white',         
+         boxShadow: isHovered === 'right' 
+      ? '0 18px 35px rgba(0,0,0,0.4), 0 0 0 4px rgba(255,255,255,0.15)' 
+      : '0 12px 30px rgba(0,0,0,0.3)',
+    border: isHovered === 'right' ? '3px solid white' : '2px solid rgba(255,255,255,0.25)',
+transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+
         }}
       >
         〉
