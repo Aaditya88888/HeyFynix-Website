@@ -779,7 +779,8 @@ import { useState, useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { SplitText } from 'gsap/SplitText';
 import { Parallax } from 'react-scroll-parallax';
-gsap.registerPlugin(SplitText);
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+gsap.registerPlugin(SplitText,ScrollTrigger);
 
 
 const galleries = [
@@ -1137,48 +1138,119 @@ const EventVideoHero = () => {
     </Parallax>
   );
 };
+const AnimatedTextSection = ({ heading, text }) => {
+  const sectionRef = useRef(null);
+  const headingRef = useRef(null);
+  const paragraphRef = useRef(null);
 
+  useEffect(() => {
+    let headingSplit = null;
+    let paragraphSplit = null;
+
+    const animate = () => {
+      if (!headingRef.current || !paragraphRef.current) return;
+
+      // Only split once when in view
+      headingSplit = new SplitText(headingRef.current, { type: "chars,words" });
+      paragraphSplit = new SplitText(paragraphRef.current, { type: "words,lines" });
+
+      // Set initial state ON THE SPLIT ELEMENTS (not parent)
+      gsap.set(headingSplit.chars, { y: 50, opacity: 0, rotationX: -30 });
+      gsap.set(paragraphSplit.words, { y: 30, opacity: 0 });
+
+      // Animate
+      gsap.to(headingSplit.chars, {
+        y: 0,
+        opacity: 1,
+        rotationX: 0,
+        duration: 1.3,
+        stagger: 0.03,
+        ease: "back.out(1.2)",
+      });
+
+      gsap.to(paragraphSplit.words, {
+        y: 0,
+        opacity: 1,
+        duration: 1,
+        stagger: 0.03,
+        ease: "power3.out",
+        delay: 0.5,
+      });
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animate();
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -100px 0px" }
+    );
+
+    if (sectionRef.current) observer.observe(sectionRef.current);
+
+    return () => {
+      observer.disconnect();
+      headingSplit?.revert();
+      paragraphSplit?.revert();
+    };
+  }, [heading, text]);
+
+  return (
+    <div
+      ref={sectionRef}
+      style={{
+        textAlign: 'center',
+        padding: '0 2rem',
+        marginBottom: '-3rem',
+        overflow: 'hidden', // Critical for smooth reveal
+      }}
+    >
+      {/* Heading - no opacity:0 on parent! */}
+      <h1
+        ref={headingRef}
+        style={{
+          fontSize: 'clamp(4rem, 8vw, 7rem)',
+          fontWeight: 900,
+          color: 'white',
+          letterSpacing: '-0.04em',
+          lineHeight: '1.1',
+          margin: '0 0 1rem',
+          fontStyle: 'italic',
+          marginBottom:'-4rem',
+        }}
+      >
+        {heading}
+      </h1>
+
+      {/* Paragraph */}
+      <p
+        ref={paragraphRef}
+        style={{
+          fontSize: '1.4rem',
+          color: 'rgba(255,255,255,0.9)',
+          maxWidth: '900px',
+          margin: '3rem auto 2rem',
+          lineHeight: '1.1',
+          marginBottom:'0rem'
+          // Remove opacity: 0 from here too!
+        }}
+      >
+        {text}
+      </p>
+    </div>
+  );
+};
 export default function GalleriesPage() {
   return (
     <section style={{ padding: '2rem 0' }}>
       {galleries.map((gallery) => (
         <div key={gallery.id} style={{ marginBottom: '6rem' }}>
-          {/* Hero only for first gallery */}
           {gallery.id === 1 && <EventVideoHero />}
-
-          {/* Static headings for the rest */}
-          {gallery.id !== 1 && (
-            <div style={{ textAlign: 'center', padding: '0 2rem', marginBottom: '-3rem' }}>
-              <h1
-                style={{
-                  fontSize: 'clamp(4rem, 8vw, 7rem)',
-                  fontWeight: '900',
-                  color: 'white',
-                  letterSpacing: '-0.04em',
-                  lineHeight: '1.8',
-                  marginBottom: '-5rem',
-                  marginTop: '-6rem',
-                  fontStyle: 'italic',
-                }}
-              >
-                {gallery.heading}
-              </h1>
-              <p
-                style={{
-                  fontSize: '1.4rem',
-                  color: 'rgba(255,255,255,0.9)',
-                  maxWidth: '900px',
-                  margin: '1.5rem auto 2rem',
-                  lineHeight: '1.4',
-                  marginBottom: '-3rem',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {gallery.text}
-              </p>
-            </div>
-          )}
-
+          {gallery.id !== 1 && <AnimatedTextSection heading={gallery.heading} text={gallery.text} />}
           <HorizontalGallery images={gallery.images} />
         </div>
       ))}
