@@ -26,7 +26,7 @@ export default function Page() {
         <CreativeText
           startOffset={0.72}
           revealRange={0.22}
-          holdDuration={0.1}
+          holdDuration={0.11}
         />
       </section>
 
