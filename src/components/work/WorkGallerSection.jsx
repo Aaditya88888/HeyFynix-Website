@@ -1228,7 +1228,7 @@ const AnimatedTextSection = ({ heading, text }) => {
     >
       {/* Heading - no opacity:0 on parent! */}
       <h1
-        ref={headingRef}
+        // ref={headingRef}
         style={{
           fontSize: 'clamp(4rem, 8vw, 7rem)',
           fontWeight: 900,

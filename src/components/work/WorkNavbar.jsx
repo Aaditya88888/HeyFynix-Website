@@ -2,11 +2,11 @@ import React from 'react'
 
 const WorkNavbar = () => {
   return (
-    <div style={{color:'white',backgroundColor:'black',height:'50px',marginBottom:'290px',marginTop:'-100px'}}>
+    <div style={{color:'white',backgroundColor:'black',height:'50px',marginBottom:'150px',marginTop:'100px'}}>
       {/* Top navigation with buttons: left, center, right */}
       <nav style={{
         position: 'absolute',
-        top: '140px',
+      
         left: 0,
         right: 0,
         zIndex: 20,
