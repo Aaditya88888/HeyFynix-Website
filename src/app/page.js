@@ -24,9 +24,9 @@ export default function Page() {
       {/* CreativeText ab landing ke andar hai → perfect sync */}
       <section className="flex items-center justify-center">
         <CreativeText
-          startOffset={0.76}
-          revealRange={0.21}
-          holdDuration={0.1}
+          startOffset={0.72}
+          revealRange={0.22}
+          holdDuration={0.11}
         />
       </section>
 

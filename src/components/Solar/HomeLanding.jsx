@@ -471,25 +471,37 @@ export default function MyMainCode() {
       });
 
       // === STARS PARALLAX ===
+      // === STARS PARALLAX — AB BILKUL PERFECT (NO REVERSE JERK EVER) ===
       if (starsOpacity > 0.01) {
-        const offset = currentProgress - 0.5;
-        const targetX = offset * 350;
-        const targetY = offset * 280;
-        const targetZ = offset * 350;
+        // TARGET PROGRESS use karo, currentProgress nahi!
+        const offset = targetProgress - 0.5; // Yeh turant react karega scroll direction pe
+
+        const targetX = offset * 380;
+        const targetY = offset * 300;
+        const targetZ = offset * 380;
+
+        const lerp = 0.14; // Thoda zyada responsive feel ke liye
 
         starsBgRef.current.position.x +=
-          (targetX - starsBgRef.current.position.x) * 0.15;
+          (targetX - starsBgRef.current.position.x) * lerp;
         starsBgRef.current.position.y +=
-          (targetY - starsBgRef.current.position.y) * 0.15;
+          (targetY - starsBgRef.current.position.y) * lerp;
         starsBgRef.current.position.z +=
-          (targetZ - starsBgRef.current.position.z) * 0.15;
+          (targetZ - starsBgRef.current.position.z) * lerp;
 
         starsRendererRef.current.render(
           starsSceneRef.current,
           starsCameraRef.current
         );
       } else {
-        starsBgRef.current.position.set(0, 0, 0);
+        // Smoothly center return
+        const reset = 0.08;
+        starsBgRef.current.position.x +=
+          (0 - starsBgRef.current.position.x) * reset;
+        starsBgRef.current.position.y +=
+          (0 - starsBgRef.current.position.y) * reset;
+        starsBgRef.current.position.z +=
+          (0 - starsBgRef.current.position.z) * reset;
       }
 
       requestAnimationFrame(mainLoop);
