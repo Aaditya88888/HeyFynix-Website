@@ -1,1202 +1,648 @@
-// 'use client';
-
-// import Image from 'next/image';
-
-// const galleries = [
-//   {
-//     id: 1,
-//     heading: 'EVENT VIDEO',
-//     text:'An event video captures the highlights, emotions, and key moments of a special occasion, preserving memories and sharing the experience with a wider audience.',
-//     images: [
-//       { src: '/images/work/E2.png', alt: 'Branding 1' ,leftText:'Sunburn',rightText:'Sunburn'},
-//       { src: '/images/work/E3.png', alt: 'Branding 2' ,leftText:'Bismil Intro Video',rightText:'Bismil'},
-//       { src: '/images/work/E5.png', alt: 'Branding 3' ,leftText:'Hip Hop Event',rightText:'Elements.ind'},
-//       { src: '/images/work/E4.png', alt: 'Branding 4' ,leftText:'Skybags',rightText:'Sunburn'},
-//       { src: '/images/work/E1.png', alt: 'Branding 5' ,leftText:'Rendezvous',rightText:'IIT Delhi'},
-     
-     
-//     ],
-   
-//   },
-//   {
-//     id: 2,
-//     heading: 'BRAND FILMS',
-//     text:'We craft films that amplify Brands heartbeat',
-//     images: [
-//       { src: '/images/work/Film-making1.png', alt: 'Film 1',leftText:'3D Ultrasound Device',rightText:'Samsung' },
-//       { src: '/images/work/Film-making2.png', alt: 'Film 2',leftText:'Shake It to Make It',rightText:'Zomato' },
-//       { src: '/images/work/Film-making3.png', alt: 'Film 3',leftText:'Mascot Tour',rightText:'Hush Puppies' },
-//       { src: '/images/work/Film-making4.png', alt: 'Film 4',leftText:'Jewellery Commercial',rightText:'Sawaria Jewellers' },
-//       { src: '/images/work/Film-making5.png', alt: 'Film 5',leftText:'Cricket ',rightText:'DPPL' },
-   
-//     ],
-//   },
-//   {
-//     id: 3,
-//     heading: 'B-ROLLS',
-//     text:'We make the in-between of B-rolls that matter',
-//     images: [
-//       { src: '/images/work/BRoll1.png', alt: 'Web 1',leftText:'Setup',rightText:'Ritik' },
-//       { src: '/images/work/BRoll2.png', alt: 'Web 2',leftText:'Tattoo',rightText:'Mascot Tattos' },
-//       { src: '/images/work/BRoll3.png', alt: 'Web 3',leftText:'Website',rightText:'Ritik' },
-//       { src: '/images/work/BRoll4.png', alt: 'Web 4',leftText:'Saloon Commercial',rightText:'Spacetech Interiors' },
-//       { src: '/images/work/BRoll5.png', alt: 'Web 5',leftText:'Cricket',rightText:'DPPL' },
-//       { src: '/images/work/BRoll6.png', alt: 'Web 6',leftText:'Sunburn',rightText:'Sunburn' },
-     
-//     ],
-//   },
-//   {
-//     id: 4,
-//     heading: 'CORPORATE VIDEOS',
-//     text:'We transform Corporate Videos and Events into engaging, trust-building stories',
-//     images: [
-//       { src: '/images/work/coorporate1.png', alt: 'Music 1' },
-//       { src: '/images/work/coorporate2.png', alt: 'Music 2' },
-//       { src: '/images/work/coorporate3.png', alt: 'Music 3' },
-//       { src: '/images/work/coorporate4.png', alt: 'Music 4' },
-//       { src: '/images/work/coorporate5.png', alt: 'Music 5' },
-//        { src: '/images/work/coorporate6.png', alt: 'Music 6' },
-//     ],
-//   },
-// ];
-
-// export default function GalleriesPage() {
-//   return (
-//     <section style={{backgroundColor: 'black', padding: '5rem 0'}}>
-//       {galleries.map((gallery) => (
-//         <div key={gallery.id} style={{marginBottom: '8rem'}}>
-
-//           {/* ==== HERO FOR FIRST GALLERY (Event Video) ==== */}
-//           {gallery.id === 1 && (
-//             <div style={{position: 'relative', height: '100vh'}}>
-//               <Image
-//                 src="/images/work/eventVideoBackground.png"
-//                 alt="Event Video Background"
-//                height={400}
-//                width={1400}
-//                 style={{width: '100%', height: '100%', objectFit: 'cover'}}
-//                 priority
-//               />
-//               <div style={{position: 'absolute', top: '0', left: '0', right: '0', bottom: '0', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 1.5rem', textAlign: 'center', zIndex: 10, backgroundColor: 'rgba(0, 0, 0, 0.4)'}}>
-//                 <h1 style={{fontSize: 'clamp(4rem, 8vw, 9rem)', fontWeight: '900', color: 'white', letterSpacing: '-0.05em', marginBottom: '2rem'}}>
-//                   {gallery.heading}
-//                 </h1>
-//                 <p style={{fontSize: 'clamp(1.3rem, 2vw, 2rem)', color: 'white', maxWidth: '64rem', lineHeight: '0.9',marginTop:'-25px'}}>
-//                   {gallery.text}
-//                 </p>
-//               </div>
-//             </div>
-//           )}
-
-//           {/* ==== HEADING FOR ALL OTHER GALLERIES ==== */}
-//           {gallery.id !== 1 && (
-//             <div className="text-center mb-16 px-6">
-//               <h1 className="text-6xl md:text-8xl lg:text-9xl font-black text-white tracking-tighter mb-6" style={{color:'white',fontSize:'4.2rem',lineHeight:'1.2',marginBottom:'-20px',textAlign:'center'}}>
-//                 {gallery.heading}
-//               </h1>
-//               <p className="text-lg md:text-2xl text-white/80 max-w-4xl mx-auto leading-relaxed" style={{color:'white',fontSize:'1.8rem',textAlign:'center'}}>
-//                 {gallery.text}
-//               </p>
-//             </div>
-//           )}
-
-//           {/* ==== HORIZONTAL SCROLL GALLERY ==== */}
-//           <div style={{overflowX: 'auto', padding: '0 1.5rem', scrollbarWidth: 'none', msOverflowStyle: 'none'}}>
-//             <div style={{display: 'flex', gap: '1.1rem', padding: '2rem 0', minWidth: 'max-content', alignItems: 'flex-start'}}>
-//               {gallery.images.map((img, idx) => (
-//                 <div
-//                   key={idx}
-//                   style={{position: 'relative', flex: 'none', width: '420px', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)', transition: 'all 0.5s'}}
-//                   // onMouseEnter={(e) => {
-//                   //   e.currentTarget.style.boxShadow = '0 25px 50px -12px rgba(0, 0, 0, 0.5)';
-//                   //   // e.currentTarget.style.transform = 'translateY(-8px)';
-                   
-//                   // }}
-//                   // onMouseLeave={(e) => {
-//                   //   e.currentTarget.style.boxShadow = '0 25px 50px -12px rgba(0, 0, 0, 0.25)';
-//                   //   // e.currentTarget.style.transform = 'translateY(0)';
-//                   // }}
-//                 >
-//                   <Image
-//                     src={img.src}
-//                     alt={img.alt}
-//                     width={500}
-//                     height={281}
-//                     style={{width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.7s'}}
-//                   />
-
-//                   {/* Left & Right Text (only if they exist) */}
-//                   {(img.leftText || img.rightText) && (
-//                     <div style={{padding: '0.78rem 0'}}>
-//                       <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-//                         {img.leftText && (
-//                           <span style={{color: 'white', fontSize: 'clamp(0.875rem, 1.25vw, 1.25rem)', fontWeight: '600'}}>
-//                             {img.leftText}
-//                           </span>
-//                         )}
-//                         {img.rightText && (
-//                           <span style={{color: 'rgba(255,255,255,0.7)', fontSize: 'clamp(0.75rem, 1vw, 0.875rem)'}}>
-//                             {img.rightText}
-//                           </span>
-//                         )}
-//                       </div>
-//                     </div>
-//                   )}
-//                 </div>
-//               ))}
-//             </div>
-//           </div>
-//         </div>
-//       ))}
-//     </section>
-//   );
-// }
-
-
-
-// // 'use client';
-
-// // import Image from 'next/image';
-// // import { useRef, useState, useEffect } from 'react';
-
-// // const CircularHorizontalGallery = ({ images }) => {
-// //   const scrollRef = useRef(null);
-// //   const animRef = useRef(null);
-// //   const firstSetRef = useRef(null);
-
-// //   // Initialize scroll to avoid sticking at exact boundary
-// //   useEffect(() => {
-// //     if (scrollRef.current) {
-// //       const c = scrollRef.current;
-// //       // Nudge a bit to allow leftward wrap logic to work
-// //       c.scrollLeft = 1;
-// //       c.scrollRight=1;
-// //     }
-// //   }, []);
-
-// //   const scroll = (direction) => {
-// //     if (!scrollRef.current) return;
-// //     const container = scrollRef.current;
-// //     const speed = direction === 'left' ? -4 : 4;
-
-// //     const step = () => {
-// //       container.scrollLeft += speed;
-
-// //       // Seamless infinite loop (both directions)
-// //       const half = container.scrollWidth / 2;
-// //       if (container.scrollLeft < 1) {
-// //         container.scrollLeft += half;
-// //       } else if (container.scrollLeft >= half) {
-// //         container.scrollLeft -= half;
-// //       }
-
-// //       animRef.current = requestAnimationFrame(step);
-// //     };
-
-// //     animRef.current = requestAnimationFrame(step);
-// //   };
-
-// //   const stop = () => {
-// //     if (animRef.current) cancelAnimationFrame(animRef.current);
-// //   };
-
-// //   return (
-// //     <div style={{ position: 'relative', width: '100%', padding: '8rem 0', backgroundColor: 'black' }}>
-// //       <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', padding: '0 5%' }}>
-// //         {/* Left Button */}
-// //         <div
-// //           onMouseEnter={() => scroll('left')}
-// //           onMouseLeave={stop}
-// //           style={{
-// //             flexShrink: 0,
-// //             fontSize: '40px',
-// //             fontWeight: '700',
-// //             color: 'white',
-// //             cursor: 'pointer',
-// //             userSelect: 'none',
-// //             opacity: 0.7,
-// //             transition: 'opacity 0.3s',
-// //           }}
-// //           onMouseOver={(e) => (e.currentTarget.style.opacity = '1')}
-// //           onMouseOut={(e) => (e.currentTarget.style.opacity = '0.7')}
-// //         >
-// //           〈
-// //         </div>
-
-// //         {/* Scroll Area (images move between buttons) */}
-// //         <div
-// //           ref={scrollRef}
-// //           style={{
-// //             flex: 1,
-// //             overflow: 'hidden',
-// //             whiteSpace: 'nowrap',
-// //           }}
-// //         >
-// //           <div style={{ display: 'inline-flex', gap: '1.2rem', alignItems: 'center' }}>
-// //             {images.map((img, i) => (
-// //               <CircleItem key={i} img={img} />
-// //             ))}
-// //             {images.map((img, i) => (
-// //               <CircleItem key={`dup-${i}`} img={img} />
-// //             ))}
-// //           </div>
-// //         </div>
-
-// //         {/* Right Button */}
-// //         <div
-// //           onMouseEnter={() => scroll('right')}
-// //           onMouseLeave={stop}
-// //           style={{
-// //             flexShrink: 0,
-// //             fontSize: '40px',
-// //             fontWeight: '700',
-// //             color: 'white',
-// //             cursor: 'pointer',
-// //             userSelect: 'none',
-// //             opacity: 0.7,
-// //             transition: 'opacity 0.3s',
-// //           }}
-// //           onMouseOver={(e) => (e.currentTarget.style.opacity = '1')}
-// //           onMouseOut={(e) => (e.currentTarget.style.opacity = '0.7')}
-// //         >
-// //           〉
-// //         </div>
-// //       </div>
-// //     </div>
-// //   );
-// // };
-
-// // // Single circular image + text
-// // const CircleItem = ({ img }) => {
-// //   const [dimmed, setDimmed] = useState(false);
-// //   return (
-// //     <div style={{ flex: 'none', textAlign: 'center' }}>
-// //       <div
-// //         onMouseEnter={() => setDimmed(true)}
-// //         onMouseLeave={() => setDimmed(false)}
-// //         style={{
-// //           position: 'relative',
-// //           width: '180px',
-// //           height: '180px',
-// //           borderRadius: '50%',
-// //           border: '1px solid white',
-// //           overflow: 'hidden',
-// //           boxShadow: '0 30px 60px rgba(0,0,0,0.6)',
-// //           transition: 'all 0.6s ease',
-// //           cursor: 'pointer',
-// //         }}
-// //       >
-// //         <Image
-// //           src={img.src}
-// //           alt={img.alt || ''}
-// //           width={380}
-// //           height={380}
-// //           style={{
-// //             width: '100%',
-// //             height: '100%',
-// //             objectFit: 'cover',
-// //             transition: 'transform 0.8s ease',
-// //           }}
-// //         />
-// //         <div
-// //           style={{
-// //             position: 'absolute',
-// //             top: 0,
-// //             left: 0,
-// //             right: 0,
-// //             bottom: 0,
-// //             background: 'rgba(248, 243, 243, 0.61)',
-// //             opacity: dimmed ? 1 : 0,
-// //             transition: 'opacity 0.3s ease',
-// //             pointerEvents: 'none',
-// //           }}
-// //         />
-// //       </div>
-
-// //       {/* Text below */}
-// //       {/* {(img.leftText || img.rightText) && (
-// //         <div style={{ marginTop: '2rem' }}>
-// //           <div style={{ display: 'flex', justifyContent: 'center', gap: '1.2rem', alignItems: 'center' }}>
-// //             {img.leftText && (
-// //               <span style={{ color: 'white', fontSize: '1.5rem', fontWeight: '600' }}>
-// //                 {img.leftText}
-// //               </span>
-// //             )}
-// //             {img.rightText && (
-// //               <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '1.2rem' }}>
-// //                 {img.rightText}
-// //               </span>
-// //             )}
-// //           </div>
-// //         </div>
-// //       )} */}
-// //     </div>
-// //   );
-// // };
-
-// // // Your full page
-// // export default function GalleriesPage() {
-// //   const galleries = [
-// //     {
-// //       id: 1,
-// //       heading: 'EVENT VIDEO',
-// //       text: 'An event video captures the highlights, emotions, and key moments of a special occasion, preserving memories and sharing the experience with a wider audience.',
-// //       images: [
-// //         { src: '/images/work/E2.png', leftText: 'Sunburn', rightText: 'Sunburn' },
-// //         { src: '/images/work/E3.png', leftText: 'Bismil Intro Video', rightText: 'Bismil' },
-// //         { src: '/images/work/E5.png', leftText: 'Hip Hop Event', rightText: 'Elements.ind' },
-// //         { src: '/images/work/E4.png', leftText: 'Skybags', rightText: 'Sunburn' },
-// //         { src: '/images/work/E1.png', leftText: 'Rendezvous', rightText: 'IIT Delhi' },
-// //         // Add more if you want
-// //       ],
-// //     },
-// //     {
-// //     id: 2,
-// //     heading: 'BRAND FILMS',
-// //     text:'We craft films that amplify Brands heartbeat',
-// //     images: [
-// //       { src: '/images/work/Film-making1.png', alt: 'Film 1',leftText:'3D Ultrasound Device',rightText:'Samsung' },
-// //       { src: '/images/work/Film-making2.png', alt: 'Film 2',leftText:'Shake It to Make It',rightText:'Zomato' },
-// //       { src: '/images/work/Film-making3.png', alt: 'Film 3',leftText:'Mascot Tour',rightText:'Hush Puppies' },
-// //       { src: '/images/work/Film-making4.png', alt: 'Film 4',leftText:'Jewellery Commercial',rightText:'Sawaria Jewellers' },
-// //       { src: '/images/work/Film-making5.png', alt: 'Film 5',leftText:'Cricket ',rightText:'DPPL' },
-   
-// //     ],
-// //   },
-// //   {
-// //     id: 3,
-// //     heading: 'B-ROLLS',
-// //     text:'We make the in-between of B-rolls that matter',
-// //     images: [
-// //       { src: '/images/work/BRoll1.png', alt: 'Web 1',leftText:'Setup',rightText:'Ritik' },
-// //       { src: '/images/work/BRoll2.png', alt: 'Web 2',leftText:'Tattoo',rightText:'Mascot Tattos' },
-// //       { src: '/images/work/BRoll3.png', alt: 'Web 3',leftText:'Website',rightText:'Ritik' },
-// //       { src: '/images/work/BRoll4.png', alt: 'Web 4',leftText:'Saloon Commercial',rightText:'Spacetech Interiors' },
-// //       { src: '/images/work/BRoll5.png', alt: 'Web 5',leftText:'Cricket',rightText:'DPPL' },
-// //       { src: '/images/work/BRoll6.png', alt: 'Web 6',leftText:'Sunburn',rightText:'Sunburn' },
-     
-// //     ],
-// //   },
-// //   {
-// //     id: 4,
-// //     heading: 'CORPORATE VIDEOS',
-// //     text:'We transform Corporate Videos and Events into engaging, trust-building stories',
-// //     images: [
-// //       { src: '/images/work/coorporate1.png', alt: 'Music 1' },
-// //       { src: '/images/work/coorporate2.png', alt: 'Music 2' },
-// //       { src: '/images/work/coorporate3.png', alt: 'Music 3' },
-// //       { src: '/images/work/coorporate4.png', alt: 'Music 4' },
-// //       { src: '/images/work/coorporate5.png', alt: 'Music 5' },
-// //        { src: '/images/work/coorporate6.png', alt: 'Music 6' },
-// //     ],
-// //   },
-// //    // Add other categories the same way...
-// //   ];
-
-// //   return (
-// //     <section style={{ backgroundColor: 'black', color: 'white' }}>
-// //       {galleries.map((gallery) => (
-// //         <div key={gallery.id}>
-// //           {/* Your heading/hero code here (keep as before) */}
-// //           {gallery.id === 1 && (
-// //             <div style={{ position: 'relative', height: '100vh' }}>
-// //               <Image src="/images/work/eventVideoBackground.png" fill style={{ objectFit: 'cover' }} priority />
-// //               <div style={{
-// //                 position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.4)',
-// //                 lineHeight:'1.2',display: 'flex',flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center'
-// //               }}>
-// //                 <h1 style={{ fontSize: 'clamp(4rem, 8vw, 9rem)', fontWeight: 900 ,marginBottom:'-2rem'}}>{gallery.heading}</h1>
-// //                 <p style={{ fontSize: '1.6rem', maxWidth: '90%' }}>{gallery.text}</p>
-// //               </div>
-// //             </div>
-// //           )}
-// //           {gallery.id !== 1 && (
-// //   <div style={{ textAlign: 'center', padding: '3rem 1rem' }}>
-// //     <h1 style={{ lineHeight:'0.9',color: 'white', fontSize: 'clamp(2.5rem, 6vw, 5rem)', fontWeight: 900, marginBottom: '0.5rem' }}>
-// //       {gallery.heading}
-// //     </h1>
-// //     <p style={{ marginBottom:'-2rem',color: 'rgba(255,255,255,0.85)', fontSize: '1.25rem', maxWidth: '60ch', margin: '0 auto' }}>
-// //       {gallery.text}
-// //     </p>
-// //   </div>
-// // )}
-
-// //           <CircularHorizontalGallery images={gallery.images} />
-// //         </div>
-// //       ))}
-// //     </section>
-// //   );
-// // }
-
-
-
-
-
-
-
-
-
-
-
 
 // 'use client';
 
-// import Image from 'next/image';
-// import { useRef, useEffect } from 'react';
+// import React, { useEffect, useRef, useState } from 'react';
+// import * as THREE from 'three';
+// import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-// const galleries = [
-//   {
-//     id: 1,
-//     heading: 'EVENT VIDEO',
-//     text: 'An event video captures the highlights, emotions, and key moments of a special occasion, preserving memories and sharing the experience with a wider audience.',
-//     images: [
-//       { src: '/images/work/E2.png', alt: 'Branding 1', leftText: 'Sunburn', rightText: 'Sunburn' },
-//       { src: '/images/work/E3.png', alt: 'Branding 2', leftText: 'Bismil Intro Video', rightText: 'Bismil' },
-//       { src: '/images/work/E5.png', alt: 'Branding 3', leftText: 'Hip Hop Event', rightText: 'Elements.ind' },
-//       { src: '/images/work/E4.png', alt: 'Branding 4', leftText: 'Skybags', rightText: 'Sunburn' },
-//       { src: '/images/work/E1.png', alt: 'Branding 5', leftText: 'Rendezvous', rightText: 'IIT Delhi' },
-//     ],
-//   },
-//   {
-//     id: 2,
-//     heading: 'BRAND FILMS',
-//     text: 'We craft films that amplify Brands heartbeat',
-//     images: [
-//       { src: '/images/work/Film-making1.png', alt: 'Film 1', leftText: '3D Ultrasound Device', rightText: 'Samsung' },
-//       { src: '/images/work/Film-making2.png', alt: 'Film 2', leftText: 'Shake It to Make It', rightText: 'Zomato' },
-//       { src: '/images/work/Film-making3.png', alt: 'Film 3', leftText: 'Mascot Tour', rightText: 'Hush Puppies' },
-//       { src: '/images/work/Film-making4.png', alt: 'Film 4', leftText: 'Jewellery Commercial', rightText: 'Sawaria Jewellers' },
-//       { src: '/images/work/Film-making5.png', alt: 'Film 5', leftText: 'Cricket ', rightText: 'DPPL' },
-//     ],
-//   },
-//   {
-//     id: 3,
-//     heading: 'B-ROLLS',
-//     text: 'We make the in-between of B-rolls that matter',
-//     images: [
-//       { src: '/images/work/BRoll1.png', alt: 'Web 1', leftText: 'Setup', rightText: 'Ritik' },
-//       { src: '/images/work/BRoll2.png', alt: 'Web 2', leftText: 'Tattoo', rightText: 'Mascot Tattos' },
-//       { src: '/images/work/BRoll3.png', alt: 'Web 3', leftText: 'Website', rightText: 'Ritik' },
-//       { src: '/images/work/BRoll4.png', alt: 'Web 4', leftText: 'Saloon Commercial', rightText: 'Spacetech Interiors' },
-//       { src: '/images/work/BRoll5.png', alt: 'Web 5', leftText: 'Cricket', rightText: 'DPPL' },
-//       { src: '/images/work/BRoll6.png', alt: 'Web 6', leftText: 'Sunburn', rightText: 'Sunburn' },
-//     ],
-//   },
-//   {
-//     id: 4,
-//     heading: 'CORPORATE VIDEOS',
-//     text: 'We transform Corporate Videos and Events into engaging, trust-building stories',
-//     images: [
-//       { src: '/images/work/coorporate1.png', alt: 'Music 1' },
-//       { src: '/images/work/coorporate2.png', alt: 'Music 2' },
-//       { src: '/images/work/coorporate3.png', alt: 'Music 3' },
-//       { src: '/images/work/coorporate4.png', alt: 'Music 4' },
-//       { src: '/images/work/coorporate5.png', alt: 'Music 5' },
-//       { src: '/images/work/coorporate6.png', alt: 'Music 6' },
-//     ],
-//   },
-// ];
+// export default function EarthSection({ onComplete }) {
+//   const mountRef = useRef(null);
+//   const [scrollProgress, setScrollProgress] = useState(0);
+//   const [isComplete, setIsComplete] = useState(false);
+//   const [hasPassedSection, setHasPassedSection] = useState(false);
 
-// // Reusable Horizontal Scroll Gallery with Arrows
-// const HorizontalGallery = ({ images }) => {
-//   const scrollContainerRef = useRef(null);
-//   const animationRef = useRef(null);
+//   useEffect(() => {
+//     const scene = new THREE.Scene();
+//     scene.background = new THREE.Color(0x000000);
 
-//   // Duplicate images for seamless infinite scroll
-//   const duplicatedImages = [...images, ...images];
+//     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+//     camera.position.z = 5;
 
-//   const startScrolling = (direction) => {
-//     if (!scrollContainerRef.current) return;
+//     const renderer = new THREE.WebGLRenderer({ antialias: true });
+//     renderer.setSize(window.innerWidth, window.innerHeight);
+//     renderer.setPixelRatio(window.devicePixelRatio);
+//     mountRef.current.appendChild(renderer.domElement);
 
-//     const container = scrollContainerRef.current;
-//     const scrollAmount = direction === 'left' ? -8 : 8; // Speed
+//     const earthGroup = new THREE.Group();
+//     scene.add(earthGroup);
 
-//     const step = () => {
-//       container.scrollLeft += scrollAmount;
+//     const galleryGroup = new THREE.Group();
+//     scene.add(galleryGroup);
 
-//       // Infinite loop logic
-//       if (container.scrollLeft <= 0) {
-//         container.scrollLeft = container.scrollWidth / 2;
-//       } else if (container.scrollLeft >= container.scrollWidth / 2) {
-//         container.scrollLeft = 0;
+//     const gltfLoader = new GLTFLoader();
+//     gltfLoader.load(
+//       '/earth (1).glb',
+//       (gltf) => {
+//         const model = gltf.scene;
+//         model.traverse((child) => {
+//           if (child.isMesh) {
+//             child.castShadow = true;
+//             child.receiveShadow = true;
+//             child.material.side = THREE.DoubleSide;
+//             if (child.material.map) {
+//               child.material.map.colorSpace = THREE.SRGBColorSpace;
+//               child.material.map.flipY = false;
+//             }
+//             child.material.needsUpdate = true;
+//           }
+//         });
+
+//         const box = new THREE.Box3().setFromObject(model);
+//         const size = box.getSize(new THREE.Vector3());
+//         const maxDim = Math.max(size.x, size.y, size.z);
+//         const scale = 4 / maxDim;
+//         model.scale.set(scale, scale, scale);
+//         model.position.y = -0.5;
+//         earthGroup.add(model);
+//       },
+//       undefined,
+//       () => {
+//         const fallback = new THREE.Mesh(
+//           new THREE.SphereGeometry(4, 64, 64),
+//           new THREE.MeshStandardMaterial({ color: 0x3399ff, roughness: 0.7, metalness: 0.3 })
+//         );
+//         earthGroup.add(fallback);
 //       }
+//     );
 
-//       animationRef.current = requestAnimationFrame(step);
+//     scene.add(new THREE.AmbientLight(0x404040, 1.5));
+//     const dirLight = new THREE.DirectionalLight(0xffffff, 3);
+//     dirLight.position.set(10, 10, 10);
+//     scene.add(dirLight);
+
+//     const imageUrls = [
+//       'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
+//       'https://images.unsplash.com/photo-1511593358241-7eea1f3c84e5?w=1200',
+//       'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200',
+//       'https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=1200',
+//       'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=1200',
+//       'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=1200',
+//     ];
+
+//     const images = [];
+//     const radius = 8;
+//     const textureLoader = new THREE.TextureLoader();
+
+//     [...imageUrls, ...imageUrls].forEach((url, i) => {
+//       const tex = textureLoader.load(url);
+//       tex.colorSpace = THREE.SRGBColorSpace;
+//       const mat = new THREE.MeshBasicMaterial({
+//         map: tex,
+//         side: THREE.DoubleSide,
+//         transparent: true,
+//         opacity: 1,
+//       });
+//       const mesh = new THREE.Mesh(new THREE.PlaneGeometry(4, 4), mat);
+//       const angle = (i / 12) * Math.PI * 2;
+//       mesh.position.set(Math.cos(angle) * radius, 2, Math.sin(angle) * radius);
+//       mesh.lookAt(0, 2, 0);
+//       galleryGroup.add(mesh);
+//       images.push(mesh);
+//     });
+
+//     const starsGeometry = new THREE.BufferGeometry();
+//     const vertices = [];
+//     const sizes = [];
+
+//     for (let i = 0; i < 2500; i++) {
+//       const radius = 50 + Math.random() * 60;
+//       const theta = Math.random() * Math.PI * 2;
+//       const phi = Math.acos(2 * Math.random() - 1);
+//       vertices.push(
+//         Math.sin(phi) * Math.cos(theta) * radius,
+//         Math.sin(phi) * Math.sin(theta) * radius,
+//         Math.cos(phi) * radius
+//       );
+//       sizes.push(Math.random() > 0.95 ? Math.random() * 3 + 3 : Math.random() * 0.8 + 0.6);
+//     }
+
+//     starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+//     starsGeometry.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1));
+
+//     const starMaterial = new THREE.ShaderMaterial({
+//       uniforms: { time: { value: 0 } },
+//       vertexShader: `
+//         attribute float size;
+//         uniform float time;
+//         void main() {
+//           vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+//           gl_PointSize = size * (1.0 + sin(time * 3.0 + position.y * 0.1) * 0.4);
+//           gl_Position = projectionMatrix * mvPosition;
+//         }
+//       `,
+//       fragmentShader: `
+//         void main() {
+//           float dist = length(gl_PointCoord - vec2(0.5));
+//           float alpha = 1.0 - smoothstep(0.0, 0.5, dist);
+//           gl_FragColor = vec4(1.0, 1.0, 1.0, alpha);
+//         }
+//       `,
+//       transparent: true,
+//       blending: THREE.AdditiveBlending,
+//     });
+
+//     const stars = new THREE.Points(starsGeometry, starMaterial);
+//     scene.add(stars);
+
+//     let currentScroll = 0;
+//     let targetScroll = 0;
+
+//     const handleWheel = (e) => {
+//       // Only prevent default when Earth section is active and not passed
+//       if (!isComplete || (isComplete && !hasPassedSection && e.deltaY < 0)) {
+//         e.preventDefault();
+        
+//         // If scrolling back up from completed state and haven't passed the section, reset
+//         if (isComplete && !hasPassedSection && e.deltaY < 0) {
+//           setIsComplete(false);
+//           targetScroll = Math.max(0, targetScroll + e.deltaY * 0.0012);
+//         } else if (!isComplete) {
+//           targetScroll += e.deltaY * 0.0012;
+//           targetScroll = Math.max(0, Math.min(1.4, targetScroll));
+//           setScrollProgress(Math.min(1, targetScroll));
+
+//           if (targetScroll >= 1.3) {
+//             setIsComplete(true);
+//             setHasPassedSection(true);
+//             onComplete && onComplete();
+//           }
+//         }
+//       }
+      
+//       // If user scrolls down after completing section, mark as passed
+//       if (isComplete && e.deltaY > 0 && !hasPassedSection) {
+//         setHasPassedSection(true);
+//       }
 //     };
 
-//     animationRef.current = requestAnimationFrame(step);
-//   };
+//     window.addEventListener('wheel', handleWheel, { passive: false });
 
-//   const stopScrolling = () => {
-//     if (animationRef.current) {
-//       cancelAnimationFrame(animationRef.current);
-//     }
-//   };
+//     const clock = new THREE.Clock();
+//     const animate = () => {
+//       requestAnimationFrame(animate);
+//       const elapsed = clock.getElapsedTime();
+//       starMaterial.uniforms.time.value = elapsed;
 
-//   // Initial nudge to enable left-wrap
-//   useEffect(() => {
-//     if (scrollContainerRef.current) {
-//       scrollContainerRef.current.scrollLeft = 1;
-//     }
-//   }, []);
+//       if (!isComplete) {
+//         currentScroll += (targetScroll - currentScroll) * 0.09;
+
+//         images.forEach((img) => {
+//           img.material.opacity = Math.max(0, 1 - currentScroll * 2);
+//         });
+
+//         const galleryGroup = scene.children.find(child => child.type === 'Group' && child !== earthGroup);
+//         if (galleryGroup) {
+//           galleryGroup.rotation.y += 0.002;
+//         }
+//         earthGroup.rotation.y += 0.006;
+//         earthGroup.position.y = -1.2 - currentScroll * 1.3;
+//         earthGroup.scale.setScalar(1 + currentScroll * 0.45);
+
+//         const zoom = 1 + currentScroll * 0.3;
+//         camera.position.z = 5 / zoom;
+//         camera.fov = 75 / zoom;
+//         camera.updateProjectionMatrix();
+//       }
+
+//       renderer.render(scene, camera);
+//     };
+//     animate();
+
+//     const handleResize = () => {
+//       camera.aspect = window.innerWidth / window.innerHeight;
+//       camera.updateProjectionMatrix();
+//       renderer.setSize(window.innerWidth, window.innerHeight);
+//     };
+//     window.addEventListener('resize', handleResize);
+
+//     return () => {
+//       window.removeEventListener('wheel', handleWheel);
+//       window.removeEventListener('resize', handleResize);
+//       if (mountRef.current && renderer.domElement) {
+//         mountRef.current.removeChild(renderer.domElement);
+//       }
+//       renderer.dispose();
+//       starsGeometry.dispose();
+//       starMaterial.dispose();
+//     };
+//   }, [onComplete, isComplete,hasPassedSection]);
 
 //   return (
-//     <div style={{ position: 'relative', padding: '2rem 0' }}>
-//       {/* Left Arrow */}
+//     <div
+//       style={{
+//         position: (isComplete && scrollProgress < 0.1) ? 'absolute' : 'fixed',
+//         top: 0,
+//         left: 0,
+//         width: '100vw',
+//         height: '100vh',
+//         zIndex: (isComplete && scrollProgress < 0.1) ? -100 : 9999,
+//         pointerEvents: isComplete ? 'none' : 'auto',
+//         opacity: isComplete ? 0 : 1,
+//         // transform: isComplete ? 'translateY(-10vh)' : 'translateY(0)',
+//         transition: 'all 1.5s cubic-bezier(0.22,1,0.36,1)',
+//       }}
+//     >
+//       <div ref={mountRef} style={{ position: 'absolute', inset: 0 }} />
+
 //       <div
-//         onMouseEnter={() => startScrolling('left')}
-//         onMouseLeave={stopScrolling}
 //         style={{
 //           position: 'absolute',
-//           left: '20px',
-//           top: '50%',
-//           transform: 'translateY(-50%)',
-//           width: '40px',
-//           height: '40px',
-//           background: 'rgba(255,255,255,0.15)',
-//           backdropFilter: 'blur(10px)',
-//           borderRadius: '50%',
-//           display: 'flex',
-//           alignItems: 'center',
-//           justifyContent: 'center',
-//           cursor: 'pointer',
-//           zIndex: 20,
-//           fontSize: '18px',
+//           top: '80%',
+//           left: '50%',
+//           transform: 'translateX(-50%)',
+//           color: '#fff',
+//           fontSize: '6rem',
 //           fontWeight: 'bold',
-//           color: 'white',
-//           opacity: 0.7,
-//           transition: 'all 0.3s',
+//           textAlign: 'center',
+//           pointerEvents: 'none',
+//           zIndex: 10,
+//           opacity: Math.max(0, 1 - scrollProgress * 3),
+//           transition: 'opacity 0.6s ease',
+//           textShadow: '0 4px 20px rgba(0,0,0,0.7)',
+//           whiteSpace: 'nowrap',
 //         }}
-//         onMouseOver={(e) => (e.currentTarget.style.opacity = '1')}
-//         onMouseOut={(e) => (e.currentTarget.style.opacity = '0.7')}
 //       >
-//         〈
+//            Our Featured Work
 //       </div>
 
-//       {/* Right Arrow */}
 //       <div
-//         onMouseEnter={() => startScrolling('right')}
-//         onMouseLeave={stopScrolling}
 //         style={{
 //           position: 'absolute',
-//           right: '20px',
-//           top: '50%',
-//           transform: 'translateY(-50%)',
-//           width: '40px',
-//           height: '40px',
-//           background: 'rgba(255,255,255,0.15)',
-//           backdropFilter: 'blur(10px)',
-//           borderRadius: '50%',
-//           display: 'flex',
-//           alignItems: 'center',
-//           justifyContent: 'center',
-//           cursor: 'pointer',
-//           zIndex: 20,
-//           fontSize: '18px',
+//           top: '10%',
+//           left: '50%',
+//           transform: 'translateX(-50%)',
+//           color: '#fff',
+//           fontSize: '4rem',
 //           fontWeight: 'bold',
-//           color: 'white',
-//           opacity: 0.7,
-//           transition: 'all 0.3s',
+//           textAlign: 'center',
+//           pointerEvents: 'none',
+//           zIndex: 10,
+//           opacity: scrollProgress > 0.2 && scrollProgress < 0.9 ? 1 : 0,
+//           transition: 'opacity 0.8s ease',
+//           textShadow: '0 0 40px rgba(0,0,0,0.9)',
+//           whiteSpace: 'nowrap',
 //         }}
-       
 //       >
-//         〉
+     
+//         We tell Stories the world remembers
 //       </div>
-
-//       {/* Scrollable Container */}
-//       <div
-//         ref={scrollContainerRef}
-//         style={{
-//           overflowX: 'auto',
-//           padding: '0 20px', // Space for arrows
-//           scrollbarWidth: 'none',
-//           msOverflowStyle: 'none',
-//         }}
-//         className="hide-scrollbar"
-//       >
-//         <div
-//           style={{
-//             display: 'flex',
-//             gap: '1.1rem',
-//             padding: '2rem 0',
-//             minWidth: 'max-content',
-//             alignItems: 'center',
-//           }}
-//         >
-//           {duplicatedImages.map((img, idx) => (
-//             <div
-//               key={idx}
-//               style={{
-//                 position: 'relative',
-//                 flex: 'none',
-//                 width: '420px',
-//                 boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.35)',
-              
-//                 overflow: 'hidden',
-//                 transition: 'all 0.5s ease',
-//               }}
-             
-//             >
-//               <Image
-//                 src={img.src}
-//                 alt={img.alt || ''}
-//                 width={500}
-//                 height={281}
-//                 style={{ width: '100%', height: 'auto', display: 'block' }}
-//               />
-
-//               {(img.leftText || img.rightText) && (
-//                 <div style={{ padding: '1rem 1.2rem 1.2rem' }}>
-//                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-//                     {img.leftText && (
-//                       <span style={{ color: 'white', fontSize: '1.1rem', fontWeight: '600' }}>
-//                         {img.leftText}
-//                       </span>
-//                     )}
-//                     {img.rightText && (
-//                       <span style={{ color: 'rgba(255,255,255,0.65)', fontSize: '0.95rem' }}>
-//                         {img.rightText}
-//                       </span>
-//                     )}
-//                   </div>
-//                 </div>
-//               )}
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-
-//       {/* Hide scrollbar */}
-//       <style jsx>{`
-//         .hide-scrollbar::-webkit-scrollbar {
-//           display: none;
-//         }
-//       `}</style>
 //     </div>
 //   );
-// };
-
-// export default function WorkGallerSection() {
-//   return (
-//     <section style={{ backgroundColor: 'black', padding: '5rem 0' }}>
-//       {galleries.map((gallery) => (
-//         <div key={gallery.id} style={{ marginBottom: '10rem' }}>
-//           {/* Hero Section - Only for first gallery */}
-//           {gallery.id === 1 && (
-//             <div style={{ position: 'relative', height: '100vh' }}>
-//               <Image
-//                 src="/images/work/eventVideoBackground.png"
-//                 alt="Event Video Background"
-//                 fill
-//                 style={{ objectFit: 'cover' }}
-//                 priority
-//               />
-//               <div
-//                 style={{
-//                   position: 'absolute',
-//                   inset: 0,
-//                   backgroundColor: 'rgba(0,0,0,0.45)',
-//                   display: 'flex',
-//                   flexDirection: 'column',
-//                   alignItems: 'center',
-//                   justifyContent: 'center',
-//                   textAlign: 'center',
-//                   padding: '0 2rem',
-//                 }}
-//               >
-//                 <h1
-//                   style={{
-//                     fontSize: 'clamp(4rem, 8vw, 9rem)',
-//                     fontWeight: '900',
-//                     color: 'white',
-//                     letterSpacing: '-0.05em',
-//                     marginBottom: '1.5rem',
-//                   }}
-//                 >
-//                   {gallery.heading}
-//                 </h1>
-//                 <p
-//                   style={{
-//                     fontSize: 'clamp(1.4rem, 2.2vw, 2rem)',
-//                     color: 'white',
-//                     maxWidth: '70rem',
-//                     lineHeight: '1.4',
-//                   }}
-//                 >
-//                   {gallery.text}
-//                 </p>
-//               </div>
-//             </div>
-//           )}
-
-//           {/* Heading for all other galleries */}
-//           {gallery.id !== 1 && (
-//             <div style={{ textAlign: 'center', padding: '0 1.5rem', marginBottom: '4rem' }}>
-//               <h1
-//                 style={{
-//                   fontSize: 'clamp(3.5rem, 7vw, 6.5rem)',
-//                   fontWeight: '900',
-//                   color: 'white',
-//                   letterSpacing: '-0.03em',
-//                   lineHeight: '1',
-//                 }}
-//               >
-//                 {gallery.heading}
-//               </h1>
-//               <p
-//                 style={{
-//                   fontSize: '1.6rem',
-//                   color: 'rgba(255,255,255,0.9)',
-//                   maxWidth: '800px',
-//                   margin: '1.5rem auto 0',
-//                   lineHeight: '1.5',
-//                 }}
-//               >
-//                 {gallery.text}
-//               </p>
-//             </div>
-//           )}
-
-//           {/* Horizontal Gallery */}
-//           <HorizontalGallery images={gallery.images} />
-//         </div>
-//       ))}
-//     </section>
-//   );
 // }
-
-
-
-
-
 
 
 
 
 'use client';
 
-import Image from 'next/image';
-import { useState,useRef, useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Lenis from 'lenis';
 
-const galleries = [
-  {
-    id: 1,
-    heading: 'EVENT VIDEO',
-    text: 'An event video captures the highlights, emotions, and key moments of a special occasion, preserving memories and sharing the experience with a wider audience.',
-    images: [
-      { src: '/images/work/E2.png', alt: 'Branding 1', leftText: 'Sunburn', rightText: 'Sunburn' },
-      { src: '/images/work/E3.png', alt: 'Branding 2', leftText: 'Bismil Intro Video', rightText: 'Bismil' },
-      { src: '/images/work/E5.png', alt: 'Branding 3', leftText: 'Hip Hop Event', rightText: 'Elements.ind' },
-      { src: '/images/work/E4.png', alt: 'Branding 4', leftText: 'Skybags', rightText: 'Sunburn' },
-      { src: '/images/work/E1.png', alt: 'Branding 5', leftText: 'Rendezvous', rightText: 'IIT Delhi' },
-    ],
-  },
-  {
-    id: 2,
-    heading: 'BRAND FILMS',
-    text: 'We craft films that amplify Brands heartbeat',
-    images: [
-      { src: '/images/work/Film-making1.png', alt: 'Film 1', leftText: '3D Ultrasound Device', rightText: 'Samsung' },
-      { src: '/images/work/Film-making2.png', alt: 'Film 2', leftText: 'Shake It to Make It', rightText: 'Zomato' },
-      { src: '/images/work/Film-making3.png', alt: 'Film 3', leftText: 'Mascot Tour', rightText: 'Hush Puppies' },
-      { src: '/images/work/Film-making4.png', alt: 'Film 4', leftText: 'Jewellery Commercial', rightText: 'Sawaria Jewellers' },
-      { src: '/images/work/Film-making5.png', alt: 'Film 5', leftText: 'Cricket ', rightText: 'DPPL' },
-    ],
-  },
-  {
-    id: 3,
-    heading: 'B-ROLLS',
-    text: 'We make the in-between of B-rolls that matter',
-    images: [
-      { src: '/images/work/BRoll1.png', alt: 'Web 1', leftText: 'Setup', rightText: 'Ritik' },
-      { src: '/images/work/BRoll2.png', alt: 'Web 2', leftText: 'Tattoo', rightText: 'Mascot Tattos' },
-      { src: '/images/work/BRoll3.png', alt: 'Web 3', leftText: 'Website', rightText: 'Ritik' },
-      { src: '/images/work/BRoll4.png', alt: 'Web 4', leftText: 'Saloon Commercial', rightText: 'Spacetech Interiors' },
-      { src: '/images/work/BRoll5.png', alt: 'Web 5', leftText: 'Cricket', rightText: 'DPPL' },
-      { src: '/images/work/BRoll6.png', alt: 'Web 6', leftText: 'Sunburn', rightText: 'Sunburn' },
-    ],
-  },
-  {
-    id: 4,
-    heading: 'CORPORATE VIDEOS',
-    text: 'We transform Corporate Videos and Events into engaging, trust-building stories',
-    images: [
-      { src: '/images/work/coorporate1.png', alt: 'Music 1' },
-      { src: '/images/work/coorporate2.png', alt: 'Music 2' },
-      { src: '/images/work/coorporate3.png', alt: 'Music 3' },
-      { src: '/images/work/coorporate4.png', alt: 'Music 4' },
-      { src: '/images/work/coorporate5.png', alt: 'Music 5' },
-      { src: '/images/work/coorporate6.png', alt: 'Music 6' },
-    ],
-  },
-];
+gsap.registerPlugin(ScrollTrigger);
 
-
-
-
-
-const HorizontalGallery = ({ images }) => {
-  const scrollContainerRef = useRef(null);
-  const itemRefs = useRef([]);                    // One ref per image
-  const animationRef = useRef(null);
-  const [centerIndex, setCenterIndex] = useState(0);
-
-  // Triple duplicate for seamless infinite scroll
-  const duplicatedImages = [...images, ...images, ...images];
-  const totalItems = duplicatedImages.length;
-
-  // Speed control — slow & premium feel
-  const SCROLL_SPEED = 3; // Perfect balance (adjust 1.5–4)
-
-  // Find which image is truly closest to the viewport center
-  const updateCenterImage = () => {
-    if (!scrollContainerRef.current || itemRefs.current.length === 0) return;
-
-    const container = scrollContainerRef.current;
-    const containerRect = container.getBoundingClientRect();
-    const containerCenter = containerRect.left + containerRect.width / 2;
-
-    let closestIndex = 0;
-    let minDistance = Infinity;
-
-    itemRefs.current.forEach((el, idx) => {
-      if (el) {
-        const rect = el.getBoundingClientRect();
-        const itemCenter = rect.left + rect.width / 2;
-        const distance = Math.abs(itemCenter - containerCenter);
-
-        if (distance < minDistance) {
-          minDistance = distance;
-          closestIndex = idx;
-        }
-      }
-    });
-
-    const realIndex = closestIndex % images.length;
-    setCenterIndex(realIndex);
-  };
-
-  const startScrolling = (direction) => {
-    if (!scrollContainerRef.current) return;
-    const container = scrollContainerRef.current;
-    const speed = direction === 'left' ? -SCROLL_SPEED : SCROLL_SPEED;
-
-    const step = () => {
-      container.scrollLeft += speed;
-      updateCenterImage();
-
-      // Seamless infinite loop
-      const maxScroll = container.scrollWidth / 3;
-      if (container.scrollLeft <= 0) {
-        container.scrollLeft += maxScroll;
-      } else if (container.scrollLeft >= maxScroll * 2) {
-        container.scrollLeft -= maxScroll;
-      }
-
-      animationRef.current = requestAnimationFrame(step);
-    };
-
-    animationRef.current = requestAnimationFrame(step);
-  };
-
-  const stopScrolling = () => {
-    if (animationRef.current) cancelAnimationFrame(animationRef.current);
-  };
+export default function EarthSection({ onComplete }) {
+  const mountRef = useRef(null);
+  const sectionRef = useRef(null);
+  const earthGroupRef = useRef(new THREE.Group());
+  const galleryGroupRef = useRef(new THREE.Group());
+  const cameraRef = useRef(null);
+  const rendererRef = useRef(null);
+  const imagesRef = useRef([]);
+  const text1Ref = useRef(null); // "Our Featured Work"
+  const text2Ref = useRef(null);
+  const typewriterRef = useRef(null);
 
   useEffect(() => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
+    let lenis;
 
-    // Start in the middle section
-    container.scrollLeft = container.scrollWidth / 3;
+    // === LENIS SETUP (MUST BE FIRST) ===
+    lenis = new Lenis({
+      duration: 1.4,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smooth: true,
+      smoothTouch: false,
+    });
 
-    const handleScroll = () => {
-      updateCenterImage();
+    // Critical: Sync Lenis with ScrollTrigger
+    lenis.on('scroll', ScrollTrigger.update);
 
-      // Keep within middle third for infinite loop
-      const maxScroll = container.scrollWidth / 3;
-      if (container.scrollLeft <= 100) {
-        container.scrollLeft += maxScroll;
-      } else if (container.scrollLeft >= maxScroll * 2 - 100) {
-        container.scrollLeft -= maxScroll;
+    // GSAP ticker for Lenis
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
+    });
+
+    gsap.ticker.lagSmoothing(0);
+
+    // === THREE.JS SETUP ===
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x000000);
+
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 5;
+    cameraRef.current = camera;
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    mountRef.current.appendChild(renderer.domElement);
+    rendererRef.current = renderer;
+
+    scene.add(earthGroupRef.current);
+    scene.add(galleryGroupRef.current);
+
+    // Load Earth
+    const loader = new GLTFLoader();
+    loader.load(
+      '/earth (1).glb',
+      (gltf) => {
+        const model = gltf.scene;
+      model.traverse((child) => {
+  if (child.isMesh) {
+    child.castShadow = true;
+    child.receiveShadow = true;
+    if (child.material) {
+      // Keep the original material but adjust specific properties
+      child.material = new THREE.MeshStandardMaterial({
+        ...child.material, // Spread the original material properties
+        roughness: 0.6,    // Slightly rough to reduce shininess
+        metalness: 0.8,   // Keep a bit of metalness for realism
+        envMapIntensity: 0.3 ,// Reduce environment reflections
+        
+
+      });
+      if (child.material.map) {
+        child.material.map.colorSpace = THREE.SRGBColorSpace;
       }
+    }
+  }
+});
+        const box = new THREE.Box3().setFromObject(model);
+        const size = box.getSize(new THREE.Vector3());
+        const scale = 4 / Math.max(size.x, size.y, size.z);
+        model.scale.set(scale, scale, scale);
+        model.position.y = -0.5;
+        earthGroupRef.current.add(model);
+      },
+      undefined,
+      () => {
+        const sphere = new THREE.Mesh(
+          new THREE.SphereGeometry(2, 64, 64),
+          new THREE.MeshStandardMaterial({ color: 0x3399ff })
+        );
+        earthGroupRef.current.add(sphere);
+      }
+    );
+
+    // Lights
+    scene.add(new THREE.AmbientLight(0x404040, 2));
+    const light = new THREE.DirectionalLight(0xffffff, 4);
+    light.position.set(10, 10, 10);
+    scene.add(light);
+
+    // Gallery Images
+    const urls = [
+      'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
+      'https://images.unsplash.com/photo-1511593358241-7eea1f3c84e5?w=1200',
+      'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200',
+      'https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=1200',
+      'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=1200',
+      'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=1200',
+    ];
+
+    urls.concat(urls).forEach((url, i) => {
+      new THREE.TextureLoader().load(url, (tex) => {
+        tex.colorSpace = THREE.SRGBColorSpace;
+        const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, side: THREE.DoubleSide });
+        const mesh = new THREE.Mesh(new THREE.PlaneGeometry(4, 4), mat);
+        const angle = (i / 12) * Math.PI * 2;
+        mesh.position.set(Math.cos(angle) * 8, 2, Math.sin(angle) * 8);
+        mesh.lookAt(0, 2, 0);
+        galleryGroupRef.current.add(mesh);
+        imagesRef.current.push(mesh);
+      });
+    });
+
+    // Stars
+    const starsGeo = new THREE.BufferGeometry();
+    const positions = [];
+    const sizes = [];
+    for (let i = 0; i < 3000; i++) {
+      const radius = 50 + Math.random() * 80;
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos(2 * Math.random() - 1);
+      positions.push(
+        radius * Math.sin(phi) * Math.cos(theta),
+        radius * Math.sin(phi) * Math.sin(theta),
+        radius * Math.cos(phi)
+      );
+      sizes.push(Math.random() > 0.95 ? 4 : 1);
+    }
+    starsGeo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    starsGeo.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1));
+
+    const starsMat = new THREE.ShaderMaterial({
+      uniforms: { time: { value: 0 } },
+      vertexShader: `
+        attribute float size;
+        uniform float time;
+        void main() {
+          vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+          gl_PointSize = size * (1.0 + sin(time * 3.0 + position.y) * 0.5);
+          gl_Position = projectionMatrix * mvPosition;
+        }
+      `,
+      fragmentShader: `
+        void main() {
+          float dist = length(gl_PointCoord - vec2(0.5));
+          gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0 - smoothstep(0.0, 0.5, dist));
+        }
+      `,
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+    });
+
+    scene.add(new THREE.Points(starsGeo, starsMat));
+const fullText = "We tell Stories the world remembers";
+    const chars = fullText.split('');
+    typewriterRef.current.innerHTML = chars.map(char => `<span style="opacity:0">${char === ' ' ? '&nbsp;' : char}</span>`).join('');
+
+    const spans = typewriterRef.current.querySelectorAll('span');
+    // === GSAP + SCROLLTRIGGER (THE MAGIC) ===
+    const tl = gsap.timeline({
+    // Inside EarthSection useEffect – replace the entire scrollTrigger config
+scrollTrigger: {
+  trigger: sectionRef.current,
+  start: "top top",
+  end: "+=200%",
+  scrub: 1,
+  pin: true,
+  pinSpacing: true,
+  anticipatePin: 1,
+  invalidateOnRefresh: true,
+
+  // THIS IS THE KEY LINE YOU WERE MISSING
+  onLeave: () => {
+    ScrollTrigger.getById(tl.scrollTrigger.id)?.disable(); // unpin!
+    onComplete?.();
+  },
+
+  // Optional: allow scrolling back smoothly
+  onLeaveBack: () => {
+    ScrollTrigger.getById(tl.scrollTrigger.id)?.enable();
+  },
+
+  onUpdate: (self) => {
+    const p = self.progress;
+
+    earthGroupRef.current.rotation.y = p * 4;
+    earthGroupRef.current.position.y = -1.2 - p * 1.3; //1.5
+    earthGroupRef.current.scale.setScalar(1 + p * 0.6);
+
+    imagesRef.current.forEach(img => {
+      img.material.opacity = Math.max(0, 1 - p * 2.5);
+    });
+
+    const zoom = 1 + p * 0.4;
+    camera.position.z = 5 / zoom;
+    camera.fov = 75 / zoom;
+    camera.updateProjectionMatrix();
+
+    gsap.to(text1Ref.current, {
+          opacity: Math.max(0, 1 - p * 4),
+          y: -50 * p,
+          duration: 0.3
+        });
+
+        // TEXT 2: "We tell Stories..." → fade in after 30%
+        gsap.to(text2Ref.current, {
+          opacity: p > 0.3 ? (p - 0.3) / 0.7 : 0,
+          y: p > 0.3 ? 0 : 50,
+          duration: 0.4
+        });
+        const typeProgress = gsap.utils.clamp(0, 1, (p - 0.4) / 0.5); // from 0.4 → 0.9
+        const visibleChars = Math.floor(typeProgress * spans.length);
+
+        spans.forEach((span, i) => {
+          span.style.opacity = i < visibleChars ? 1 : 0;
+        });
+        if (p > 0.98) onComplete?.();
+  },
+}
+    });
+
+    // Force refresh after everything loads
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 1000);
+
+    // Render loop
+    const clock = new THREE.Clock();
+    const animate = () => {
+      requestAnimationFrame(animate);
+      const elapsed = clock.getElapsedTime();
+      starsMat.uniforms.time.value = elapsed;
+      
+      // Auto-rotate the gallery
+      galleryGroupRef.current.rotation.y = elapsed * 0.1; // Rotate at 0.2 radians per second
+          earthGroupRef.current.rotation.y = elapsed * 0.2; // Adjust speed as needed (0.2 is a good starting point)
+
+      renderer.render(scene, camera);
     };
+    animate();
 
-    container.addEventListener('scroll', handleScroll);
-    updateCenterImage();
+    // Resize
+    const onResize = () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      ScrollTrigger.refresh();
+    };
+    window.addEventListener('resize', onResize);
 
-    return () => container.removeEventListener('scroll', handleScroll);
+    // Cleanup
+    return () => {
+      lenis.destroy();
+      gsap.ticker.remove(lenis.raf);
+      window.removeEventListener('resize', onResize);
+      ScrollTrigger.getAll().forEach(st => st.kill());
+      renderer.dispose();
+    };
   }, []);
 
   return (
-    <div style={{ position: 'relative', padding: '3rem 80px', overflow: 'hidden' }}>
-      {/* Left Arrow */}
-      <div
-        onMouseEnter={() => startScrolling('left')}
-        onMouseLeave={stopScrolling}
+    <section
+      ref={sectionRef}
+      style={{
+        position: 'relative',
+        width: '100vw',
+        height: '100vh',
+        overflow: 'hidden',
+        background: '#000',
+      }}
+    >
+      <div ref={mountRef} style={{ position: 'absolute', inset: 0 }} />
+
+      {/* TEXT 1 - Bottom (fades out) */}
+      <h2
+        ref={text1Ref}
         style={{
+          position: 'absolute',
+          bottom: '3%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          color: 'white',
+          fontSize: 'clamp(3rem, 8vw, 7rem)',
+          fontWeight: 'bold',
+          textAlign: 'center',
+          pointerEvents: 'none',
+          zIndex: 10,
+          textShadow: '0 4px 30px rgba(0,0,0,0.8)',
+          whiteSpace: 'nowrap',
+          opacity: 1,
+        }}
+      >
+        Our Featured Work
+      </h2>
+
+      {/* TEXT 2 - Top (fades in) */}
+      <div
+        ref={text2Ref}
+        style={{
+          position: 'absolute',
+          top: '20%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          color: 'white',
+          fontSize: 'clamp(1.8rem, 5vw, 5rem)',
+          fontWeight:'bolder',
+          textAlign: 'center',
+          pointerEvents: 'none',
+          zIndex: 10,
+          textShadow: '0 0 40px rgba(0,0,0,0.9)',
+          whiteSpace: 'nowrap',
+          opacity: 0,
+          letterSpacing: '0.01em',
+        }}
+      >
+       <div
+          ref={typewriterRef}
+          style={{
+            display: 'inline-block',
+            fontFamily: 'inherit',
+          }}
+        />
+        <style jsx>{`
+          span {
+            display: inline-block;
+            transition: opacity 0.01s;
+          }
+        `}</style>
+      </div>
      
-          position: 'absolute',
-          left: '30px',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          width: '40px',
-          height: '40px',
-          background: 'rgba(255,255,255,0.15)',
-          backdropFilter: 'blur(20px)',
-          borderRadius: '50%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer',
-          zIndex: 100,
-          fontSize: '28px',
-          color: 'white',
-          boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
-          border: '2px solid rgba(255,255,255,0.2)',
-            paddingRight:'10px',
-        }}
-      >
-        〈
-      </div>
-
-      {/* Right Arrow */}
-      <div
-        onMouseEnter={() => startScrolling('right')}
-        onMouseLeave={stopScrolling}
-        style={{
-          position: 'absolute',
-          right: '30px',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          width: '40px',
-          height: '40px',
-          background: 'rgba(255,255,255,0.15)',
-          backdropFilter: 'blur(20px)',
-          borderRadius: '50%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-         
-            paddingLeft:'10px',
-          cursor: 'pointer',
-          zIndex: 100,
-          fontSize: '28px',
-          color: 'white',
-          boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
-          border: '2px solid rgba(255,255,255,0.2)',
-        }}
-      >
-        〉
-      </div>
-
-      <div
-        ref={scrollContainerRef}
-        style={{
-          overflowX: 'hidden',
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
-        }}
-        className="hide-scrollbar"
-      >
-        <div style={{
-          display: 'flex',
-          gap: '1.3rem',
-          padding: '2rem 0',
-          alignItems: 'center',
-        }}>
-          {duplicatedImages.map((img, idx) => {
-            const originalIndex = idx % images.length;
-            const isCenter = originalIndex === centerIndex;
-
-            return (
-              <div
-                key={idx}
-                ref={el => itemRefs.current[idx] = el}   // Critical: track each item
-                style={{
-                  flex: 'none',
-                  transition: 'all 0.7s cubic-bezier(0.4, 0, 0.2, 1)',
-                 transform: isCenter 
-  ? 'scale(1.05) translateY(5px)'   // ← Only 20px lift (feels premium & balanced)
-  : 'scale(0.92) translateY(10px)',   // ← Side images slightly lower
-                  zIndex: isCenter ? 50 : 10,
-                  filter: isCenter ? 'brightness(0.85)' : 'brightness(0.95)',
-                }}
-              >
-               <div style={{
-  width: '408px',
-  height: '280px',
-  overflow: 'hidden',
-  position: 'relative',
-  borderRadius: '12px', // optional: nice touch
-}}>
-  <Image
-    src={img.src}
-    alt={img.alt || `Image ${originalIndex + 1}`}
-    width={600}
-    height={500}
-    style={{
-      width: '100%',
-      height: '100%',
-      objectFit: 'cover',
-      transition: 'filter 0.7s cubic-bezier(0.4, 0, 0.2, 1)',
-      // This is the key: grayscale + reduced brightness for non-center
-      filter: isCenter 
-        ?'grayscale(50%) brightness(0.65) contrast(1.1)': 'brightness(1.1) saturate(1.1)',
-    }}
-    priority={isCenter}
-  />
-  
-  {/* Optional: Subtle dark overlay on non-center images for richer blacks */}
-  {isCenter && (
-    <div style={{
-      position: 'absolute',
-      inset: 0,
-      background: 'rgba(0, 0, 0, 0.25)',
-      pointerEvents: 'none',
-      transition: 'opacity 0.7s',
-      opacity: 1,
-    }} />
-  )}
-</div>
-
-                {/* Text */}
-                {(img.leftText || img.rightText) && (
-                  <div style={{
-  marginTop: isCenter ? '-0.2rem' : '0.3rem',  // Reduced top margin for centered item
-                    textAlign: 'center',
-                    opacity: isCenter ? 1 : 0.8,
-                    transition: 'all 0.5s',
-                  }}>
-                    <div style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      padding: '0 2rem',
-                      fontSize: isCenter ? '1.1rem' : '0.95rem',
-                    }}>
-                      {img.leftText && (
-                        <span style={{ fontWeight: isCenter ? '700' : '500', color: 'white',marginLeft:'-25px' }}>
-                          {img.leftText}
-                        </span>
-                      )}
-                      {img.rightText && (
-                        <span style={{ color: 'rgba(255,255,255,0.7)',marginRight:'-20px' }}>
-                          {img.rightText}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      <style jsx>{`
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-      `}</style>
-    </div>
-  );
-};
-
-
-export default function GalleriesPage() {
-  return (
-    <section style={{ padding: '2rem 0' }}>
-      {galleries.map((gallery) => (
-        <div key={gallery.id} style={{ marginBottom: '6rem' }}>
-          {/* Hero Section - Only for first gallery */}
-          {gallery.id === 1 && (
-            <div style={{ position: 'relative', height: '90vh', minHeight: '500px', marginBottom: '-6rem' }}>
-              <Image
-                src="/images/work/eventVideoBackground.png"
-                alt="Event Video Hero"
-                fill
-                style={{ objectFit: 'cover' }}
-                priority
-              />
-              <div
-                style={{
-                  
-                  position: 'absolute',
-                  inset: 0,
-                  backgroundColor: 'rgba(0,0,0,0.5)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  textAlign: 'center',
-                  padding: '0 2rem',
-                }}
-              >
-                <h1
-                  style={{
-                    fontSize: 'clamp(4.5rem, 9vw, 10rem)',
-                    fontWeight: '900',
-                    color: 'white',
-                    letterSpacing: '-0.06em',
-                    marginBottom: '1rem',
-                    lineHeight:'3.9rem',
-                    marginTop:'15.2rem',
-                    fontStyle:'italic'
-                  }}
-                >
-                  {gallery.heading}
-                </h1>
-                <p
-                  style={{
-                    fontSize: 'clamp(1.1rem, 1.8vw, 2.2rem)',
-                    color: 'white',
-                    maxWidth: '90rem',
-                    lineHeight: '1.2',
-                    marginBottom: '2rem',
-                  }}
-                >
-                  {gallery.text}
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Heading for other galleries */}
-          {gallery.id !== 1 && (
-            <div style={{ textAlign: 'center', padding: '0 2rem', marginBottom: '-3rem' }}>
-              <h1
-                style={{
-                  fontSize: 'clamp(4rem, 8vw, 7rem)',
-                  fontWeight: '900',
-                  color: 'white',
-                  letterSpacing: '-0.04em',
-                  lineHeight: '1.8',
-                  marginBottom:'-5rem',
-                  marginTop:'-6rem',
-                  fontStyle:'italic'
-                }}
-              >
-                {gallery.heading}
-              </h1>
-              <p
-                style={{
-                  fontSize: '1.4rem',
-                  color: 'rgba(255,255,255,0.9)',
-                  maxWidth: '900px',
-                  margin: '1.5rem auto 2rem',
-                  lineHeight: '1.4',
-                                            marginBottom:'-4rem',
-
-                  whiteSpace:'nowrap'
-                }}
-              >
-                {gallery.text}
-              </p>
-            </div>
-          )}
-
-          {/* Gallery */}
-          <HorizontalGallery images={gallery.images} />
-        </div>
-      ))}
     </section>
   );
 }
