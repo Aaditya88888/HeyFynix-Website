@@ -616,8 +616,8 @@ export default function LusionEffect() {
     let mouseX = -9999;
     let mouseY = -9999;
 
-    const PARTICLES = 70;
-    const RADIUS = 160;
+    const PARTICLES = 200;
+    const RADIUS = 150;
 
     window.addEventListener("resize", () => {
       w = canvas.width = window.innerWidth;
@@ -656,7 +656,7 @@ export default function LusionEffect() {
       reset() {
         this.x = Math.random() * w;
         this.y = h + 40;
-        this.size = Math.random() * 20 + 10;
+        this.size = Math.random() * 12 + 10;
         this.vx = Math.random() * 2 - 1;
         this.vy = Math.random() * 1.4 + 0.8;
         this.color = colors[Math.floor(Math.random() * colors.length)];
@@ -677,7 +677,7 @@ export default function LusionEffect() {
         if (dist < RADIUS) {
           const force = (RADIUS - dist) / RADIUS;
           const angle = Math.atan2(dy, dx);
-          const push = force * 9;
+          const push = force * 20;
           this.x += Math.cos(angle) * push;
           this.y += Math.sin(angle) * push;
         }
