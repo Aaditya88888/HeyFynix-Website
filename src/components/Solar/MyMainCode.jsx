@@ -1,4 +1,3 @@
-// components/MyMainCode.jsx
 "use client";
 import React, { useEffect, useRef } from "react";
 import "./MyMain.css";
@@ -82,8 +81,8 @@ export default function MyMainCode() {
     starsRenderer.setSize(window.innerWidth, window.innerHeight);
     starsRenderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     starsRenderer.domElement.className = "stars-canvas";
-    starsRenderer.domElement.style.opacity = "1";
-    // starsRenderer.domElement.style.transition = "opacity 0.15s linear";
+    starsRenderer.domElement.style.opacity = "0";
+    starsRenderer.domElement.style.transition = "opacity 0.35s linear";
     container.appendChild(starsRenderer.domElement);
 
     // Controls
@@ -490,9 +489,10 @@ export default function MyMainCode() {
         solarSystem.userData.progress = progress;
 
         // Fade in canvases
-        const visible = progress > 0.02;
+        const visible = progress > 0.001;
         renderer.domElement.style.opacity = visible ? "1" : "0";
         labelRenderer.domElement.style.opacity = visible ? "1" : "0";
+        starsRenderer.domElement.style.opacity = visible ? "1" : "0";
 
         // Create corner texts
         if (progress > 0.05 && !cornerCreatedRef.current) {
