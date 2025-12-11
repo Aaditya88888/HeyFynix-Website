@@ -10,10 +10,6 @@ const inter = Inter({ subsets: ["latin"] });
 
 export default function MyMainCode() {
   const rootRef = useRef(null);
-  const starsRendererRef = useRef(null);
-  const starsSceneRef = useRef(null);
-  const starsCameraRef = useRef(null);
-  const starsBgRef = useRef(null);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -47,81 +43,6 @@ export default function MyMainCode() {
     scrollContainer.style.position = "relative";
     scrollContainer.style.zIndex = "10";
     scrollContainer.style.background = "transparent";
-
-    // === STARS BACKGROUND (Three.js) ===
-    const starsScene = new THREE.Scene();
-    starsSceneRef.current = starsScene;
-
-    const starsCamera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      10000
-    );
-    starsCamera.position.z = 600;
-    starsCameraRef.current = starsCamera;
-
-    const starsRenderer = new THREE.WebGLRenderer({
-      antialias: true,
-      alpha: true,
-    });
-    starsRenderer.setSize(window.innerWidth, window.innerHeight);
-    starsRenderer.setClearColor(0x000000, 0);
-    starsRenderer.domElement.style.position = "fixed";
-    starsRenderer.domElement.style.top = "0";
-    starsRenderer.domElement.style.left = "0";
-    starsRenderer.domElement.style.width = "100%";
-    starsRenderer.domElement.style.height = "relative";
-    starsRenderer.domElement.style.zIndex = "60";
-    starsRenderer.domElement.style.opacity = "0";
-    starsRenderer.domElement.style.pointerEvents = "none";
-    starsRenderer.domElement.style.setProperty(
-      "pointer-events",
-      "none",
-      "important"
-    );
-    starsRendererRef.current = starsRenderer;
-    const existingCanvas = root.querySelector("canvas");
-    if (existingCanvas) existingCanvas.remove();
-    root.appendChild(starsRenderer.domElement);
-
-    const starGeometry = new THREE.BufferGeometry();
-    const starCount = window.innerWidth < 768 ? 4000 : 10000;
-    const starVertices = [];
-    const spreadX = 2500,
-      spreadY = 2500,
-      spreadZ = 2500;
-
-    for (let i = 0; i < starCount; i++) {
-      const x = (Math.random() - 0.5) * spreadX;
-      const y = (Math.random() - 0.5) * spreadY;
-      const z = (Math.random() - 0.5) * spreadZ;
-      starVertices.push(x, y, z);
-    }
-
-    starGeometry.setAttribute(
-      "position",
-      new THREE.Float32BufferAttribute(starVertices, 3)
-    );
-
-    const starTexture = new THREE.TextureLoader().load(
-      "https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/sprites/circle.png"
-    );
-
-    const starMaterial = new THREE.PointsMaterial({
-      color: 0xffffff,
-      size: 2.5,
-      sizeAttenuation: true,
-      map: starTexture,
-      transparent: true,
-      opacity: 0.8,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
-    });
-
-    const starsBg = new THREE.Points(starGeometry, starMaterial);
-    starsScene.add(starsBg);
-    starsBgRef.current = starsBg;
 
     // === VIDEO LOADING ===
     let loadedAssets = 0;
@@ -277,8 +198,6 @@ export default function MyMainCode() {
           videoSection.style.display = videoOpacity > 0.05 ? "flex" : "none";
         }
       };
-
-      window.addEventListener("resize", resizeHandler);
       window.addEventListener("scroll", handleScroll);
 
       // Hover shadow
@@ -408,92 +327,14 @@ export default function MyMainCode() {
       if (clampedTarget === 0) currentProgress = 0;
       if (clampedTarget === maxScroll) currentProgress = maxScroll;
 
-      // === STARS OPACITY (SMOOTH BOTH DIRECTIONS) ===
-      let starsOpacity = 0;
-
-      // Fade IN smoothly between 0.1 → 0.3
-      if (currentProgress >= 0.1 && currentProgress <= 0.3) {
-        starsOpacity = (currentProgress - 0.1) / 0.2; // 0 → 1
-      }
-
-      // FULL visible between 0.3 → 0.6
-      else if (currentProgress > 0.3 && currentProgress < 0.6) {
-        starsOpacity = 1;
-      }
-
-      // Fade OUT smoothly between 0.6 → 0.7
-      else if (currentProgress >= 0.6 && currentProgress <= 0.7) {
-        starsOpacity = 1 - (currentProgress - 0.6) / 0.1; // 1 → 0
-      }
-
-      // Otherwise hidden
-      else {
-        starsOpacity = 0;
-      }
-
-      // Apply to DOM with smooth easing
-      gsap.to(starsRendererRef.current.domElement, {
-        opacity: starsOpacity,
-        duration: 0.3, // VERY smooth
-        ease: "power2.out",
-        overwrite: true,
-      });
-
-      // === STARS PARALLAX ===
       // === STARS PARALLAX — AB BILKUL PERFECT (NO REVERSE JERK EVER) ===
-      if (starsOpacity > 0.01) {
-        // TARGET PROGRESS use karo, currentProgress nahi!
-        const offset = targetProgress - 0.5; // Yeh turant react karega scroll direction pe
-
-        const targetX = offset * 380;
-        const targetY = offset * 300;
-        const targetZ = offset * 380;
-
-        const lerp = 0.14; // Thoda zyada responsive feel ke liye
-
-        starsBgRef.current.position.x +=
-          (targetX - starsBgRef.current.position.x) * lerp;
-        starsBgRef.current.position.y +=
-          (targetY - starsBgRef.current.position.y) * lerp;
-        starsBgRef.current.position.z +=
-          (targetZ - starsBgRef.current.position.z) * lerp;
-
-        starsRendererRef.current.render(
-          starsSceneRef.current,
-          starsCameraRef.current
-        );
-      } else {
-        // Smoothly center return
-        const reset = 0.08;
-        starsBgRef.current.position.x +=
-          (0 - starsBgRef.current.position.x) * reset;
-        starsBgRef.current.position.y +=
-          (0 - starsBgRef.current.position.y) * reset;
-        starsBgRef.current.position.z +=
-          (0 - starsBgRef.current.position.z) * reset;
-      }
 
       requestAnimationFrame(mainLoop);
     }
 
-    const resizeHandler = () => {
-      starsCameraRef.current.aspect = window.innerWidth / window.innerHeight;
-      starsCameraRef.current.updateProjectionMatrix();
-      starsRendererRef.current.setSize(window.innerWidth, window.innerHeight);
-    };
-
     // === CLEANUP ===
     return () => {
-      window.removeEventListener("resize", resizeHandler);
       window.removeEventListener("scroll", () => {});
-      if (starsRendererRef.current) {
-        starsRendererRef.current.dispose();
-        if (starsRendererRef.current.domElement?.parentNode) {
-          starsRendererRef.current.domElement.parentNode.removeChild(
-            starsRendererRef.current.domElement
-          );
-        }
-      }
       root.innerHTML = "";
     };
   }, []);
