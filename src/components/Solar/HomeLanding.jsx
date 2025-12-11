@@ -23,7 +23,7 @@ export default function MyMainCode() {
       </div>
       <div id="topText"></div>
       <div id="videoSection">
-        <video class="bgVideo" id="astronautVideo" src="/textures/models/15.mp4" type="video/mp4"
+        <video class="bgVideo" id="astronautVideo" src="/textures/models/3.mp4" type="video/mp4"
           muted playsinline webkit-playsinline preload="auto" crossorigin="anonymous" loop></video>
       </div>
       <div id="scrollContainer"></div>
