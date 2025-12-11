@@ -27,7 +27,7 @@ export default function MyMainCode() {
       </div>
       <div id="topText"></div>
       <div id="videoSection">
-        <video class="bgVideo" id="astronautVideo" src="/textures/models/video.mp4" type="video/mp4"
+        <video class="bgVideo" id="astronautVideo" src="/textures/models/15.mp4" type="video/mp4"
           muted playsinline webkit-playsinline preload="auto" crossorigin="anonymous" loop></video>
       </div>
       <div id="scrollContainer"></div>
@@ -158,6 +158,18 @@ export default function MyMainCode() {
       updateProgress();
     });
 
+    // Video ko turant play kar do jab load ho jaye
+    astronautVideo.play().catch((err) => {
+      console.log("Autoplay blocked, waiting for user interaction");
+      const playOnInteract = () => {
+        astronautVideo.play();
+        document.removeEventListener("click", playOnInteract);
+        document.removeEventListener("touchstart", playOnInteract);
+      };
+      document.addEventListener("click", playOnInteract, { once: true });
+      document.addEventListener("touchstart", playOnInteract, { once: true });
+    });
+
     // === TEXT ANIMATION ===
     function showTextAnimation() {
       const text = "Hey,we are Fynix";
@@ -256,6 +268,13 @@ export default function MyMainCode() {
           textContainer.style.opacity = opacity;
           textContainer.style.visibility =
             scrollPercent <= fadeEnd ? "visible" : "hidden";
+
+          // Video opacity text ke saath sync karo
+          const videoOpacity = Math.max(0, 1 - fadeProgress * 1.4); // same easing as text
+          astronautVideo.style.opacity = videoOpacity;
+          astronautVideo.style.visibility =
+            videoOpacity > 0.05 ? "visible" : "hidden";
+          videoSection.style.display = videoOpacity > 0.05 ? "flex" : "none";
         }
       };
 
@@ -344,15 +363,8 @@ export default function MyMainCode() {
     let targetProgress = 0;
     let currentProgress = 0;
     const smoothTime = 0.08;
-    let videoDuration = 0;
-
-    astronautVideo.addEventListener("loadedmetadata", () => {
-      videoDuration = astronautVideo.duration || 0;
-    });
-    astronautVideo.pause();
 
     function initScrollControl() {
-      let hasStarted = false;
       let ticking = false;
 
       const scrollHandler = () => {
@@ -374,20 +386,6 @@ export default function MyMainCode() {
                 targetProgress = progress;
               }
             }
-
-            if (!hasStarted && scrollY > 50 && astronautVideo.readyState >= 2) {
-              hasStarted = true;
-              astronautVideo.play().catch(() => {
-                const playOnInteract = () => astronautVideo.play();
-                document.addEventListener("click", playOnInteract, {
-                  once: true,
-                });
-                document.addEventListener("touchstart", playOnInteract, {
-                  once: true,
-                });
-              });
-            }
-
             ticking = false;
           });
           ticking = true;
@@ -410,35 +408,6 @@ export default function MyMainCode() {
       if (clampedTarget === 0) currentProgress = 0;
       if (clampedTarget === maxScroll) currentProgress = maxScroll;
 
-      const smoothVideoProgress = currentProgress / maxScroll;
-      const videoProgress = Math.min(smoothVideoProgress, 1);
-
-      const videoOpacity = Math.max(0, 1 - videoProgress);
-
-      if (astronautVideo.readyState >= 2 && videoDuration > 0) {
-        const targetTime = videoDuration * (currentProgress / maxScroll);
-        const currentTime = astronautVideo.currentTime;
-        const diff = targetTime - currentTime;
-
-        // Agar scroll UP hai (targetTime < currentTime) → slow & smooth reverse
-        if (diff < -0.02) {
-          // Smooth reverse — jaise real rewind lagta hai
-          astronautVideo.currentTime += diff * 0.52; // 0.42 = perfect reverse feel
-        }
-        // Agar scroll DOWN hai → thoda fast chase (pro feel)
-        else if (diff > 0.02) {
-          astronautVideo.currentTime += diff * 0.78; // thoda tez forward
-        }
-        // Agar bilkul close hai → exact snap
-        else {
-          astronautVideo.currentTime = targetTime;
-        }
-      }
-
-      astronautVideo.style.opacity = videoOpacity;
-      astronautVideo.style.visibility =
-        videoOpacity > 0.05 ? "visible" : "hidden";
-      videoSection.style.display = videoOpacity > 0.05 ? "flex" : "none";
       // === STARS OPACITY (SMOOTH BOTH DIRECTIONS) ===
       let starsOpacity = 0;
 
