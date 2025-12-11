@@ -107,7 +107,7 @@ html::-webkit-scrollbar {
    ================================ */
 #videoSection {
   position: fixed;
-  inset: 0;
+  /* inset: 0; */
   z-index: 60;
   display: flex;
   align-items: center;
@@ -124,22 +124,6 @@ html::-webkit-scrollbar {
   visibility: visible;
   transition: opacity 0.6s ease;
   pointer-events: none !important;
-}
-
-/* ================================
-   THREE.JS CANVAS
-   ================================ */
-canvas.three-canvas,
-.three-canvas {
-  position: fixed !important;
-  top: 0;
-  left: 0;
-  width: 100% !important;
-  height: 100% !important;
-  opacity: 0;
-  z-index: 1 !important;
-  pointer-events: none !important;
-  transition: opacity 0.3s ease;
 }
 
 .creativeText {

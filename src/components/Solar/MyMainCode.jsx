@@ -1,4 +1,3 @@
-// components/MyMainCode.jsx
 "use client";
 import React, { useEffect, useRef } from "react";
 import "./MyMain.css";
@@ -337,35 +336,6 @@ export default function MyMainCode() {
       });
       orbitMeshes.forEach((m) => (m.rotation.z += 0.0002));
     }
-
-    // raycaster for hover labels
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-    let lastHoveredPlanet = null;
-    const mouseMoveHandler = (e) => {
-      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-      raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(
-        planetMeshes.map((p) => p.mesh),
-        true
-      );
-      if (lastHoveredPlanet?.userData.label)
-        lastHoveredPlanet.userData.label.visible = false;
-      lastHoveredPlanet = null;
-      if (intersects.length > 0) {
-        let obj = intersects[0].object;
-        while (obj && !obj.userData.isPlanet) obj = obj.parent;
-        if (obj?.userData.label) {
-          obj.userData.label.visible = true;
-          lastHoveredPlanet = obj;
-        }
-      }
-    };
-    container.addEventListener("mousemove", mouseMoveHandler);
-
-    // ---------- Corner Text CREATION & ANIMATION ----------
-    // We'll add left and right corner texts, build spans, and create a GSAP timeline.
     function createCornerTexts() {
       if (cornerCreatedRef.current) return;
       cornerCreatedRef.current = true;
@@ -519,7 +489,7 @@ export default function MyMainCode() {
         solarSystem.userData.progress = progress;
 
         // Fade in canvases
-        const visible = progress > 0.02;
+        const visible = progress > 0.001;
         renderer.domElement.style.opacity = visible ? "1" : "0";
         labelRenderer.domElement.style.opacity = visible ? "1" : "0";
         starsRenderer.domElement.style.opacity = visible ? "1" : "0";
