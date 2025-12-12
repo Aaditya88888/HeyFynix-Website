@@ -1053,7 +1053,7 @@ const HorizontalGallery = ({ images }) => {
                 >
                   <div
                     style={{
-                      width: '455px',
+                      width: '454px',
                       height: '280px',
                       overflow: 'hidden',
                       position: 'relative',
