@@ -1,0 +1,505 @@
+
+
+'use client';
+
+import Image from 'next/image';
+import { useState, useRef, useEffect } from 'react';
+import { gsap } from 'gsap';
+import { SplitText } from 'gsap/SplitText';
+import { Parallax } from 'react-scroll-parallax';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+gsap.registerPlugin(SplitText,ScrollTrigger);
+
+
+const galleries = [
+  {
+    id: 1,
+    heading: 'EVENT VIDEO',
+    text: 'An event video captures the highlights, emotions, and key moments of a special occasion, preserving memories and sharing the experience with a wider audience.',
+    images: [
+      { src: '/images/work/E2.png', alt: 'Branding 1', leftText: 'Sunburn', rightText: 'Sunburn' },
+      { src: '/images/work/E3.png', alt: 'Branding 2', leftText: 'Bismil Intro Video', rightText: 'Bismil' },
+      { src: '/images/work/E5.png', alt: 'Branding 3', leftText: 'Hip Hop Event', rightText: 'Elements.ind' },
+      { src: '/images/work/E4.png', alt: 'Branding 4', leftText: 'Skybags', rightText: 'Sunburn' },
+      { src: '/images/work/E1.png', alt: 'Branding 5', leftText: 'Rendezvous', rightText: 'IIT Delhi' },
+    ],
+  },
+  {
+    id: 2,
+    heading: 'BRAND FILMS',
+    text: 'We craft films that amplify Brands heartbeat',
+    images: [
+      { src: '/images/work/Film-making1.png', alt: 'Film 1', leftText: '3D Ultrasound Device', rightText: 'Samsung' },
+      { src: '/images/work/Film-making2.png', alt: 'Film 2', leftText: 'Shake It to Make It', rightText: 'Zomato' },
+      { src: '/images/work/Film-making3.png', alt: 'Film 3', leftText: 'Mascot Tour', rightText: 'Hush Puppies' },
+      { src: '/images/work/Film-making4.png', alt: 'Film 4', leftText: 'Jewellery Commercial', rightText: 'Sawaria Jewellers' },
+      { src: '/images/work/Film-making5.png', alt: 'Film 5', leftText: 'Cricket ', rightText: 'DPPL' },
+    ],
+  },
+  {
+    id: 3,
+    heading: 'B-ROLLS',
+    text: 'We make the in-between of B-rolls that matter',
+    images: [
+      { src: '/images/work/BRoll1.png', alt: 'Web 1', leftText: 'Setup', rightText: 'Ritik' },
+      { src: '/images/work/BRoll2.png', alt: 'Web 2', leftText: 'Tattoo', rightText: 'Mascot Tattos' },
+      { src: '/images/work/BRoll3.png', alt: 'Web 3', leftText: 'Website', rightText: 'Ritik' },
+      { src: '/images/work/BRoll4.png', alt: 'Web 4', leftText: 'Saloon Commercial', rightText: 'Spacetech Interiors' },
+      { src: '/images/work/BRoll5.png', alt: 'Web 5', leftText: 'Cricket', rightText: 'DPPL' },
+      { src: '/images/work/BRoll6.png', alt: 'Web 6', leftText: 'Sunburn', rightText: 'Sunburn' },
+    ],
+  },
+  {
+    id: 4,
+    heading: 'CORPORATE VIDEOS',
+    text: 'We transform Corporate Videos and Events into engaging, trust-building stories',
+    images: [
+      { src: '/images/work/coorporate1.png', alt: 'Music 1' },
+      { src: '/images/work/coorporate2.png', alt: 'Music 2' },
+      { src: '/images/work/coorporate3.png', alt: 'Music 3' },
+      { src: '/images/work/coorporate4.png', alt: 'Music 4' },
+      { src: '/images/work/coorporate5.png', alt: 'Music 5' },
+      { src: '/images/work/coorporate6.png', alt: 'Music 6' },
+    ],
+  },
+];
+
+const HorizontalGallery = ({ images }) => {
+  const scrollContainerRef = useRef(null);
+  const itemRefs = useRef([]);
+  const animationRef = useRef(null);
+  const [centerIndex, setCenterIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+
+
+  const duplicatedImages = [...images, ...images, ...images];
+  const totalItems = duplicatedImages.length;
+  const SCROLL_SPEED = 3;
+
+  const updateCenterImage = () => {
+    if (!scrollContainerRef.current || itemRefs.current.length === 0) return;
+
+    const container = scrollContainerRef.current;
+    const containerRect = container.getBoundingClientRect();
+    const containerCenter = containerRect.left + containerRect.width / 2;
+
+    let closestIndex = 0;
+    let minDistance = Infinity;
+
+    itemRefs.current.forEach((el, idx) => {
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        const itemCenter = rect.left + rect.width / 2;
+        const distance = Math.abs(itemCenter - containerCenter);
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestIndex = idx;
+        }
+      }
+    });
+
+    const realIndex = closestIndex % images.length;
+    setCenterIndex(realIndex);
+  };
+
+  const startScrolling = (direction) => {
+    if (!scrollContainerRef.current) return;
+    const container = scrollContainerRef.current;
+    const speed = direction === 'left' ? -SCROLL_SPEED : SCROLL_SPEED;
+
+    const step = () => {
+      container.scrollLeft += speed;
+      updateCenterImage();
+
+      const maxScroll = container.scrollWidth / 3;
+      if (container.scrollLeft <= 0) container.scrollLeft += maxScroll;
+      else if (container.scrollLeft >= maxScroll * 2) container.scrollLeft -= maxScroll;
+
+      animationRef.current = requestAnimationFrame(step);
+    };
+
+    animationRef.current = requestAnimationFrame(step);
+  };
+
+  const stopScrolling = () => {
+    if (animationRef.current) cancelAnimationFrame(animationRef.current);
+  };
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    container.scrollLeft = container.scrollWidth / 3;
+
+    const handleScroll = () => {
+      updateCenterImage();
+      const maxScroll = container.scrollWidth / 3;
+      if (container.scrollLeft <= 100) container.scrollLeft += maxScroll;
+      else if (container.scrollLeft >= maxScroll * 2 - 100) container.scrollLeft -= maxScroll;
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    updateCenterImage();
+
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <div style={{ position: 'relative', padding: '3rem 80px',margin:'-2rem', overflow: 'hidden' }}>
+      {/* Left Arrow */}
+      <div
+       onMouseEnter={() => {
+    setIsHovered('left');
+    startScrolling('left');
+  }}
+  onMouseLeave={() => {
+    setIsHovered(null);
+    stopScrolling();
+  }}
+        style={{
+          position: 'absolute',
+          left: '45px',
+          top: '50%',
+transform: `translateY(-50%) ${isHovered === 'left' ? 'scale(0.9)' : 'scale(1)'}`,          width: '30px',
+          height: '30px',
+background: isHovered === 'left' ? 'white' : 'rgba(255,255,255,0.15)',          backdropFilter: 'blur(20px)',
+          borderRadius: '50%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          zIndex: 100,
+          fontSize: '14px',
+color: isHovered === 'left' ? 'black' : 'white',         
+        boxShadow: isHovered === 'left' 
+      ? '0 18px 35px rgba(0,0,0,0.4), 0 0 0 4px rgba(255,255,255,0.15)' 
+      : '0 12px 30px rgba(0,0,0,0.3)',
+    border: isHovered === 'left' ? '3px solid white' : '2px solid rgba(255,255,255,0.25)',
+          paddingRight: '10px',
+transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',    
+        }}
+      >
+        〈
+      </div>
+
+      {/* Right Arrow */}
+      <div
+       onMouseEnter={() => {
+    setIsHovered('right');
+    startScrolling('right');
+  }}
+  onMouseLeave={() => {
+    setIsHovered(null);
+    stopScrolling();
+  }}
+        style={{
+          position: 'absolute',
+          right: '40px',
+          top: '50%',
+transform: `translateY(-50%) ${isHovered === 'right' ? 'scale(0.9)' : 'scale(1)'}`,          width: '30px',
+          height: '30px',
+background: isHovered === 'right' ? 'white' : 'rgba(255,255,255,0.15)',          backdropFilter: 'blur(20px)',
+          borderRadius: '50%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          paddingLeft: '10px',
+          cursor: 'pointer',
+          zIndex: 100,
+          fontSize: '14px',
+color: isHovered === 'right' ? 'black' : 'white',         
+         boxShadow: isHovered === 'right' 
+      ? '0 18px 35px rgba(0,0,0,0.4), 0 0 0 4px rgba(255,255,255,0.15)' 
+      : '0 12px 30px rgba(0,0,0,0.3)',
+    border: isHovered === 'right' ? '3px solid white' : '2px solid rgba(255,255,255,0.25)',
+transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+
+        }}
+      >
+        〉
+      </div>
+
+      <div
+        ref={scrollContainerRef}
+        style={{ overflowX: 'hidden', scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        className="hide-scrollbar"
+      >
+        <div style={{ display: 'flex', gap: '0.5rem', padding: '1rem 0', alignItems: 'center' }}>
+          {duplicatedImages.map((img, idx) => {
+            const originalIndex = idx % images.length;
+            const isCenter = originalIndex === centerIndex;
+
+            return (
+              <div
+                key={idx}
+                ref={(el) => (itemRefs.current[idx] = el)}
+                style={{
+                  flex: 'none',
+                  transition: 'all 0.7s cubic-bezier(0.4, 0, 0.2, 1)',
+                  transform: isCenter
+                    ? 'scale(1.05) translateY(5px)'
+                    : 'scale(0.92) translateY(10px)',
+                  zIndex: isCenter ? 50 : 10,
+                  filter: isCenter ? 'brightness(0.85)' : 'brightness(0.95)',
+                }}
+              >
+                <div
+                  style={{
+                    width: '455px',
+                    height: '280px',
+                    overflow: 'hidden',
+                    position: 'relative',
+                    borderRadius: '32px',
+                  }}
+                 
+                >
+                  <Image
+                    src={img.src}
+                    alt={img.alt || `Image ${originalIndex + 1}`}
+                    width={600}
+                    height={500}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      transition: 'filter 0.7s cubic-bezier(0.4, 0, 0.2, 1)',
+                      filter: isCenter
+                        ? 'grayscale(50%) brightness(0.65) contrast(1.1)'
+                        : 'brightness(1.1) saturate(1.1)',
+                    }}
+                    priority={isCenter}
+                  />
+                  {isCenter && (
+                    <div
+                      style={{
+                        position: 'absolute',
+                        inset: 0,
+                        background: 'rgba(0, 0, 0, 0.25)',
+                        pointerEvents: 'none',
+                      }}
+                    />
+                  )}
+                </div>
+
+                {(img.leftText || img.rightText) && (
+                  <div
+                    style={{
+                      marginTop: isCenter ? '-0.2rem' : '0.3rem',
+                      textAlign: 'center',
+                      opacity: isCenter ? 1 : 0.8,
+                      transition: 'all 0.5s',
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        padding: '0 2rem',
+                        fontSize: isCenter ? '1.1rem' : '0.95rem',
+                      }}
+                    >
+                      {img.leftText && (
+                        <span style={{ fontWeight: isCenter ? '700' : '500', color: 'white', marginLeft: '-25px' }}>
+                          {img.leftText}
+                        </span>
+                      )}
+                      {img.rightText && (
+                        <span style={{ color: 'rgba(255,255,255,0.7)', marginRight: '-20px' }}>
+                          {img.rightText}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <style jsx>{`
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
+    </div>
+  );
+};
+
+/* Simplified Hero – no text animation */
+const EventVideoHero = () => {
+  return (
+    <Parallax y={[-60, 60]} easing="easeOutQuad">
+      <div style={{ position: 'relative', height: '699px',  marginBottom: '-5rem' }}>
+        <Image
+          src="/images/work/eventVideoBackground.png"
+          alt="Event Video Hero"
+          fill
+          style={{ objectFit: 'cover' }}
+          priority
+        />
+        <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)' }} />
+
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            textAlign: 'center',
+            padding: '0 2rem',
+          }}
+        >
+          <h1
+            style={{
+              fontSize: 'clamp(4.5rem, 9vw, 10rem)',
+              fontWeight: '900',
+              color: 'white',
+              letterSpacing: '-0.06em',
+              margin: 0,
+              lineHeight: '0.9',
+              marginTop: '15.2rem',
+              fontStyle: 'italic',
+              marginBottom: '1rem',
+            }}
+          >
+            EVENT VIDEO
+          </h1>
+
+          <p
+            style={{
+              fontSize: 'clamp(1.1rem, 1.8vw, 2.2rem)',
+              color: 'white',
+              maxWidth: '90rem',
+              lineHeight: '1.2',
+              marginBottom: '2rem',
+            }}
+          >
+            An event video captures the highlights, emotions, and key moments of a special occasion, preserving memories and sharing the experience with a wider audience.
+          </p>
+        </div>
+      </div>
+    </Parallax>
+  );
+};
+const AnimatedTextSection = ({ heading, text }) => {
+  const sectionRef = useRef(null);
+  const headingRef = useRef(null);
+  const paragraphRef = useRef(null);
+
+  useEffect(() => {
+    let headingSplit = null;
+    let paragraphSplit = null;
+
+    const animate = () => {
+      if (!headingRef.current || !paragraphRef.current) return;
+
+      // Only split once when in view
+      headingSplit = new SplitText(headingRef.current, { type: "chars,words" });
+      paragraphSplit = new SplitText(paragraphRef.current, { type: "words,lines" });
+
+      // Set initial state ON THE SPLIT ELEMENTS (not parent)
+      gsap.set(headingSplit.chars, { y: 50, opacity: 0, rotationX: -30 });
+      gsap.set(paragraphSplit.words, { y: 30, opacity: 0 });
+
+      // Animate
+      gsap.to(headingSplit.chars, {
+        y: 0,
+        opacity: 1,
+        rotationX: 0,
+        duration: 1.3,
+        stagger: 0.03,
+        ease: "back.out(1.2)",
+      });
+
+      gsap.to(paragraphSplit.words, {
+        y: 0,
+        opacity: 1,
+        duration: 1,
+        stagger: 0.03,
+        ease: "power3.out",
+        delay: 0.5,
+      });
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animate();
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -100px 0px" }
+    );
+
+    if (sectionRef.current) observer.observe(sectionRef.current);
+
+    return () => {
+      observer.disconnect();
+      headingSplit?.revert();
+      paragraphSplit?.revert();
+    };
+  }, [heading, text]);
+
+  return (
+    <div
+      ref={sectionRef}
+      style={{
+        textAlign: 'center',
+        padding: '0 2rem',
+        marginBottom: '-3rem',
+        overflow: 'hidden', // Critical for smooth reveal
+      }}
+    >
+      {/* Heading - no opacity:0 on parent! */}
+      <h1
+        // ref={headingRef}
+        style={{
+          fontSize: 'clamp(4rem, 8vw, 7rem)',
+          fontWeight: 900,
+          color: 'white',
+          letterSpacing: '-0.04em',
+          lineHeight: '1.1',
+          margin: '0 0 1rem',
+          fontStyle: 'italic',
+          marginBottom:'-4rem',
+        }}
+      >
+        {heading}
+      </h1>
+
+      {/* Paragraph */}
+      <p
+        ref={paragraphRef}
+        style={{
+          fontSize: '1.4rem',
+          color: 'rgba(255,255,255,0.9)',
+          maxWidth: '900px',
+          margin: '3rem auto 2rem',
+          lineHeight: '1.1',
+          marginBottom:'0rem'
+          // Remove opacity: 0 from here too!
+        }}
+      >
+        {text}
+      </p>
+    </div>
+  );
+};
+export default function GalleriesPage() {
+  return (
+    <section style={{ padding: '2rem 0' }}>
+      {galleries.map((gallery) => (
+        <div key={gallery.id} style={{ marginBottom: '6rem' }}>
+          {gallery.id === 1 && <EventVideoHero />}
+          {gallery.id !== 1 && <AnimatedTextSection heading={gallery.heading} text={gallery.text} />}
+          <HorizontalGallery images={gallery.images} />
+        </div>
+      ))}
+    </section>
+  );
+}
