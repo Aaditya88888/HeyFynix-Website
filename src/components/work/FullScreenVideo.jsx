@@ -451,7 +451,7 @@ useEffect(() => {
       </div>
 
       {/* Everything else — 100% unchanged */}
-      <div style={{ position: 'relative', width: '961px', height: '430px', margin: '0 auto' }}>
+      <div style={{ position: 'relative', width: '961px', height: '430px', margin: '0 auto',marginBottom:'120px' }}>
         <video
           muted
           loop
@@ -468,20 +468,20 @@ useEffect(() => {
       <div
         style={{
           position: 'absolute',
-          bottom: '760px',
+          bottom:'-350px',
           left: '50%',
           transform: 'translateX(-50%)',
           zIndex: 10,
           pointerEvents: 'none',
         }}
       >
-        <div style={{ position: 'relative', maxWidth: '100vw', height: '50vh' }}>
+        <div style={{ position: 'relative', maxWidth: '100vw', height: '100vh',marginBottom:'-100px' }}>
           <Image
             src="/images/work/chair.png"
             alt="Bottom overlay image"
             width={1800}
-            height={500}
-            style={{ maxWidth: '100vw', height: '50vh' }}
+            height={700}
+            style={{ maxWidth: '100vw', height: '80vh' }}
             priority
           />
           <div
@@ -498,7 +498,6 @@ useEffect(() => {
         </div>
       </div>
 
-      <div style={{ height: '150vh' }} />
 
       <style jsx global>{`
         html, body, #__next { margin: 0; padding: 0; height: 100%; }

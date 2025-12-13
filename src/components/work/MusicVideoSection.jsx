@@ -330,126 +330,241 @@
 // }
 
 
-"use client";
+// "use client";
 
-import { Parallax, ParallaxProvider } from "react-scroll-parallax";
+// import { Parallax, ParallaxProvider } from "react-scroll-parallax";
+
+// const titleText = "MUSIC VIDEOS";
+
+// export default function MusicVideoSection() {
+//   return (
+//     <ParallaxProvider>
+//       <div style={{ position: 'relative', overflow: 'hidden',marginTop:'-80vh' }}>
+//         {/* Background Layer - Moves slowest */}
+//         <Parallax 
+//           y={[-20, 20]} 
+//           style={{ 
+//             position: 'absolute',
+//             top: 0,
+//             left: 0,
+//             right: 0,
+//             bottom: 0,
+//             zIndex: 1
+//           }}
+//         >
+//           <div 
+//             style={{
+//               height: "100vh",
+//               width: "100vw",
+//               backgroundImage: "url(/images/work/background.png)",
+//               backgroundSize: "cover",
+//               backgroundPosition: "center",
+//               position: "relative",
+//             }}
+//           />
+//         </Parallax>
+
+//         {/* Overlay gradient */}
+//         <div 
+//           style={{ 
+//             position: "absolute", 
+//             inset: 0, 
+//             background: "linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.8))",
+//             zIndex: 2 
+//           }} 
+//         />
+
+//         {/* Content Layer - Moves faster than background */}
+//         <Parallax 
+//           y={[-40, 40]} 
+//           style={{ 
+//             position: "relative",
+//             zIndex: 3,
+//             height: "100vh",
+//             display: "flex",
+//             alignItems: "center",
+//             justifyContent: "center",
+//           }}
+//         >
+//           <div
+//             style={{
+//               textAlign: "center",
+//               color: "white",
+//               width: "100%",
+//               maxWidth: "1600px",
+//               padding: "0 2rem",
+//             }}
+//           >
+//             <Parallax y={[10, -10]}>
+//               <p
+//                 style={{
+//                   fontSize: "clamp(1.2rem, 4vw, 4.5rem)",
+//                   fontWeight: 700,
+//                   margin: 0,
+//                   textAlign: "left",
+//                   letterSpacing: "-0.02em",
+//                   marginBottom: "-3rem",
+//                   marginLeft: "7rem",
+//                   marginTop: '5rem'
+//                 }}
+//               >
+//                 We Create
+//               </p>
+//             </Parallax>
+
+//             <Parallax y={[20, -20]}>
+//               <h1
+//                 style={{
+//                   fontSize: "clamp(6.5rem, 12vw, 11rem)",
+//                   fontWeight: 900,
+//                   margin: "0.6rem 0 -0.4rem 0",
+//                   lineHeight: "1",
+//                   letterSpacing: "-0.04em",
+//                   textShadow: "0 10px 60px rgba(0,0,0,0.9)",
+//                   fontStyle: 'italic',
+//                   marginBottom: '-2rem'
+//                 }}
+//               >
+//                 {titleText.split("").map((letter, i) => (
+//                   <span key={i} style={{ display: "inline-block" }}>
+//                     {letter === " " ? "\u00A0" : letter}
+//                   </span>
+//                 ))}
+//               </h1>
+//             </Parallax>
+
+//             <Parallax y={[30, -10]}>
+//               <p
+//                 style={{
+//                   fontSize: "clamp(0.4rem, 2vw, 4rem)",
+//                   fontWeight: 600,
+//                   margin: "0.4rem 0 0 0",
+//                   textAlign: "right",
+//                   letterSpacing: "-0.02em",
+//                   marginRight: "5rem",
+//                 }}
+//               >
+//                 in sync with every beat
+//               </p>
+//             </Parallax>
+//           </div>
+//         </Parallax>
+//       </div>
+//     </ParallaxProvider>
+//   );
+// }
+
+"use client";
 
 const titleText = "MUSIC VIDEOS";
 
 export default function MusicVideoSection() {
   return (
-    <ParallaxProvider>
-      <div style={{ position: 'relative', overflow: 'hidden',marginTop:'-80vh' }}>
-        {/* Background Layer - Moves slowest */}
-        <Parallax 
-          y={[-20, 20]} 
-          style={{ 
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            zIndex: 1
+    <div
+      style={{
+        position: "relative",
+        height: "120vh", // Full viewport height
+        width: "100vw",
+        overflow: "hidden",
+      }}
+    >
+      {/* Full Background Image */}
+    <div
+  style={{
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    
+    backgroundImage: "url(/images/work/background.png)",
+    backgroundSize: "100% auto",      // Full width, auto height → touches left & right edges
+    backgroundPosition: "center",     // Centers it vertically and horizontally
+    backgroundRepeat: "no-repeat",
+  }}
+/>
+
+      {/* Dark Gradient Overlay */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.8))",
+          zIndex: 1,
+        }}
+      />
+
+      {/* Text Content - Centered vertically, same layout as before */}
+      <div
+        style={{
+          position: "relative",
+          zIndex: 2,
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <div
+          style={{
+            textAlign: "center",
+            color: "white",
+            width: "100%",
+            maxWidth: "1600px",
+            padding: "0 2rem",
           }}
         >
-          <div 
+          {/* "We Create" */}
+          <p
             style={{
-              height: "100vh",
-              width: "100vw",
-              backgroundImage: "url(/images/work/background.png)",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              position: "relative",
-            }}
-          />
-        </Parallax>
-
-        {/* Overlay gradient */}
-        <div 
-          style={{ 
-            position: "absolute", 
-            inset: 0, 
-            background: "linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.8))",
-            zIndex: 2 
-          }} 
-        />
-
-        {/* Content Layer - Moves faster than background */}
-        <Parallax 
-          y={[-40, 40]} 
-          style={{ 
-            position: "relative",
-            zIndex: 3,
-            height: "100vh",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <div
-            style={{
-              textAlign: "center",
-              color: "white",
-              width: "100%",
-              maxWidth: "1600px",
-              padding: "0 2rem",
+              fontSize: "clamp(1.2rem, 4vw, 4.5rem)",
+              fontWeight: 700,
+              margin: 0,
+              textAlign: "left",
+              letterSpacing: "-0.02em",
+              marginBottom: "-3rem",
+              marginLeft: "9rem",
+              marginTop: "5rem",
             }}
           >
-            <Parallax y={[10, -10]}>
-              <p
-                style={{
-                  fontSize: "clamp(1.2rem, 4vw, 4.5rem)",
-                  fontWeight: 700,
-                  margin: 0,
-                  textAlign: "left",
-                  letterSpacing: "-0.02em",
-                  marginBottom: "-3rem",
-                  marginLeft: "7rem",
-                  marginTop: '5rem'
-                }}
-              >
-                We Create
-              </p>
-            </Parallax>
+            We Create
+          </p>
 
-            <Parallax y={[20, -20]}>
-              <h1
-                style={{
-                  fontSize: "clamp(6.5rem, 12vw, 11rem)",
-                  fontWeight: 900,
-                  margin: "0.6rem 0 -0.4rem 0",
-                  lineHeight: "1",
-                  letterSpacing: "-0.04em",
-                  textShadow: "0 10px 60px rgba(0,0,0,0.9)",
-                  fontStyle: 'italic',
-                  marginBottom: '-2rem'
-                }}
-              >
-                {titleText.split("").map((letter, i) => (
-                  <span key={i} style={{ display: "inline-block" }}>
-                    {letter === " " ? "\u00A0" : letter}
-                  </span>
-                ))}
-              </h1>
-            </Parallax>
+          {/* Main Title "MUSIC VIDEOS" */}
+          <h1
+            style={{
+              fontSize: "clamp(6.5rem, 12vw, 11rem)",
+              fontWeight: 900,
+              margin: "0.6rem 0 -0.4rem 0",
+              lineHeight: "1",
+              letterSpacing: "-0.04em",
+              textShadow: "0 10px 60px rgba(0,0,0,0.9)",
+              fontStyle: "italic",
+              marginBottom: "-2rem",
+            }}
+          >
+            {titleText.split("").map((letter, i) => (
+              <span key={i} style={{ display: "inline-block" }}>
+                {letter === " " ? "\u00A0" : letter}
+              </span>
+            ))}
+          </h1>
 
-            <Parallax y={[30, -10]}>
-              <p
-                style={{
-                  fontSize: "clamp(0.4rem, 2vw, 4rem)",
-                  fontWeight: 600,
-                  margin: "0.4rem 0 0 0",
-                  textAlign: "right",
-                  letterSpacing: "-0.02em",
-                  marginRight: "5rem",
-                }}
-              >
-                in sync with every beat
-              </p>
-            </Parallax>
-          </div>
-        </Parallax>
+          {/* "in sync with every beat" */}
+          <p
+            style={{
+              fontSize: "clamp(0.4rem, 2vw, 4rem)",
+              fontWeight: 600,
+              margin: "0.4rem 0 0 0",
+              textAlign: "right",
+              letterSpacing: "-0.02em",
+              marginRight: "7rem",
+            }}
+          >
+            in sync with every beat
+          </p>
+        </div>
       </div>
-    </ParallaxProvider>
+    </div>
   );
 }

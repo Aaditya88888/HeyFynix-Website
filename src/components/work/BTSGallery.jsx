@@ -169,18 +169,18 @@ const BTSGallery = () => {
       className="min-h-screen py-32 px-6 text-white"
     >
       {/* Title */}
-      <div className="max-w-7xl mx-auto mb-20 flex flex-col ">
-        <h1 className="text-[80px] md:text-[120px] lg:text-[180px] font-black tracking-tighter leading-none">
+      <div className="max-w-8xl mx-auto mb-20 flex flex-col ">
+        <h1 className="text-[80px] md:text-[120px] lg:text-[180px] font-black tracking-tighter leading-none ">
           BTS
         </h1>
         
-        <p className="text-right text-2xl md:text-3xl font-bold -mt-16 md:-mt-12 -md:mb-6 -mb-16 pr-8 md:pr-16">
+        <p className="text-right text-2xl md:text-3xl font-bold -mt-16 md:-mt-12 -md:mb-6 -mb-16 pr-8 md:pr-6">
           (Behind the Scenes)
         </p>
       </div>
 
       {/* Grid */}
-      <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-8 gap-4 md:gap-3">
+      <div className="max-w-8xl mx-auto grid grid-cols-2 sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-8 gap-4 md:gap-3">
         {videos.map((item, i) => (
           <div
             key={i}

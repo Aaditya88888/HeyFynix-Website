@@ -282,9 +282,11 @@ export default function Government() {
                   lineHeight: '0.8',
                   textShadow: '0 4px 40px rgba(0,0,0,0.9)',
                   color: 'white',
-                  marginTop: '90px',
-                  marginLeft: '40px',
-                  fontStyle: 'italic'
+                  marginTop: '10px',
+                  marginLeft: '-20px',
+                  fontStyle: 'italic',
+                  whiteSpace:'nowrap',
+                  marginBottom:'10px'
                 }}
               >
                 Government & NGO Videos
@@ -293,7 +295,7 @@ export default function Government() {
               <p
                 className="font-light max-w-2xl mx-auto"
                 style={{
-                  fontSize: 'clamp(1.2rem, 2vw, 2.8rem)',
+                  fontSize: 'clamp(0.8rem, 1.6vw, 2.8rem)',
                   lineHeight: '1.2',
                   maxWidth: '900px',
                   color: 'white',

@@ -1008,7 +1008,7 @@ const HorizontalGallery = ({ images }) => {
           style={{ overflowX: 'hidden', scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           className="hide-scrollbar"
         >
-          <div style={{ display: 'flex', gap: '1.5rem', padding: '1rem 0', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '2.3rem', padding: '1rem 0', alignItems: 'center' }}>
             {duplicatedImages.map((img, idx) => {
               const originalIndex = idx % images.length;
               const isHoveredImage = hoveredImageIndex === idx;
@@ -1026,9 +1026,9 @@ const HorizontalGallery = ({ images }) => {
                   onMouseEnter={() => setHoveredImageIndex(idx)}
                   onMouseLeave={() => setHoveredImageIndex(null)}
                 >
-                  <div
+                 {/* <div
                     style={{
-                      width: '455px',
+                      width: '450px',
                       height: '310px',
                       overflow: 'hidden',
                       position: 'relative',
@@ -1040,10 +1040,8 @@ const HorizontalGallery = ({ images }) => {
                     }}
                     onClick={() => isHoveredImage && setSelectedItem(img)}
                   >
-                    {/* Container for perfect circle clip on hover */}
-                   {/* Inside your gallery item, wrap the Image and text separately */}
+                    
 <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-  {/* Only clip the image, not the text overlay */}
   <div style={{
     width: '100%',
     height: '100%',
@@ -1069,7 +1067,6 @@ const HorizontalGallery = ({ images }) => {
     />
   </div>
 
-  {/* Text overlay — now OUTSIDE the clipped container */}
   {isHoveredImage && img.leftText && (
     <div
       style={{
@@ -1086,7 +1083,7 @@ const HorizontalGallery = ({ images }) => {
         textShadow: '0 4px 20px rgba(0,0,0,0.8)',
         pointerEvents: 'none',
         whiteSpace: 'nowrap',
-        border: '2px solid white', // made it 2px to be more visible
+        border: '2px solid white',
         borderRadius: '50px',
         minWidth: '360px',
         padding: '12px 32px',
@@ -1099,9 +1096,89 @@ const HorizontalGallery = ({ images }) => {
     </div>
   )}
 </div>
-                  </div>
+                  </div>  */}
 
-                  {/* Bottom text when not hovered */}
+
+<div
+  style={{
+    width: '450px',
+    height: '310px',
+    overflow: 'hidden',
+    position: 'relative',
+    cursor: 'pointer',
+    borderRadius: '32px',
+    
+  }}
+  onClick={() => isHoveredImage && setSelectedItem(img)}
+  // Add these if not already present
+  onMouseEnter={() => setIsHoveredImage(true)}
+  onMouseLeave={() => setIsHoveredImage(false)}
+>
+  <div style={{ position: 'relative', width: '100%', height: '100%', }}>
+    {/* Clipped Image with Animated Circular Border via box-shadow */}
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        clipPath: isHoveredImage ? 'circle(40% at center)' : 'circle(100% at center)',
+        transition: 'clip-path 1.2s cubic-bezier(0.4, 0.0, 0.2, 1)',
+        position: 'relative',
+        // This creates the circular white border that grows with the circle
+      boxShadow: isHoveredImage 
+          ? 'inset 50px 50px 50px 88px rgba(247, 245, 245, 0.95)' 
+          : 'inset 0px 0px 0px 10px rgba(253, 252, 252, 0.97)',
+        transition: 'box-shadow 1.2s cubic-bezier(0.4, 0.0, 0.2, 1), clip-path 1.2s cubic-bezier(0.4, 0.0, 0.2, 1)',
+        pointerEvents: 'none',
+      }}
+    >
+      <Image
+        src={img.src}
+        alt={img.alt || `Image ${originalIndex + 1}`}
+        width={600}
+        height={500}
+        style={{
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          objectPosition: 'center',
+          transition: 'filter 0.8s ease',
+          filter: isHoveredImage ? 'grayscale(100%) brightness(1.1)' : 'brightness(1.1)',
+        }}
+      />
+    </div>
+
+    {/* Text overlay on hover */}
+    {isHoveredImage && img.leftText && (
+      <div
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          color: 'white',
+          fontSize: '1.2rem',
+          fontWeight: '900',
+          textAlign: 'center',
+          textTransform: 'uppercase',
+          letterSpacing: '0.05em',
+          textShadow: '0 4px 20px rgba(0,0,0,0.8)',
+          pointerEvents: 'none',
+          whiteSpace: 'nowrap',
+          border: '2px solid white',
+          borderRadius: '50px',
+          minWidth: '360px',
+          padding: '12px 32px',
+          zIndex: 10,
+          backgroundColor: 'rgba(0, 0, 0, 0.7)',
+          backdropFilter: 'blur(4px)',
+        }}
+      >
+        {img.leftText}
+      </div>
+    )}
+  </div>
+</div>
+
                   {(img.leftText || img.rightText) && !isHoveredImage && (
                     <div
                       style={{
@@ -1358,7 +1435,7 @@ const AnimatedTextSection = ({ heading, text }) => {
       style={{
         textAlign: 'center',
         padding: '0 2rem',
-        marginBottom: '-3rem',
+        marginBottom: '-2rem',
         overflow: 'hidden', // Critical for smooth reveal
       }}
     >
@@ -1373,7 +1450,7 @@ const AnimatedTextSection = ({ heading, text }) => {
           lineHeight: '1.1',
           margin: '0 0 1rem',
           fontStyle: 'italic',
-          marginBottom:'-4rem',
+          marginBottom:'-3.7rem',
         }}
       >
         {heading}
