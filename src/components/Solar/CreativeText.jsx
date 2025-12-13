@@ -3,9 +3,9 @@ import { useEffect, useRef } from "react";
 import "../Solar/HomeLanding.css";
 
 export default function CreativeText({
-  startOffset = 0.99,
-  revealRange = 0.12,
-  holdDuration = 0.5,
+  startOffset = 0.72, // ← Ab yeh sahi value hai (tumhare page ke hisaab se)
+  revealRange = 0.22,
+  holdDuration = 0.11,
 }) {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
@@ -19,13 +19,17 @@ export default function CreativeText({
     centerTolerance: 30,
   });
 
-  // ============ STARS BACKGROUND EFFECT (Floating + Twinkling) ============
+  // SCROLL PROGRESS FOR STARS PARALLAX
+  const scrollProgressRef = useRef(0);
+
+  // ============ STARS: SCROLL-CONTROLLED PARALLAX + TWINKLE + FADE CONTROL ============
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
     let animationFrame;
+    let time = 0;
 
     const resizeCanvas = () => {
       canvas.width = canvas.offsetWidth * devicePixelRatio;
@@ -37,70 +41,84 @@ export default function CreativeText({
     window.addEventListener("resize", resizeCanvas);
 
     const stars = [];
-    const starCount = window.innerWidth < 768 ? 400 : 1000;
+    const starCount = window.innerWidth < 768 ? 500 : 200;
 
     for (let i = 0; i < starCount; i++) {
       stars.push({
-        x: Math.random() * canvas.offsetWidth * 1.2, // more spacing
-        y: Math.random() * canvas.offsetHeight * 1.2, // more spacing
-        radius: Math.random() * 0.9 + 0.3, // smaller stars
-        opacity: Math.random() * 0.4 + 0.2,
-        twinkleSpeed: Math.random() * 0.02 + 0.005,
+        baseX: Math.random() * canvas.offsetWidth * 1.3,
+        baseY: Math.random() * canvas.offsetHeight * 1.3,
+        radius: Math.random() * 0.9 + 0.3,
+        opacity: Math.random() * 0.5 + 0.3,
+        twinkleSpeed: Math.random() * 0.02 + 0.008,
         twinklePhase: Math.random() * Math.PI * 2,
-
-        // Slower, subtle movement
-        vx: (Math.random() - 0.5) * 0.05,
-        vy: Math.random() * 0.15 + 0.05,
-
-        driftRadius: Math.random() * 80 + 30,
-        driftSpeed: Math.random() * 0.004 + 0.001,
-        driftAngle: Math.random() * Math.PI * 2,
+        driftX: (Math.random() - 0.5) * 0.03,
+        driftY: (Math.random() - 0.5) * 0.04,
       });
     }
 
-    let time = 0;
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+    const animateStars = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const prog = scrollProgressRef.current;
+
+      // STARS SIRF TAB DIKHO JAB TEXT REVEAL SHURU HO RAHA HO
+      const starsStart = startOffset - 0.15; // thoda baad mein start
+      if (prog < starsStart) {
+        time += 1;
+        animationFrame = requestAnimationFrame(animateStars);
+        return;
+      }
+
+      const parallaxProg = prog - starsStart;
+      const offsetX = parallaxProg * 420;
+      const offsetY = parallaxProg * -320;
+      const scale = 1 + parallaxProg * 0.5;
+
+      // Smooth fade-in of stars
+      const starsOpacity = Math.min(parallaxProg / 0.12, 1);
 
       stars.forEach((star) => {
-        // Floating movement (slow drift + slight circular motion)
-        star.driftAngle += star.driftSpeed;
-        star.x += Math.cos(star.driftAngle) * 0.3 + star.vx;
-        star.y += Math.sin(star.driftAngle) * 0.2 + star.vy;
+        let x = star.baseX + star.driftX * time * 20 + offsetX;
+        let y = star.baseY + star.driftY * time * 20 + offsetY;
 
-        // Wrap around screen (infinite space feel)
-        if (star.x < 0) star.x = canvas.offsetWidth;
-        if (star.x > canvas.offsetWidth) star.x = 0;
-        if (star.y < 0) star.y = canvas.offsetHeight;
-        if (star.y > canvas.offsetHeight) star.y = 0;
+        // Infinite wrap
+        if (x < -100) x += canvas.offsetWidth + 200;
+        if (x > canvas.offsetWidth + 100) x -= canvas.offsetWidth + 200;
+        if (y < -100) y += canvas.offsetHeight + 200;
+        if (y > canvas.offsetHeight + 100) y -= canvas.offsetHeight + 200;
 
-        // Twinkle effect
         const twinkle =
-          Math.sin(time * star.twinkleSpeed + star.twinklePhase) * 0.3 + 0.7;
-        const opacity = star.opacity * twinkle;
+          Math.sin(time * star.twinkleSpeed + star.twinklePhase) * 0.4 + 0.7;
+        const finalOpacity = star.opacity * twinkle * starsOpacity;
+
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.scale(scale, scale);
+        ctx.translate(-x, -y);
 
         ctx.beginPath();
-        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
-        ctx.shadowBlur = 8;
-        ctx.shadowColor = "#ffffff";
+        ctx.arc(x, y, star.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${finalOpacity})`;
+        ctx.shadowBlur = 12;
+        ctx.shadowColor = "#fff";
         ctx.fill();
+        ctx.restore();
       });
 
       ctx.shadowBlur = 0;
       time += 1;
-      animationFrame = requestAnimationFrame(animate);
+      animationFrame = requestAnimationFrame(animateStars);
     };
 
-    animate();
+    animateStars();
 
     return () => {
       window.removeEventListener("resize", resizeCanvas);
       if (animationFrame) cancelAnimationFrame(animationFrame);
     };
-  }, []);
+  }, [startOffset]);
 
-  // ============ MAIN LOGIC ============
+  // ============ MAIN SCROLL + TEXT + PIN LOGIC ============
   useEffect(() => {
     let mounted = true;
     let retryInterval = null;
@@ -109,24 +127,45 @@ export default function CreativeText({
     const findScrollContainer = () =>
       document.querySelector("#scrollContainer");
 
+    const computeProgress = (scrollContainer) => {
+      const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+      const containerHeight = scrollContainer?.offsetHeight || 0;
+      const windowHeight = window.innerHeight;
+      const maxScroll = containerHeight - windowHeight;
+      if (maxScroll <= 0) return 0;
+
+      const prog = scrollY / maxScroll;
+
+      // Update stars progress
+      scrollProgressRef.current = prog;
+
+      // Agar bahut peeche scroll kar diya to progress 0 kar do
+      if (prog < 0.65) {
+        scrollProgressRef.current = 0;
+      }
+
+      return Math.max(0, prog);
+    };
+
     const buildDOM = () => {
       const container = containerRef.current;
       if (!container) return null;
 
-      // Safe: only manipulate text-wrapper
       let textWrapper = container.querySelector(".text-wrapper");
       if (!textWrapper) {
         textWrapper = document.createElement("div");
         textWrapper.className = "text-wrapper";
-        textWrapper.style.position = "relative";
-        textWrapper.style.zIndex = "2";
-        textWrapper.style.width = "100%";
-        textWrapper.style.height = "100%";
-        textWrapper.style.display = "flex";
-        textWrapper.style.flexDirection = "column";
-        textWrapper.style.justifyContent = "center";
-        textWrapper.style.alignItems = "center";
-        textWrapper.style.padding = "0 2rem";
+        Object.assign(textWrapper.style, {
+          position: "relative",
+          zIndex: "100",
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "0 2rem",
+        });
         container.appendChild(textWrapper);
       } else {
         textWrapper.innerHTML = "";
@@ -147,35 +186,22 @@ export default function CreativeText({
           font-style:italic;
           letter-spacing:1.5px;
           line-height:1.1;
-          white-space: nowrap;
+          white-space:nowrap;
         `;
+
         line.split("").forEach((char) => {
           const span = document.createElement("span");
           span.textContent = char === " " ? "\u00A0" : char;
-          span.style.opacity = "0";
-          span.style.transform = "translateX(-40px)";
-          span.style.display = "inline-block";
-          span.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+          span.style.cssText =
+            "opacity:0; transform:translateX(-40px); display:inline-block; transition:opacity 0.6s ease, transform 0.6s ease;";
           lineDiv.appendChild(span);
           allSpans.push(span);
         });
+
         textWrapper.appendChild(lineDiv);
       });
 
       return allSpans;
-    };
-
-    const computeContainerProgress = (scrollContainer) => {
-      const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-      const containerHeight = scrollContainer.offsetHeight || 0;
-      const windowHeight = window.innerHeight;
-
-      // Ye line badal di → ab 1 se aage bhi ja sakta hai!
-      const maxScroll = containerHeight - windowHeight;
-      if (maxScroll <= 0) return 0;
-
-      const progress = scrollY / maxScroll;
-      return Math.max(0, progress); // ← Yaha Math.min(1, ...) hata diya!
     };
 
     const pinElement = () => {
@@ -200,15 +226,20 @@ export default function CreativeText({
       stateRef.current.isPinned = false;
     };
 
-    const checkPinStatus = () => {
+    const check = () => {
+      if (!mounted) return;
+
       const scrollContainer = findScrollContainer();
-      if (!scrollContainer) return;
+      if (!scrollContainer) {
+        rafRef.current = requestAnimationFrame(check);
+        return;
+      }
 
       const currentScrollY = window.pageYOffset;
       const direction = currentScrollY > lastScrollY ? "down" : "up";
       lastScrollY = currentScrollY;
 
-      const prog = computeContainerProgress(scrollContainer);
+      const prog = computeProgress(scrollContainer);
 
       if (!stateRef.current.initialized && prog >= startOffset) {
         stateRef.current.allSpans = buildDOM();
@@ -223,96 +254,85 @@ export default function CreativeText({
       }
 
       if (!stateRef.current.initialized) {
-        if (mounted) rafRef.current = requestAnimationFrame(checkPinStatus);
+        rafRef.current = requestAnimationFrame(check);
         return;
       }
 
-      const el = containerRef.current;
-      if (!el) return;
-
-      // Ye part replace kar de (checkPinStatus ke andar)
-      const revealStart = startOffset; // 1.2 bhi allowed
-      const revealEnd = revealStart + revealRange; // 1.2 + 0.18 = 1.38
-      const holdEnd = revealEnd + holdDuration; // 1.38 + 0.1 = 1.48
+      const revealStart = startOffset;
+      const revealEnd = revealStart + revealRange;
+      const holdEnd = revealEnd + holdDuration;
 
       let localProgress = 0;
-
       if (prog >= revealStart) {
         if (prog < revealEnd) {
           localProgress = (prog - revealStart) / revealRange;
         } else if (prog < holdEnd) {
-          localProgress = 1; // hold phase
+          localProgress = 1;
         } else {
-          localProgress = 1; // ready to unpin
+          localProgress = 1;
         }
       }
-
       localProgress = Math.max(0, Math.min(1, localProgress));
-      const isFullyRevealed = localProgress >= 1;
-
-      // Unpin only after hold
-      const shouldUnpin =
-        prog >= holdEnd && direction === "down" && stateRef.current.isPinned;
-
-      if (shouldUnpin && !stateRef.current.wasFullyRevealed) {
-        stateRef.current.wasFullyRevealed = true;
-        unpinElement();
-      }
-
-      if (!stateRef.current.isPinned && direction === "up") {
-        const rect = el.getBoundingClientRect();
-        const centerY = window.innerHeight / 2;
-        const elementCenter = rect.top + rect.height / 2;
-        const diff = Math.abs(elementCenter - centerY);
-        if (diff <= stateRef.current.centerTolerance) {
-          pinElement();
-          stateRef.current.wasFullyRevealed = false;
-        }
-      }
 
       const spans = stateRef.current.allSpans || [];
-      const total = stateRef.current.totalLetters;
-      const showCount = Math.floor(localProgress * total * 1.1);
+      const showCount = Math.floor(
+        localProgress * stateRef.current.totalLetters * 1.15
+      );
 
       spans.forEach((s, i) => {
         if (i < showCount) {
           s.style.opacity = "1";
-          s.style.transform = "translateX(0px)";
+          s.style.transform = "translateX(0)";
         } else {
           s.style.opacity = "0";
           s.style.transform = "translateX(-40px)";
         }
       });
 
-      if (mounted) rafRef.current = requestAnimationFrame(checkPinStatus);
+      const shouldUnpin =
+        prog >= holdEnd && direction === "down" && stateRef.current.isPinned;
+      if (shouldUnpin && !stateRef.current.wasFullyRevealed) {
+        stateRef.current.wasFullyRevealed = true;
+        unpinElement();
+      }
+
+      if (!stateRef.current.isPinned && direction === "up") {
+        const rect = containerRef.current.getBoundingClientRect();
+        const diff = Math.abs(
+          rect.top + rect.height / 2 - window.innerHeight / 2
+        );
+        if (diff <= stateRef.current.centerTolerance) {
+          pinElement();
+          stateRef.current.wasFullyRevealed = false;
+        }
+      }
+
+      rafRef.current = requestAnimationFrame(check);
     };
 
     const onScroll = () => {
-      if (!rafRef.current)
-        rafRef.current = requestAnimationFrame(checkPinStatus);
+      if (!rafRef.current) rafRef.current = requestAnimationFrame(check);
     };
 
-    const startWatching = () => {
+    const start = () => {
       const sc = findScrollContainer();
       if (sc) {
         lastScrollY = window.pageYOffset;
-        rafRef.current = requestAnimationFrame(checkPinStatus);
+        rafRef.current = requestAnimationFrame(check);
         window.addEventListener("scroll", onScroll, { passive: true });
         window.addEventListener("resize", onScroll);
       } else {
-        let tries = 0;
         retryInterval = setInterval(() => {
-          tries++;
           const sc2 = findScrollContainer();
           if (sc2) {
             clearInterval(retryInterval);
-            startWatching();
-          } else if (tries > 40) clearInterval(retryInterval);
-        }, 60);
+            start();
+          }
+        }, 80);
       }
     };
 
-    startWatching();
+    start();
 
     return () => {
       mounted = false;
@@ -321,7 +341,7 @@ export default function CreativeText({
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
-  }, [startOffset, revealRange]);
+  }, [startOffset, revealRange, holdDuration]);
 
   return (
     <div
@@ -329,23 +349,21 @@ export default function CreativeText({
       className="creativeText"
       style={{
         width: "100%",
-        textAlign: "center",
-        opacity: 0,
-        visibility: "hidden",
-        transition: "opacity 0.3s ease",
-        height: "360vh",
+        height: "200vh",
         position: "fixed",
         top: "50%",
         left: "50%",
         transform: "translate(-50%, -50%)",
         pointerEvents: "none",
+        opacity: 0,
+        visibility: "hidden",
+        transition: "opacity 0.4s ease",
         fontFamily: "var(--font-inter), sans-serif",
         color: "#fff",
-        zIndex: 9,
+        zIndex: 100,
         overflow: "hidden",
       }}
     >
-      {/* Stars */}
       <canvas
         ref={canvasRef}
         style={{
@@ -354,16 +372,15 @@ export default function CreativeText({
           width: "100%",
           height: "100%",
           background: "transparent",
-          zIndex: 1,
+          zIndex: 99,
         }}
       />
 
-      {/* Text */}
       <div
         className="text-wrapper"
         style={{
           position: "relative",
-          zIndex: 2,
+          zIndex: 100,
           width: "100%",
           height: "100%",
           display: "flex",
@@ -372,7 +389,7 @@ export default function CreativeText({
           alignItems: "center",
           padding: "0 2rem",
         }}
-      ></div>
+      />
     </div>
   );
 }
