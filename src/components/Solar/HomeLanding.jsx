@@ -162,7 +162,7 @@ export default function MyMainCode() {
         const scrollPercent = Math.min(scrollY / scrollMax, 1);
 
         const movePhaseEnd = 0.09;
-        const fadeEnd = 0.32;
+        const fadeEnd = 0.27;
         const moveProgress = Math.min(scrollPercent / movePhaseEnd, 1);
         const eased = Math.pow(moveProgress, 0.7);
 
@@ -179,23 +179,27 @@ export default function MyMainCode() {
           heySpan.style.transform = `translateX(${heySpan._finalMove}px)`;
           fynixSpan.style.transform = `translateX(-${fynixSpan._finalMove}px)`;
 
-          const fadeProgress =
+          let fadeProgress =
             (scrollPercent - movePhaseEnd) / (fadeEnd - movePhaseEnd);
+          fadeProgress = Math.min(Math.max(fadeProgress, 0), 1); // clamp
 
-          const scale = Math.max(0.4, 1 - fadeProgress * 0.9);
-          const opacity = Math.max(0, 1 - fadeProgress * 1.4);
+          // Smooth easing
+          const easedFade = fadeProgress ** 1.4;
 
-          textContainer.style.transform = `scale(${scale})`;
+          // SMOOTH ZOOM-OUT
+          const scale = 1 - easedFade * 0.6; // 1 → 0.4
+          const opacity = 1 - easedFade * 1.3; // 1 → 0
+
+          textContainer.style.transform = `scale(${scale}) translateY(-${
+            easedFade * 40
+          }px)`; // small upward move = professional effect
           textContainer.style.opacity = opacity;
-          textContainer.style.visibility =
-            scrollPercent <= fadeEnd ? "visible" : "hidden";
+          textContainer.style.visibility = opacity <= 0 ? "hidden" : "visible";
 
-          // Video opacity text ke saath sync karo
-          const videoOpacity = Math.max(0, 1 - fadeProgress * 1.4); // same easing as text
+          // Video fade sync
+          const videoOpacity = 1 - easedFade * 1.1;
           astronautVideo.style.opacity = videoOpacity;
-          astronautVideo.style.visibility =
-            videoOpacity > 0.05 ? "visible" : "hidden";
-          videoSection.style.display = videoOpacity > 0.05 ? "flex" : "none";
+          videoSection.style.display = videoOpacity <= 0 ? "none" : "flex";
         }
       };
       window.addEventListener("scroll", handleScroll);

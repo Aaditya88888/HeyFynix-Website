@@ -833,64 +833,43 @@ const galleries = [
     ],
   },
 ];
-const circleHoverStyle = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '0',
-  height: '0',
-  borderRadius: '50%',
-  backgroundColor: 'rgba(0, 0, 0, 0.7)',
-  transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
-  overflow: 'hidden',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  color: 'white',
-  fontSize: '1.5rem',
-  fontWeight: 'bold',
-  opacity: 0,
-  pointerEvents: 'none',
-};
 
 const HorizontalGallery = ({ images }) => {
   const scrollContainerRef = useRef(null);
   const itemRefs = useRef([]);
   const animationRef = useRef(null);
-  const [centerIndex, setCenterIndex] = useState(0);
+  const [isCloseHovered, setIsCloseHovered] = useState(false);
   const [isHovered, setIsHovered] = useState(null); // 'left' | 'right' | null
   const [hoveredImageIndex, setHoveredImageIndex] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null); // Now holds the full image object
-
   const duplicatedImages = [...images, ...images, ...images];
   const SCROLL_SPEED = 3;
 
-  const updateCenterImage = () => {
-    if (!scrollContainerRef.current || itemRefs.current.length === 0) return;
+  // const updateCenterImage = () => {
+  //   if (!scrollContainerRef.current || itemRefs.current.length === 0) return;
 
-    const container = scrollContainerRef.current;
-    const containerRect = container.getBoundingClientRect();
-    const containerCenter = containerRect.left + containerRect.width / 2;
+  //   const container = scrollContainerRef.current;
+  //   const containerRect = container.getBoundingClientRect();
+  //   const containerCenter = containerRect.left + containerRect.width / 2;
 
-    let closestIndex = 0;
-    let minDistance = Infinity;
+  //   let closestIndex = 0;
+  //   let minDistance = Infinity;
 
-    itemRefs.current.forEach((el, idx) => {
-      if (el) {
-        const rect = el.getBoundingClientRect();
-        const itemCenter = rect.left + rect.width / 2;
-        const distance = Math.abs(itemCenter - containerCenter);
-        if (distance < minDistance) {
-          minDistance = distance;
-          closestIndex = idx;
-        }
-      }
-    });
+  //   itemRefs.current.forEach((el, idx) => {
+  //     if (el) {
+  //       const rect = el.getBoundingClientRect();
+  //       const itemCenter = rect.left + rect.width / 2;
+  //       const distance = Math.abs(itemCenter - containerCenter);
+  //       if (distance < minDistance) {
+  //         minDistance = distance;
+  //         closestIndex = idx;
+  //       }
+  //     }
+  //   });
 
-    const realIndex = closestIndex % images.length;
-    setCenterIndex(realIndex);
-  };
+  //   const realIndex = closestIndex % images.length;
+  //   setCenterIndex(realIndex);
+  // };
 
   const startScrolling = (direction) => {
     if (!scrollContainerRef.current) return;
@@ -899,7 +878,7 @@ const HorizontalGallery = ({ images }) => {
 
     const step = () => {
       container.scrollLeft += speed;
-      updateCenterImage();
+      // updateCenterImage();
 
       const maxScroll = container.scrollWidth / 3;
       if (container.scrollLeft <= 0) container.scrollLeft += maxScroll;
@@ -922,14 +901,14 @@ const HorizontalGallery = ({ images }) => {
     container.scrollLeft = container.scrollWidth / 3;
 
     const handleScroll = () => {
-      updateCenterImage();
+      // updateCenterImage();
       const maxScroll = container.scrollWidth / 3;
       if (container.scrollLeft <= 100) container.scrollLeft += maxScroll;
       else if (container.scrollLeft >= maxScroll * 2 - 100) container.scrollLeft -= maxScroll;
     };
 
     container.addEventListener('scroll', handleScroll);
-    updateCenterImage();
+    // updateCenterImage();
 
     return () => container.removeEventListener('scroll', handleScroll);
   }, []);
@@ -1029,10 +1008,9 @@ const HorizontalGallery = ({ images }) => {
           style={{ overflowX: 'hidden', scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           className="hide-scrollbar"
         >
-          <div style={{ display: 'flex', gap: '0.5rem', padding: '1rem 0', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '1.5rem', padding: '1rem 0', alignItems: 'center' }}>
             {duplicatedImages.map((img, idx) => {
               const originalIndex = idx % images.length;
-              const isCenter = originalIndex === centerIndex;
               const isHoveredImage = hoveredImageIndex === idx;
 
               return (
@@ -1042,38 +1020,38 @@ const HorizontalGallery = ({ images }) => {
                   style={{
                     flex: 'none',
                     transition: 'all 0.7s cubic-bezier(0.4, 0, 0.2, 1)',
-                    transform: isCenter
-                      ? 'scale(1.05) translateY(5px)'
-                      : 'scale(0.92) translateY(10px)',
-                    zIndex: isCenter ? 50 : 10,
-                    filter: isCenter ? 'brightness(0.85)' : 'brightness(0.95)',
+                    zIndex: 10,
+                    filter:'brightness(0.95)',
                   }}
                   onMouseEnter={() => setHoveredImageIndex(idx)}
                   onMouseLeave={() => setHoveredImageIndex(null)}
                 >
                   <div
                     style={{
-                      width: '454px',
-                      height: '280px',
+                      width: '450px',
+                      height: '310px',
                       overflow: 'hidden',
                       position: 'relative',
                       cursor: 'pointer',
+                      borderRadius:'32px',
+                      border:isHoveredImage?'none':'1px solid white',
+                    
+            
                     }}
                     onClick={() => isHoveredImage && setSelectedItem(img)}
                   >
                     {/* Container for perfect circle clip on hover */}
                    {/* Inside your gallery item, wrap the Image and text separately */}
-<div style={{ position: 'relative', width: '100%', height: '100%',
-
- }}>
-  {/* Image with clip path */}
+<div style={{ position: 'relative', width: '100%', height: '100%' }}>
+  {/* Only clip the image, not the text overlay */}
   <div style={{
     width: '100%',
     height: '100%',
-    clipPath: isHoveredImage ? 'circle(34%)' : 'none',
-    transition: 'clip-path 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
-    position: 'relative',
-   
+    clipPath: isHoveredImage ? 'circle(40% at center)' : 'none',
+    transition: 'clip-path 2s cubic-bezier(0.25, 0.1, 0.1, 1)',
+    pointerEvents: 'none',
+  
+     border:isHoveredImage?'2px solid white':"none",
   }}>
     <Image
       src={img.src}
@@ -1091,7 +1069,7 @@ const HorizontalGallery = ({ images }) => {
     />
   </div>
 
-  {/* Text outside the clipped area */}
+  {/* Text overlay — now OUTSIDE the clipped container */}
   {isHoveredImage && img.leftText && (
     <div
       style={{
@@ -1108,11 +1086,10 @@ const HorizontalGallery = ({ images }) => {
         textShadow: '0 4px 20px rgba(0,0,0,0.8)',
         pointerEvents: 'none',
         whiteSpace: 'nowrap',
-        border: '1px solid white',
+        border: '2px solid white', // made it 2px to be more visible
         borderRadius: '50px',
-        minWidth: '300px', // Fixed minimum width
-
-        padding: '10px 30px',
+        minWidth: '360px',
+        padding: '12px 32px',
         zIndex: 10,
         backgroundColor: 'rgba(0, 0, 0, 0.7)',
         backdropFilter: 'blur(4px)',
@@ -1128,9 +1105,9 @@ const HorizontalGallery = ({ images }) => {
                   {(img.leftText || img.rightText) && !isHoveredImage && (
                     <div
                       style={{
-                        marginTop: isCenter ? '-0.2rem' : '0.3rem',
+                        marginTop: '0.3rem',
                         textAlign: 'center',
-                        opacity: isCenter ? 1 : 0.8,
+                        opacity: 0.8,
                         transition: 'all 0.5s',
                       }}
                     >
@@ -1139,11 +1116,11 @@ const HorizontalGallery = ({ images }) => {
                           display: 'flex',
                           justifyContent: 'space-between',
                           padding: '0 2rem',
-                          fontSize: isCenter ? '1.1rem' : '0.95rem',
+                          fontSize:'0.95rem',
                         }}
                       >
                         {img.leftText && (
-                          <span style={{ fontWeight: isCenter ? '700' : '500', color: 'white', marginLeft: '-25px' }}>
+                          <span style={{ fontWeight:'500', color: 'white', marginLeft: '-25px' }}>
                             {img.leftText}
                           </span>
                         )}
@@ -1174,15 +1151,13 @@ const HorizontalGallery = ({ images }) => {
           style={{
             position: 'fixed',
             inset: 0,
-            background: 'rgba(0, 0, 0, 0.95)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            borderRadius: '16px',
             zIndex: 999,
-             backdropFilter: 'blur(2px)',
+            backdropFilter:'brightness(0.4)',
             cursor: 'pointer',
-            border:'2px solid white'
+          
           }}
           // onClick={() => setSelectedItem(null)}
         >
@@ -1196,8 +1171,8 @@ const HorizontalGallery = ({ images }) => {
                 border:'1px solid white',
                   maxWidth: '75vw',
                   maxHeight: '75vh',
-                  borderRadius: '26px',
-                  boxShadow: '0 20px 60px rgba(0,0,0,0.8)',
+                  borderRadius: '46px',
+                 
                 }}
               />
             ) : (
@@ -1218,53 +1193,38 @@ const HorizontalGallery = ({ images }) => {
               />
             )}
 
+
             {/* Close button */}
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 setSelectedItem(null);
               }}
+              onMouseEnter={() => setIsCloseHovered(true)}
+  onMouseLeave={() => setIsCloseHovered(false)}
+ 
               style={{
                 position: 'absolute',
-                top: '-60px',
+                top: '-40px',
                 right: '0px',
-                background: 'rgba(255,255,255,0.15)',
                 border: 'none',
-                color: 'white',
-                fontSize: '2.5rem',
-                width: '40px',
-                height: '40px',
+    color: isCloseHovered ? 'white' : 'gray',
+                fontSize: '2rem',
+                width: '30px',
+                height: '30px',
                 borderRadius: '50%',
                 cursor: 'pointer',
                 backdropFilter: 'blur(10px)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                    transition: 'color 0.2s ease',
+
               }}
+
             >
               ×
             </button>
-
-            {/* Caption in popup */}
-            {/* {selectedItem.leftText && (
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: '30px',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  color: 'white',
-                  fontSize: '2rem',
-                  fontWeight: '700',
-                  textShadow: '0 4px 16px rgba(0,0,0,0.8)',
-                  background: 'rgba(0,0,0,0.4)',
-                  padding: '0.5rem 2rem',
-                  borderRadius: '8px',
-                }}
-              >
-                {selectedItem.leftText}
-              </div>
-            )} */}
           </div>
         </div>
       )}
@@ -1428,7 +1388,7 @@ const AnimatedTextSection = ({ heading, text }) => {
           maxWidth: '900px',
           margin: '3rem auto 2rem',
           lineHeight: '1.1',
-          marginBottom:'0rem'
+          marginBottom:'1rem'
           // Remove opacity: 0 from here too!
         }}
       >

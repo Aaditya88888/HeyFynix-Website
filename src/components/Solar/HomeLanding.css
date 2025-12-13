@@ -71,7 +71,7 @@ html::-webkit-scrollbar {
   font-weight: 90;
   color: #fff;
   letter-spacing: -0.02em;
-  z-index: 900;
+  z-index: 110;
   pointer-events: none; /* ← Text select disable (tumhara requirement) */
   user-select: none;
   white-space: nowrap;
@@ -136,7 +136,7 @@ html::-webkit-scrollbar {
   text-align: center;
   font-family: var(--font-inter), sans-serif !important;
   color: #fff;
-  z-index: 90;
+  z-index: 100;
   pointer-events: auto !important;
   opacity: 0;
   visibility: hidden;
