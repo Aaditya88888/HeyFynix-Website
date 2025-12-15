@@ -1664,6 +1664,522 @@
 
 // *****************************************************************************
 
+// "use client";
+// import { useEffect, useRef } from "react";
+// import gsap from "gsap";
+// import { useGSAP } from "@gsap/react";
+
+// export default function LusionEffect() {
+//   const canvasRef = useRef(null);
+//   const rafRef = useRef(null);
+//   const hoverRef = useRef(null);
+//   const line1Ref = useRef(null);
+//   const line2Ref = useRef(null);
+
+//   useGSAP(() => {
+//     const ctx = gsap.context(() => {
+//       gsap.set([line1Ref.current, line2Ref.current], {
+//         scaleX: 0,
+//         transformOrigin: "left center",
+//       });
+
+//       const tl = gsap.timeline({ paused: true });
+
+//       tl.to([line1Ref.current], {
+//         scaleX: 1,
+//         duration: 0.4,
+//         ease: "power4.out",
+//         stagger: 0.05, // subtle premium feel
+//       });
+
+//       tl.to([line2Ref.current], {
+//         scaleX: 1,
+//         duration: 0.4,
+//         delay: 0.3,
+//         ease: "power4.out",
+//         stagger: 0.05, // subtle premium feel
+//       });
+
+//       const enter = () => tl.play();
+//       const leave = () => {
+//         tl.reverse();
+//         gsap.set([line1Ref.current, line2Ref.current], {
+//           transformOrigin: "left center",
+//         });
+//       };
+
+//       hoverRef.current.addEventListener("mouseenter", enter);
+//       hoverRef.current.addEventListener("mouseleave", leave);
+
+//       return () => {
+//         hoverRef.current.removeEventListener("mouseenter", enter);
+//         hoverRef.current.removeEventListener("mouseleave", leave);
+//       };
+//     });
+
+//     return () => ctx.revert();
+//   }, []);
+
+//   useEffect(() => {
+//     const canvas = canvasRef.current;
+//     const ctx = canvas.getContext("2d");
+
+//     let dpr = window.devicePixelRatio || 1;
+//     let w = (canvas.width = Math.floor(window.innerWidth * dpr));
+//     let h = (canvas.height = Math.floor(window.innerHeight * dpr));
+//     canvas.style.width = `${window.innerWidth}px`;
+//     canvas.style.height = `${window.innerHeight}px`;
+//     ctx.scale(dpr, dpr);
+
+//     let mouseX = -9999;
+//     let mouseY = -9999;
+//     let mouseActive = false;
+
+//     const PARTICLES = 500;
+//     const RADIUS = 12; // visual radius in CSS px
+//     const PHYS_RADIUS = 13; // physics radius (same)
+//     const MASS = 1;
+//     const GRAVITY = 2; // px/frame^2
+//     const FRICTION_GROUND = 0.85;
+//     const AIR_FRICTION = 0.998;
+//     const RESTITUTION = 0.2; // bounce factor (inelastic)
+//     const SLEEP_VEL = 0.08; // threshold to mark sleeping
+//     const CELL_SIZE = PHYS_RADIUS * 2.5; // spatial grid cell size
+//     const MAX_PUSH = 900; // mouse push impulse magnitude
+//     const TIME_STEP = 1; // integration multiplier
+
+//     // Resize handler
+//     function resize() {
+//       dpr = window.devicePixelRatio || 1;
+//       w = canvas.width = Math.floor(window.innerWidth * dpr);
+//       // h = canvas.height = Math.floor(window.innerHeight * 0.45 * dpr);
+//       h = canvas.height = Math.floor(window.innerHeight * dpr);
+//       canvas.style.width = `${window.innerWidth}px`;
+//       // canvas.style.height = `${window.innerHeight * 0.45}px`;
+//       canvas.style.height = `${window.innerHeight}px`;
+//       ctx.setTransform(1, 0, 0, 1, 0, 0);
+//       ctx.scale(dpr, dpr);
+//     }
+//     window.addEventListener("resize", resize);
+
+//     // Mouse tracking
+//     function onMove(e) {
+//       const rect = canvas.getBoundingClientRect();
+//       const x = e.clientX - rect.left;
+//       const y = e.clientY - rect.top;
+//       mouseX = x;
+//       mouseY = y;
+//       mouseActive = true;
+//     }
+//     function onLeave() {
+//       mouseX = -9999;
+//       mouseY = -9999;
+//       mouseActive = false;
+//     }
+//     window.addEventListener("mousemove", onMove);
+//     window.addEventListener("pointerleave", onLeave);
+
+//     // Particle class
+//     class Particle {
+//       constructor(x, y) {
+//         this.x = x;
+//         this.y = y;
+//         this.r = PHYS_RADIUS;
+//         this.vx = (Math.random() - 0.5) * 2; // slight horizontal jitter
+//         this.vy = Math.random() * 2; // small initial
+//         this.mass = MASS;
+//         this.shape = Math.random() > 0.5 ? "triangle" : "star";
+//         this.color = "#ffffff";
+//         this.rot = Math.random() * Math.PI * 2;
+//         this.rotSpeed = 0;
+//         this.sleep = false;
+//         this.restCount = 0; // frames of low motion
+//       }
+
+//       applyPhysics() {
+//         if (this.sleep) return;
+
+//         // gravity
+//         this.vy += GRAVITY * TIME_STEP;
+
+//         // air friction
+//         this.vx *= AIR_FRICTION;
+//         this.vy *= AIR_FRICTION;
+
+//         // integrate
+//         this.x += this.vx * TIME_STEP;
+//         this.y += this.vy * TIME_STEP;
+
+//         // floor collision
+//         const floorY = canvas.clientHeight || window.innerHeight * 0.45;
+//         if (this.y + this.r > floorY) {
+//           this.y = floorY - this.r;
+//           // bounce (inelastic) + friction
+//           if (Math.abs(this.vy) > 0.5) {
+//             this.vy = -this.vy * RESTITUTION;
+//           } else {
+//             this.vy = 0;
+//           }
+//           this.vx *= FRICTION_GROUND;
+//         }
+
+//         // horizontal walls
+//         if (this.x - this.r < 0) {
+//           this.x = this.r;
+//           this.vx = Math.abs(this.vx) * RESTITUTION;
+//         } else if (
+//           this.x + this.r >
+//           (canvas.clientWidth || window.innerWidth)
+//         ) {
+//           this.x = (canvas.clientWidth || window.innerWidth) - this.r;
+//           this.vx = -Math.abs(this.vx) * RESTITUTION;
+//         }
+
+//         // Top wall
+//         if (this.y - this.r < 0) {
+//           this.y = this.r;
+//           this.vy = Math.abs(this.vy) * RESTITUTION; // bounce downward (or -Math.abs if direction matters)
+//         }
+
+//         // sleeping detection (resting on floor and low speed)
+//         const speed = Math.hypot(this.vx, this.vy);
+//         const onFloor =
+//           Math.abs(
+//             this.y + this.r - (canvas.clientHeight || window.innerHeight * 0.45)
+//           ) < 0.5;
+//         if (speed < SLEEP_VEL && onFloor) {
+//           this.restCount++;
+//           if (this.restCount > 8) {
+//             this.sleep = true;
+//             this.vx = 0;
+//             this.vy = 0;
+//           }
+//         } else {
+//           this.restCount = 0;
+//         }
+//       }
+
+//       draw(ctx) {
+//         ctx.save();
+//         ctx.translate(this.x, this.y);
+//         ctx.rotate(this.rot);
+//         ctx.fillStyle = this.color;
+
+//         // Draw circle fallback for performance if wanted:
+//         // ctx.beginPath(); ctx.arc(0, 0, this.r, 0, Math.PI*2); ctx.fill();
+
+//         if (this.shape === "triangle") {
+//           const s = this.r;
+//           ctx.beginPath();
+//           ctx.moveTo(0, -s);
+//           ctx.lineTo(-s * 0.9, s * 0.8);
+//           ctx.lineTo(s * 0.9, s * 0.8);
+//           ctx.closePath();
+//           ctx.fill();
+//         } else {
+//           // star
+//           let rot = (Math.PI / 2) * 3;
+//           const size = this.r;
+//           const step = Math.PI / 5;
+//           ctx.beginPath();
+//           ctx.moveTo(0, -size);
+//           for (let i = 0; i < 5; i++) {
+//             ctx.lineTo(Math.cos(rot) * size, Math.sin(rot) * size);
+//             rot += step;
+//             ctx.lineTo(
+//               Math.cos(rot) * (size / 2.3),
+//               Math.sin(rot) * (size / 2.3)
+//             );
+//             rot += step;
+//           }
+//           ctx.closePath();
+//           ctx.fill();
+//         }
+
+//         ctx.restore();
+//       }
+//     }
+
+//     // Create particles above the canvas so they fall and stack
+//     const particles = [];
+//     for (let i = 0; i < PARTICLES; i++) {
+//       // spread horizontally above the canvas
+//       const startX = Math.random() * (canvas.clientWidth || window.innerWidth);
+//       const startY =
+//         -Math.random() * (canvas.clientHeight || window.innerHeight * 0.45) -
+//         Math.random() * 40 -
+//         10;
+//       particles.push(new Particle(startX, startY));
+//     }
+
+//     // Spatial hash grid for collision broadphase
+//     function buildGrid(items, cellSize) {
+//       const grid = new Map();
+//       for (let i = 0; i < items.length; i++) {
+//         const p = items[i];
+//         const gx = Math.floor(p.x / cellSize);
+//         const gy = Math.floor(p.y / cellSize);
+//         const key = `${gx},${gy}`;
+//         if (!grid.has(key)) grid.set(key, []);
+//         grid.get(key).push(p);
+//       }
+//       return grid;
+//     }
+
+//     function neighborsFromGrid(grid, gx, gy) {
+//       const neigh = [];
+//       for (let i = gx - 1; i <= gx + 1; i++) {
+//         for (let j = gy - 1; j <= gy + 1; j++) {
+//           const key = `${i},${j}`;
+//           if (grid.has(key)) neigh.push(...grid.get(key));
+//         }
+//       }
+//       return neigh;
+//     }
+
+//     // Narrow-phase collision resolution (circle-circle)
+//     function resolveCircleCollision(a, b) {
+//       const dx = b.x - a.x;
+//       const dy = b.y - a.y;
+//       const dist = Math.hypot(dx, dy) || 0.0001;
+//       const minDist = a.r + b.r;
+//       if (dist < minDist) {
+//         // push them apart proportionally to masses
+//         const overlap = minDist - dist;
+//         const nx = dx / dist;
+//         const ny = dy / dist;
+
+//         // separate
+//         const totalMass = a.mass + b.mass;
+//         const pushA = overlap * (b.mass / totalMass);
+//         const pushB = overlap * (a.mass / totalMass);
+//         a.x -= nx * pushA;
+//         a.y -= ny * pushA;
+//         b.x += nx * pushB;
+//         b.y += ny * pushB;
+
+//         // relative velocity along normal
+//         const rvx = b.vx - a.vx;
+//         const rvy = b.vy - a.vy;
+//         const relVelAlongNormal = rvx * nx + rvy * ny;
+
+//         // only apply impulse if they are moving towards each other
+//         if (relVelAlongNormal < 0) {
+//           const e = Math.min(RESTITUTION, RESTITUTION);
+//           const j = (-(1 + e) * relVelAlongNormal) / (1 / a.mass + 1 / b.mass);
+//           const impulseX = nx * j;
+//           const impulseY = ny * j;
+//           a.vx -= impulseX / a.mass;
+//           a.vy -= impulseY / a.mass;
+//           b.vx += impulseX / b.mass;
+//           b.vy += impulseY / b.mass;
+//         }
+
+//         // small damping to simulate friction on contact
+//         a.vx *= 0.999;
+//         a.vy *= 0.999;
+//         b.vx *= 0.999;
+//         b.vy *= 0.999;
+
+//         // wake up if sleeping
+//         if (a.sleep) a.sleep = false;
+//         if (b.sleep) b.sleep = false;
+//       }
+//     }
+
+//     // Mouse push: apply impulse if near and awake or asleep (wake)
+//     function applyMousePush() {
+//       if (!mouseActive) return;
+//       const pushRadius = 50;
+//       for (let i = 0; i < particles.length; i++) {
+//         const p = particles[i];
+//         const dx = p.x - mouseX;
+//         const dy = p.y - mouseY;
+//         const dist = Math.hypot(dx, dy);
+//         if (dist < pushRadius) {
+//           const force = (1 - dist / pushRadius) * MAX_PUSH;
+//           const ang = Math.atan2(dy, dx);
+//           p.vx += Math.cos(ang) * force * 0.06;
+//           p.vy += Math.sin(ang) * force * 0.06;
+//           p.sleep = false; // wake
+//         }
+//       }
+//     }
+
+//     function animate() {
+//       ctx.clearRect(
+//         0,
+//         0,
+//         canvas.clientWidth || window.innerWidth,
+//         canvas.clientHeight || window.innerHeight
+//       );
+
+//       // 1️⃣ Build spatial grid
+//       const grid = new Map();
+//       for (let i = 0; i < particles.length; i++) {
+//         const p = particles[i];
+//         const gx = Math.floor(p.x / CELL_SIZE);
+//         const gy = Math.floor(p.y / CELL_SIZE);
+//         const key = `${gx},${gy}`;
+//         if (!grid.has(key)) grid.set(key, []);
+//         grid.get(key).push(p);
+//       }
+
+//       // 2️⃣ Collision solver (multiple iterations to avoid overlap)
+//       const SOLVER_ITERATIONS = 40;
+
+//       for (let k = 0; k < SOLVER_ITERATIONS; k++) {
+//         for (let i = 0; i < particles.length; i++) {
+//           const a = particles[i];
+//           const gx = Math.floor(a.x / CELL_SIZE);
+//           const gy = Math.floor(a.y / CELL_SIZE);
+//           const neighbors = neighborsFromGrid(grid, gx, gy);
+
+//           for (let j = 0; j < neighbors.length; j++) {
+//             const b = neighbors[j];
+//             if (a !== b) {
+//               resolveCircleCollision(a, b);
+//             }
+//           }
+//         }
+//       }
+
+//       // 3️⃣ Apply mouse push (wake particles safely)
+//       applyMousePush();
+
+//       // 4️⃣ Integrate physics + draw
+//       for (let i = 0; i < particles.length; i++) {
+//         const p = particles[i];
+//         p.applyPhysics();
+//         p.draw(ctx);
+//       }
+
+//       rafRef.current = requestAnimationFrame(animate);
+//     }
+
+//     // Kick things off
+//     animate();
+
+//     // Cleanup
+//     return () => {
+//       window.removeEventListener("resize", resize);
+//       window.removeEventListener("mousemove", onMove);
+//       window.removeEventListener("pointerleave", onLeave);
+//       if (rafRef.current) cancelAnimationFrame(rafRef.current);
+//     };
+//   }, []);
+
+//   return (
+//     <>
+//       <div className="relative w-full h-[100vh] bg-black">
+//         <div className="w-full h-[55vh] flex relative z-10 px-[4%]">
+//           {/* Left Links */}
+//           <div className="w-1/4 h-full flex relative">
+//             <div className="absolute w-full h-full flex flex-col justify-center items-start gap-4">
+//               <a className="text-white text-xl hover:underline" href="#">
+//                 Instagram
+//               </a>
+//               <a className="text-white text-xl hover:underline" href="#">
+//                 LinkedIn
+//               </a>
+//               <a className="text-white text-xl hover:underline" href="#">
+//                 Twitter
+//               </a>
+//               <a
+//                 className="text-white text-xl hover:underline"
+//                 href="mailto:yourmail@gmail.com"
+//               >
+//                 Email
+//               </a>
+//             </div>
+//           </div>
+
+//           {/* Center Image + Text */}
+//           <div className="w-1/2 h-full flex justify-center items-center relative">
+//             <img
+//               src="/images/home/astro.png"
+//               className="w-full h-full object-contain rounded-lg"
+//               alt="Center"
+//             />
+//             {/* <div
+//               ref={hoverRef}
+//               className="absolute w-full h-full flex flex-col justify-end items-center text-white text-8xl font-bold text-center pb-6 cursor-pointer"
+//             >
+//               <span className="relative inline-block">
+//                 Let's Work
+//                 <span
+//                   ref={line1Ref}
+//                   className="absolute left-0 -bottom-3 w-full h-[10px] bg-white"
+//                 />
+//               </span>
+
+//               <span className="relative inline-block mt-2">
+//                 Together
+//                 <span
+//                   ref={line2Ref}
+//                   className="absolute left-0 -bottom-3 w-full h-[10px] bg-white"
+//                 />
+//               </span>
+//             </div> */}
+
+//             <div className="absolute bottom-6 flex justify-center w-full">
+//               <div
+//                 ref={hoverRef}
+//                 className="flex flex-col items-center text-white text-8xl font-bold cursor-pointer"
+//               >
+//                 <span className="relative inline-block">
+//                   Let's Work
+//                   <span
+//                     ref={line1Ref}
+//                     className="absolute left-0 -bottom-3 w-full h-[10px] bg-white"
+//                   />
+//                 </span>
+
+//                 <span className="relative inline-block mt-2">
+//                   Together
+//                   <span
+//                     ref={line2Ref}
+//                     className="absolute left-0 -bottom-3 w-full h-[10px] bg-white"
+//                   />
+//                 </span>
+//               </div>
+//             </div>
+//           </div>
+
+//           {/* Right Links */}
+//           <div className="w-1/4 h-full flex relative">
+//             <div className="absolute w-full h-full flex flex-col justify-center items-end gap-4 text-right">
+//               <a className="text-white text-xl hover:underline" href="#">
+//                 About
+//               </a>
+//               <a className="text-white text-xl hover:underline" href="#">
+//                 Work
+//               </a>
+//               <a className="text-white text-xl hover:underline" href="#">
+//                 Service
+//               </a>
+//               <a className="text-white text-xl hover:underline" href="#">
+//                 Career
+//               </a>
+//               <a className="text-white text-xl hover:underline" href="#">
+//                 Contact
+//               </a>
+//             </div>
+//           </div>
+//         </div>
+
+//         {/* Blue Canvas */}
+//         <canvas
+//           ref={canvasRef}
+//           className="absolute bottom-0 left-0 w-full h-full pointer-events-none z-0 bg-[#1a2ffb]"
+//         ></canvas>
+//       </div>
+//     </>
+//   );
+// }
+
+// **********************************************************************
+
 "use client";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
@@ -1682,16 +2198,13 @@ export default function LusionEffect() {
         scaleX: 0,
         transformOrigin: "left center",
       });
-
       const tl = gsap.timeline({ paused: true });
-
       tl.to([line1Ref.current], {
         scaleX: 1,
         duration: 0.4,
         ease: "power4.out",
         stagger: 0.05, // subtle premium feel
       });
-
       tl.to([line2Ref.current], {
         scaleX: 1,
         duration: 0.4,
@@ -1699,7 +2212,6 @@ export default function LusionEffect() {
         ease: "power4.out",
         stagger: 0.05, // subtle premium feel
       });
-
       const enter = () => tl.play();
       const leave = () => {
         tl.reverse();
@@ -1707,39 +2219,132 @@ export default function LusionEffect() {
           transformOrigin: "left center",
         });
       };
-
       hoverRef.current.addEventListener("mouseenter", enter);
       hoverRef.current.addEventListener("mouseleave", leave);
+
+      // New character animation logic
+      // const chars = gsap.utils.toArray(".char");
+      // function animateRandom() {
+      //   const shuffled = gsap.utils.shuffle([...chars]);
+      //   const selected = shuffled.slice(0, 2);
+      //   gsap.to(selected, {
+      //     rotationX: 360,
+      //     duration: 0.8, // Adjust duration as needed for the flip effect
+      //     stagger: 0.1, // Stagger between the two characters
+      //     ease: "power2.inOut",
+      //     onComplete: () => {
+      //       gsap.set(selected, { rotationX: 0 }); // Reset to 0 explicitly if needed (though 360 brings it back)
+      //       gsap.delayedCall(2, animateRandom); // Schedule next animation after 2 seconds
+      //     },
+      //   });
+      // }
+      // // Start the infinite loop after an initial delay if desired, or immediately
+      // gsap.delayedCall(2, animateRandom);
+      // New character animation logic - floating up effect
+      // const chars = gsap.utils.toArray(".char");
+
+      // function animateRandom() {
+      //   // Shuffle and pick 2 random characters
+      //   const shuffled = gsap.utils.shuffle([...chars]);
+      //   const selected = shuffled.slice(0, 2);
+
+      //   // First, instantly move them down by 20px and make sure they're at starting point
+      //   gsap.set(selected, { y: 20, opacity: 0.6 });
+
+      //   // Then animate them up to their original position with a nice float feel
+      //   gsap.to(selected, {
+      //     y: 0,
+      //     opacity: 1,
+      //     duration: 1.2,
+      //     stagger: 0.15, // slight delay between the two characters
+      //     ease: "power3.out", // gives a nice bouncy overshoot at the end for premium feel
+      //     // Alternative eases you can try:
+      //     // ease: "elastic.out(1, 0.5)"  // more bouncy
+      //     // ease: "power3.out"           // smooth and strong
+      //     onComplete: () => {
+      //       // Optional: small settle animation for extra polish
+      //       gsap.to(selected, {
+      //         y: -8,
+      //         duration: 0.4,
+      //         ease: "power2.out",
+      //         onComplete: () => {
+      //           gsap.to(selected, { y: 0, duration: 0.3, ease: "power2.out" });
+      //         },
+      //       });
+
+      //       // Schedule next pair after 2 seconds
+      //       gsap.delayedCall(2, animateRandom);
+      //     },
+      //   });
+      // }
+
+      // // Start the infinite animation loop
+      // gsap.delayedCall(1, animateRandom); // starts after 1 second on load
+      const chars = gsap.utils.toArray(".char");
+
+      function animateRandom() {
+        const shuffled = gsap.utils.shuffle([...chars]);
+        const selected = shuffled.slice(0, 2);
+
+        const tl = gsap.timeline({
+          onComplete: () => {
+            gsap.delayedCall(2, animateRandom);
+          },
+        });
+
+        tl
+          // 1. Move UP and disappear
+          .to(selected, {
+            y: -20,
+            opacity: 0,
+            duration: 0.6,
+            ease: "power2.in",
+            stagger: 0.55,
+          })
+
+          // 2. Instantly move to bottom (hidden)
+          .set(selected, {
+            y: 20,
+          })
+
+          // 3. Come back from bottom and appear
+          .to(selected, {
+            y: 0,
+            opacity: 1,
+            duration: 1,
+            ease: "power3.out",
+            stagger: 0.15,
+          });
+      }
+
+      // start loop
+      gsap.delayedCall(1, animateRandom);
 
       return () => {
         hoverRef.current.removeEventListener("mouseenter", enter);
         hoverRef.current.removeEventListener("mouseleave", leave);
       };
     });
-
     return () => ctx.revert();
   }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
-
     let dpr = window.devicePixelRatio || 1;
     let w = (canvas.width = Math.floor(window.innerWidth * dpr));
     let h = (canvas.height = Math.floor(window.innerHeight * dpr));
     canvas.style.width = `${window.innerWidth}px`;
     canvas.style.height = `${window.innerHeight}px`;
     ctx.scale(dpr, dpr);
-
     let mouseX = -9999;
     let mouseY = -9999;
     let mouseActive = false;
-
     const PARTICLES = 500;
     const RADIUS = 12; // visual radius in CSS px
     const PHYS_RADIUS = 13; // physics radius (same)
-    const MASS = 1;
-    const GRAVITY = 2; // px/frame^2
+    const MASS = 0.8;
+    const GRAVITY = 0.3; // px/frame^2
     const FRICTION_GROUND = 0.85;
     const AIR_FRICTION = 0.998;
     const RESTITUTION = 0.2; // bounce factor (inelastic)
@@ -1747,7 +2352,6 @@ export default function LusionEffect() {
     const CELL_SIZE = PHYS_RADIUS * 2.5; // spatial grid cell size
     const MAX_PUSH = 900; // mouse push impulse magnitude
     const TIME_STEP = 1; // integration multiplier
-
     // Resize handler
     function resize() {
       dpr = window.devicePixelRatio || 1;
@@ -1761,7 +2365,6 @@ export default function LusionEffect() {
       ctx.scale(dpr, dpr);
     }
     window.addEventListener("resize", resize);
-
     // Mouse tracking
     function onMove(e) {
       const rect = canvas.getBoundingClientRect();
@@ -1778,7 +2381,6 @@ export default function LusionEffect() {
     }
     window.addEventListener("mousemove", onMove);
     window.addEventListener("pointerleave", onLeave);
-
     // Particle class
     class Particle {
       constructor(x, y) {
@@ -1795,21 +2397,16 @@ export default function LusionEffect() {
         this.sleep = false;
         this.restCount = 0; // frames of low motion
       }
-
       applyPhysics() {
         if (this.sleep) return;
-
         // gravity
         this.vy += GRAVITY * TIME_STEP;
-
         // air friction
         this.vx *= AIR_FRICTION;
         this.vy *= AIR_FRICTION;
-
         // integrate
         this.x += this.vx * TIME_STEP;
         this.y += this.vy * TIME_STEP;
-
         // floor collision
         const floorY = canvas.clientHeight || window.innerHeight * 0.45;
         if (this.y + this.r > floorY) {
@@ -1822,7 +2419,6 @@ export default function LusionEffect() {
           }
           this.vx *= FRICTION_GROUND;
         }
-
         // horizontal walls
         if (this.x - this.r < 0) {
           this.x = this.r;
@@ -1834,13 +2430,11 @@ export default function LusionEffect() {
           this.x = (canvas.clientWidth || window.innerWidth) - this.r;
           this.vx = -Math.abs(this.vx) * RESTITUTION;
         }
-
         // Top wall
         if (this.y - this.r < 0) {
           this.y = this.r;
           this.vy = Math.abs(this.vy) * RESTITUTION; // bounce downward (or -Math.abs if direction matters)
         }
-
         // sleeping detection (resting on floor and low speed)
         const speed = Math.hypot(this.vx, this.vy);
         const onFloor =
@@ -1858,16 +2452,13 @@ export default function LusionEffect() {
           this.restCount = 0;
         }
       }
-
       draw(ctx) {
         ctx.save();
         ctx.translate(this.x, this.y);
         ctx.rotate(this.rot);
         ctx.fillStyle = this.color;
-
         // Draw circle fallback for performance if wanted:
         // ctx.beginPath(); ctx.arc(0, 0, this.r, 0, Math.PI*2); ctx.fill();
-
         if (this.shape === "triangle") {
           const s = this.r;
           ctx.beginPath();
@@ -1895,11 +2486,9 @@ export default function LusionEffect() {
           ctx.closePath();
           ctx.fill();
         }
-
         ctx.restore();
       }
     }
-
     // Create particles above the canvas so they fall and stack
     const particles = [];
     for (let i = 0; i < PARTICLES; i++) {
@@ -1911,7 +2500,6 @@ export default function LusionEffect() {
         10;
       particles.push(new Particle(startX, startY));
     }
-
     // Spatial hash grid for collision broadphase
     function buildGrid(items, cellSize) {
       const grid = new Map();
@@ -1925,7 +2513,6 @@ export default function LusionEffect() {
       }
       return grid;
     }
-
     function neighborsFromGrid(grid, gx, gy) {
       const neigh = [];
       for (let i = gx - 1; i <= gx + 1; i++) {
@@ -1936,7 +2523,6 @@ export default function LusionEffect() {
       }
       return neigh;
     }
-
     // Narrow-phase collision resolution (circle-circle)
     function resolveCircleCollision(a, b) {
       const dx = b.x - a.x;
@@ -1948,7 +2534,6 @@ export default function LusionEffect() {
         const overlap = minDist - dist;
         const nx = dx / dist;
         const ny = dy / dist;
-
         // separate
         const totalMass = a.mass + b.mass;
         const pushA = overlap * (b.mass / totalMass);
@@ -1957,12 +2542,10 @@ export default function LusionEffect() {
         a.y -= ny * pushA;
         b.x += nx * pushB;
         b.y += ny * pushB;
-
         // relative velocity along normal
         const rvx = b.vx - a.vx;
         const rvy = b.vy - a.vy;
         const relVelAlongNormal = rvx * nx + rvy * ny;
-
         // only apply impulse if they are moving towards each other
         if (relVelAlongNormal < 0) {
           const e = Math.min(RESTITUTION, RESTITUTION);
@@ -1974,19 +2557,16 @@ export default function LusionEffect() {
           b.vx += impulseX / b.mass;
           b.vy += impulseY / b.mass;
         }
-
         // small damping to simulate friction on contact
         a.vx *= 0.999;
         a.vy *= 0.999;
         b.vx *= 0.999;
         b.vy *= 0.999;
-
         // wake up if sleeping
         if (a.sleep) a.sleep = false;
         if (b.sleep) b.sleep = false;
       }
     }
-
     // Mouse push: apply impulse if near and awake or asleep (wake)
     function applyMousePush() {
       if (!mouseActive) return;
@@ -2005,7 +2585,6 @@ export default function LusionEffect() {
         }
       }
     }
-
     function animate() {
       ctx.clearRect(
         0,
@@ -2013,7 +2592,6 @@ export default function LusionEffect() {
         canvas.clientWidth || window.innerWidth,
         canvas.clientHeight || window.innerHeight
       );
-
       // 1️⃣ Build spatial grid
       const grid = new Map();
       for (let i = 0; i < particles.length; i++) {
@@ -2024,17 +2602,14 @@ export default function LusionEffect() {
         if (!grid.has(key)) grid.set(key, []);
         grid.get(key).push(p);
       }
-
       // 2️⃣ Collision solver (multiple iterations to avoid overlap)
-      const SOLVER_ITERATIONS = 40;
-
+      const SOLVER_ITERATIONS = 60;
       for (let k = 0; k < SOLVER_ITERATIONS; k++) {
         for (let i = 0; i < particles.length; i++) {
           const a = particles[i];
           const gx = Math.floor(a.x / CELL_SIZE);
           const gy = Math.floor(a.y / CELL_SIZE);
           const neighbors = neighborsFromGrid(grid, gx, gy);
-
           for (let j = 0; j < neighbors.length; j++) {
             const b = neighbors[j];
             if (a !== b) {
@@ -2043,23 +2618,18 @@ export default function LusionEffect() {
           }
         }
       }
-
       // 3️⃣ Apply mouse push (wake particles safely)
       applyMousePush();
-
       // 4️⃣ Integrate physics + draw
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
         p.applyPhysics();
         p.draw(ctx);
       }
-
       rafRef.current = requestAnimationFrame(animate);
     }
-
     // Kick things off
     animate();
-
     // Cleanup
     return () => {
       window.removeEventListener("resize", resize);
@@ -2071,7 +2641,7 @@ export default function LusionEffect() {
 
   return (
     <>
-      <div className="relative w-full h-[100vh] bg-black">
+      <div className="relative w-full h-[100vh] bg-transparent">
         <div className="w-full h-[55vh] flex relative z-10 px-[4%]">
           {/* Left Links */}
           <div className="w-1/4 h-full flex relative">
@@ -2093,7 +2663,6 @@ export default function LusionEffect() {
               </a>
             </div>
           </div>
-
           {/* Center Image + Text */}
           <div className="w-1/2 h-full flex justify-center items-center relative">
             <img
@@ -2101,42 +2670,53 @@ export default function LusionEffect() {
               className="w-full h-full object-contain rounded-lg"
               alt="Center"
             />
-            {/* <div
-              ref={hoverRef}
-              className="absolute w-full h-full flex flex-col justify-end items-center text-white text-8xl font-bold text-center pb-6 cursor-pointer"
+            <div
+              className="absolute bottom-6 flex justify-center w-full"
+              style={{ perspective: "1000px" }}
             >
-              <span className="relative inline-block">
-                Let's Work
-                <span
-                  ref={line1Ref}
-                  className="absolute left-0 -bottom-3 w-full h-[10px] bg-white"
-                />
-              </span>
-
-              <span className="relative inline-block mt-2">
-                Together
-                <span
-                  ref={line2Ref}
-                  className="absolute left-0 -bottom-3 w-full h-[10px] bg-white"
-                />
-              </span>
-            </div> */}
-
-            <div className="absolute bottom-6 flex justify-center w-full">
+              {" "}
+              {/* Add perspective for 3D effect */}
               <div
                 ref={hoverRef}
                 className="flex flex-col items-center text-white text-8xl font-bold cursor-pointer"
               >
-                <span className="relative inline-block">
-                  Let's Work
+                <span
+                  className="relative inline-block"
+                  style={{ display: "inline-flex" }}
+                >
+                  {"Let's Work".split("").map((char, i) => (
+                    <span
+                      key={`line1-${i}`}
+                      className="char"
+                      style={{
+                        display: "inline-block",
+                        transformStyle: "preserve-3d",
+                      }}
+                    >
+                      {char}
+                    </span>
+                  ))}
                   <span
                     ref={line1Ref}
                     className="absolute left-0 -bottom-3 w-full h-[10px] bg-white"
                   />
                 </span>
-
-                <span className="relative inline-block mt-2">
-                  Together
+                <span
+                  className="relative inline-block mt-2"
+                  style={{ display: "inline-flex" }}
+                >
+                  {"Together".split("").map((char, i) => (
+                    <span
+                      key={`line2-${i}`}
+                      className="char"
+                      style={{
+                        display: "inline-block",
+                        transformStyle: "preserve-3d",
+                      }}
+                    >
+                      {char}
+                    </span>
+                  ))}
                   <span
                     ref={line2Ref}
                     className="absolute left-0 -bottom-3 w-full h-[10px] bg-white"
@@ -2145,7 +2725,6 @@ export default function LusionEffect() {
               </div>
             </div>
           </div>
-
           {/* Right Links */}
           <div className="w-1/4 h-full flex relative">
             <div className="absolute w-full h-full flex flex-col justify-center items-end gap-4 text-right">
@@ -2167,11 +2746,10 @@ export default function LusionEffect() {
             </div>
           </div>
         </div>
-
         {/* Blue Canvas */}
         <canvas
           ref={canvasRef}
-          className="absolute bottom-0 left-0 w-full h-full pointer-events-none z-0 bg-[#1a2ffb]"
+          className="absolute bottom-0 left-0 w-full h-full pointer-events-none z-0 bg-transparent"
         ></canvas>
       </div>
     </>
