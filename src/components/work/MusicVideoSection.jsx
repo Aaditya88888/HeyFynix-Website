@@ -14,7 +14,7 @@
 // // //       marginTop:'100px'
 // // //     }}>
 // // //       {/* Your astronaut text */}
-      
+
 // // //        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.8))' }} />
 // // //       <div style={{
 // // //         position: 'absolute',
@@ -23,8 +23,7 @@
 // // //         transform: 'translate(-50%, -50%)',
 // // //         textAlign: 'center',
 // // //         color: 'white',
-      
-       
+
 // // //         whiteSpace:'nowrap'
 // // //       }}>
 // // //         <div style={{
@@ -37,7 +36,7 @@
 // // //           <p style={{ fontSize: 'clamp(3.2rem, 5vw, 2rem)',fontWeight: 600, margin: 0, textAlign: 'left' }}>
 // // //           We Create
 // // //           </p>
-         
+
 // // //         </div>
 // // //         <h1 style={{ fontSize: 'clamp(8rem, 12vw, 10rem)', fontWeight: 900, margin: '1rem 0', textShadow: '0 4px 40px rgba(0,0,0,0.9)' ,lineHeight:'0.6'}}>
 // // //         MUSIC VIDEOS
@@ -51,13 +50,12 @@
 // // //           <p style={{ fontSize: 'clamp(2.2rem, 5vw, 2rem)', margin: 0, textAlign: 'right' }}>
 // // //           in sync with every beat
 // // //           </p>
-         
+
 // // //         </div>
 // // //       </div>
 // // //     </div>
 // // //   );
 // // // }
-
 
 // // "use client";
 
@@ -226,9 +224,6 @@
 // //   );
 // // }
 
-
-
-
 // "use client";
 
 // import { Parallax } from "react-scroll-parallax";
@@ -329,7 +324,6 @@
 //   );
 // }
 
-
 // "use client";
 
 // import { Parallax, ParallaxProvider } from "react-scroll-parallax";
@@ -341,9 +335,9 @@
 //     <ParallaxProvider>
 //       <div style={{ position: 'relative', overflow: 'hidden',marginTop:'-80vh' }}>
 //         {/* Background Layer - Moves slowest */}
-//         <Parallax 
-//           y={[-20, 20]} 
-//           style={{ 
+//         <Parallax
+//           y={[-20, 20]}
+//           style={{
 //             position: 'absolute',
 //             top: 0,
 //             left: 0,
@@ -352,7 +346,7 @@
 //             zIndex: 1
 //           }}
 //         >
-//           <div 
+//           <div
 //             style={{
 //               height: "100vh",
 //               width: "100vw",
@@ -365,19 +359,19 @@
 //         </Parallax>
 
 //         {/* Overlay gradient */}
-//         <div 
-//           style={{ 
-//             position: "absolute", 
-//             inset: 0, 
+//         <div
+//           style={{
+//             position: "absolute",
+//             inset: 0,
 //             background: "linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.8))",
-//             zIndex: 2 
-//           }} 
+//             zIndex: 2
+//           }}
 //         />
 
 //         {/* Content Layer - Moves faster than background */}
-//         <Parallax 
-//           y={[-40, 40]} 
-//           style={{ 
+//         <Parallax
+//           y={[-40, 40]}
+//           style={{
 //             position: "relative",
 //             zIndex: 3,
 //             height: "100vh",
@@ -469,27 +463,28 @@ export default function MusicVideoSection() {
       }}
     >
       {/* Full Background Image */}
-    <div
-  style={{
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    
-    backgroundImage: "url(/images/work/background.png)",
-    backgroundSize: "100% auto",      // Full width, auto height → touches left & right edges
-    backgroundPosition: "center",     // Centers it vertically and horizontally
-    backgroundRepeat: "no-repeat",
-  }}
-/>
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+
+          backgroundImage: "url(/images/work/background.png)",
+          backgroundSize: "100% auto", // Full width, auto height → touches left & right edges
+          backgroundPosition: "center", // Centers it vertically and horizontally
+          backgroundRepeat: "no-repeat",
+        }}
+      />
 
       {/* Dark Gradient Overlay */}
       <div
         style={{
           position: "absolute",
           inset: 0,
-          background: "linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.8))",
+          background:
+            "linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.8))",
           zIndex: 1,
         }}
       />

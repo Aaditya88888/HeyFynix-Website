@@ -475,7 +475,7 @@ useEffect(() => {
           pointerEvents: 'none',
         }}
       >
-        <div style={{ position: 'relative', maxWidth: '100vw', height: '100vh',marginBottom:'-100px' }}>
+        <div id="chair-image" style={{ position: 'relative', maxWidth: '100vw', height: '100vh',marginBottom:'-100px' }}>
           <Image
             src="/images/work/chair.png"
             alt="Bottom overlay image"
