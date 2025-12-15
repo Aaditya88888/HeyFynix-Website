@@ -1,8 +1,9 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "@/components/Home/Navbar/Navbar";
 import HomeLanding from "@/components/Solar/HomeLanding";
-import CreativeText from "@/components/Solar/CreativeText";
+// import CreativeText from "@/components/Solar/CreativePage";
+import CreativePage from "@/components/Solar/CreativePage";
 import MyMainCode from "@/components/Solar/MyMainCode";
 import WhatWeDo from "@/components/Home/WhatWeDo/WhatWeDo";
 import InfiniteCreativity from "@/components/Home/InfiniteCreativity/InfiniteCreativity";
@@ -12,27 +13,34 @@ import MakesUsDifferent from "@/components/Home/MakesUsDifferent/MakesUsDifferen
 import Footer from "@/components/Home/Footer/Footer";
 
 export default function Page() {
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.history.scrollRestoration = "manual";
+      window.scrollTo(0, 0);
+    }
+  }, []);
   return (
     <main className="w-full bg-transparent text-white">
       <Navbar />
 
-      {/* SECTION 1 — Landing with fake long scroll */}
-      <section className="relative bg-black overflow-hidden">
-        {/* Yeh wrapper daal diya */}
-        <HomeLanding />
-      </section>
-      {/* CreativeText ab landing ke andar hai → perfect sync */}
-      <section className="flex items-center justify-center">
-        <CreativeText
-          startOffset={0.72}
-          revealRange={0.22}
-          holdDuration={0.11}
-        />
-      </section>
+      {/* Video Landing with Pinning */}
+      <HomeLanding />
+      <div style={{ height: "120vh" }}></div>
+
+      <CreativePage />
+      {/* <section
+        id="section-2"
+        className="relative min-h-screen bg-transparent flex items-center justify-center"
+      >
+        <h1 className="text-8xl font-black text-amber-400 drop-shadow-2xl">
+          HELLO BROTHER
+        </h1>
+      </section> */}
 
       <section className="min-h-screen bg-black">
         <MyMainCode />
       </section>
+      <div style={{ height: "30vh" }}></div>
 
       {/* Baaki sab sections normal flow mein */}
       <InfiniteCreativity />
