@@ -2,8 +2,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import CursorEffect from "@/components/CursorEffect/CursorEffect";
 import StarsBackground from "@/components/StarsBackground/StarsBackground";
-import ClientParallaxProvider from './ParallaxProvider';
-// Google Font (Inter)
+import ClientParallaxProvider from "./ParallaxProvider";
+import LoadingOverlay from "@/components/LoadingOverlay";
 const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
@@ -17,16 +17,20 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" >
-      <body className={`${inter.variable} font-sans antialiased`}suppressHydrationWarning={true}>
-        {/* 👇 This makes the hover canvas global (on all pages) */}
+    <html lang="en">
+      <body
+        className={`${inter.variable} font-sans antialiased`}
+        suppressHydrationWarning
+      >
+        {/* Backgrounds */}
         <StarsBackground />
         <CursorEffect />
 
-        {/* 👇 Your actual website content */}
-       <ClientParallaxProvider>
-          {children}
-        </ClientParallaxProvider>
+        {/* Loading Overlay */}
+        <LoadingOverlay />
+
+        {/* Main Content */}
+        <ClientParallaxProvider>{children}</ClientParallaxProvider>
       </body>
     </html>
   );
