@@ -654,166 +654,171 @@
 
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import ScrollTrigger from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(ScrollTrigger);
-
-export default function Process() {
-  const expWrapRef = useRef(null);
-
+export default function ScrollCards() {
   useEffect(() => {
-    const expWrap = expWrapRef.current;
+    gsap.registerPlugin(ScrollTrigger);
 
-    const viewportW = window.innerWidth;
-    const textW = expWrap.offsetWidth;
+    const positions = [
+      { x: 0.2, y: 0.2 },
+      { x: 0, y: 0 },
+      { x: -0.2, y: -0.2 },
+      { x: -0.4, y: -0.4 },
+      { x: -0.6, y: -0.2 },
+      { x: -0.8, y: 0 },
+      { x: -1, y: 0.2 },
+      { x: -1.2, y: 0.4 },
+      { x: -1.4, y: 0.6 },
+      { x: -1.6, y: 0.8 },
+      { x: -1.8, y: 1 },
+    ];
 
-    const moveDistance = viewportW + textW;
+    const totalSteps = positions.length - 1;
+    const cards = [".card1", ".card2", ".card3", ".card4", ".card5"];
 
-    gsap.set(expWrap, { x: viewportW / 2 + textW / 2 });
+    // Initial setup
+    gsap.set(".card1", {
+      x: positions[0].x * window.innerWidth,
+      y: positions[0].y * window.innerHeight,
+    });
 
-    gsap.to(expWrap, {
-      x: -(viewportW / 2 + textW / 2),
-      ease: "none",
-      scrollTrigger: {
-        trigger: ".experience-section",
-        start: "center center",
-        end: "+=" + moveDistance,
-        scrub: true,
-        pin: true,
-        anticipatePin: 1,
+    cards.slice(1).forEach((card) => {
+      gsap.set(card, {
+        x: window.innerWidth * 1.2,
+        y: window.innerHeight * 1.2,
+      });
+    });
+
+    // Pin section
+    ScrollTrigger.create({
+      trigger: ".experience-section",
+      start: "top top",
+      end: "+=400%",
+      pin: true,
+      anticipatePin: 1,
+    });
+
+    // Scroll animation
+    ScrollTrigger.create({
+      trigger: ".experience-section",
+      start: "top top",
+      end: "+=400%",
+      scrub: 0.5,
+      onUpdate: (self) => {
+        const progress = self.progress;
+        const effectiveStep = progress * totalSteps;
+
+        cards.forEach((card, index) => {
+          const cardStep = effectiveStep - index;
+          let pos;
+
+          if (cardStep <= 0) {
+            pos = {
+              x: 1.2 * window.innerWidth,
+              y: 1.2 * window.innerHeight,
+            };
+          } else if (cardStep >= totalSteps) {
+            const finalIdx = Math.min(Math.floor(cardStep), totalSteps);
+            pos = {
+              x: positions[finalIdx].x * window.innerWidth,
+              y: positions[finalIdx].y * window.innerHeight,
+            };
+          } else {
+            const floor = Math.floor(cardStep);
+            const frac = cardStep - floor;
+
+            const curr = positions[floor];
+            const next = positions[floor + 1];
+
+            pos = {
+              x: (curr.x + frac * (next.x - curr.x)) * window.innerWidth,
+              y: (curr.y + frac * (next.y - curr.y)) * window.innerHeight,
+            };
+          }
+
+          gsap.to(card, {
+            x: pos.x,
+            y: pos.y,
+            duration: 0.1,
+            ease: "none",
+            overwrite: "auto",
+          });
+        });
       },
     });
 
     const onResize = () => ScrollTrigger.refresh();
     window.addEventListener("resize", onResize);
 
-    return () => window.removeEventListener("resize", onResize);
+    return () => {
+      ScrollTrigger.getAll().forEach((st) => st.kill());
+      window.removeEventListener("resize", onResize);
+    };
   }, []);
 
   return (
-    <div className="bg-transparent w-full h-full text-white">
-      <div className="header-container flex justify-between items-center w-full h-[60vh] px-[4%]">
-        <div className="left  w-[40%] h-full">
-          <h1 className="text-9xl font-medium leading-[86%] ">
-            How We Work, It's All About You
+    <div className="overflow-x-hidden bg-transparent text-white">
+      {/* Top Section */}
+      <section className="h-[70vh] px-[4%]  flex bg-transparent">
+        <div className="left  w-[65%] h-full text-[9rem] ">
+          <h1 className="leading-[0.8] tracking-[-0.01em] font-medium">
+            How We <br />
+            Work, It's <br />
+            All About <br /> You
           </h1>
         </div>
-        <div className="right  w-[30%] h-full">
-          <p className="text-2xl font-normal leading-[164%] text-justify">
+
+        <div className="right  w-[35%] h-full">
+          <p className="font-normal text-[1.5rem] text-justify">
             Wondering how we turn your vision into something tangible? It's
             simple, collaborative, and a ton of fun. Here's the scoop:
           </p>
         </div>
-      </div>
-      <div className="experience-section w-full h-screen flex justify-center items-center overflow-hidden relative ">
-        <div
-          ref={expWrapRef}
-          id="expWrap"
-          className="exp-wrap whitespace-nowrap inline-block will-change-transform"
-        >
-          <div id="expText" className="flex gap-8">
-            {/* CARD 1 */}
-            <div
-              className="w-[300px] h-[400px] rounded-[20px] overflow-hidden bg-cover bg-center flex items-center justify-center text-center p-5
-"
-              style={{
-                backgroundImage: "url('/images/home/process-1.jpg')",
-              }}
-            >
-              <div className="w-[90%] mx-auto max-h-[90%] flex flex-col  overflow-hidden leading-relaxed">
-                <p className="text-2xl">Step 1</p>
-                <h1 className="text-5xl font-medium italic pt-10 pb-5">
-                  Discover
-                </h1>
-                <p className="text-base text-wrap">
-                  We start by chatting, what's your goal, who’s your audience,
-                  and what keeps you up at night?
-                </p>
-              </div>
-            </div>
+      </section>
 
-            {/* CARD 2 */}
-            <div
-              className="w-[300px] h-[400px] rounded-[20px] overflow-hidden bg-cover bg-center flex items-center justify-center text-center p-5
-"
-              style={{
-                backgroundImage: "url('/images/home/process-2.jpg')",
-              }}
-            >
-              <div className="w-[90%] mx-auto max-h-[90%] flex flex-col  overflow-hidden leading-relaxed">
-                <p className="text-2xl">Step 2</p>
-                <h1 className="text-5xl font-medium italic pt-10 pb-5">
-                  Ideate
-                </h1>
-                <p className="text-base text-wrap">
-                  Then we brainstorm like crazy, throwing ideas around until we
-                  find the perfect fit for you.
-                </p>
-              </div>
-            </div>
-
-            {/* CARD 3 */}
-            <div
-              className="w-[300px] h-[400px] rounded-[20px] overflow-hidden bg-cover bg-center flex items-center justify-center text-center p-5
-"
-              style={{
-                backgroundImage: "url('/images/home/process-3.jpg')",
-              }}
-            >
-              <div className="w-[90%] mx-auto max-h-[90%] flex flex-col  overflow-hidden leading-relaxed">
-                <p className="text-2xl">Step 3</p>
-                <h1 className="text-5xl font-medium italic pt-10 pb-5">
-                  Create
-                </h1>
-                <p className="text-base text-wrap">
-                  Time to roll up our sleeves and build it with creativity and
-                  care.
-                </p>
-              </div>
-            </div>
-
-            {/* CARD 4 */}
-            <div
-              className="w-[300px] h-[400px] rounded-[20px] overflow-hidden bg-cover bg-center flex items-center justify-center text-center p-5
-"
-              style={{
-                backgroundImage: "url('/images/home/process-4.jpg')",
-              }}
-            >
-              <div className="w-[90%] mx-auto max-h-[90%] flex flex-col  overflow-hidden leading-relaxed">
-                <p className="text-2xl">Step 4</p>
-                <h1 className="text-5xl font-medium italic pt-10 pb-5">
-                  Refine
-                </h1>
-                <p className="text-base text-wrap">
-                  We loop you in for feedback - your input makes it shine!
-                </p>
-              </div>
-            </div>
-
-            {/* CARD 5 */}
-            <div
-              className="w-[300px] h-[400px] rounded-[20px] overflow-hidden bg-cover bg-center flex items-center justify-center text-center p-5
-"
-              style={{
-                backgroundImage: "url('/images/home/process-5.jpg')",
-              }}
-            >
-              <div className="w-[90%] mx-auto max-h-[90%] flex flex-col  overflow-hidden leading-relaxed">
-                <p className="text-2xl">Step 5</p>
-                <h1 className="text-5xl font-medium italic pt-10 pb-5">
-                  Launch
-                </h1>
-                <p className="text-base text-wrap">
-                  Boom! We deliver, celebrate, and watch the magic unfold.
-                </p>
-              </div>
-            </div>
-          </div>
+      {/* Experience Section */}
+      <section className="experience-section relative h-screen bg-transparent flex items-end justify-end">
+        <div className="card card1 absolute mb-10 mr-10 h-[300px] w-[232px] rounded-2xl border border-white/30 bg-white/10 backdrop-blur-[2px] flex flex-col items-center p-4 justify-center text-white">
+          <p className="text-2xl font-bold">Step 1</p>
+          <h1 className="text-4xl pt-10 pb-5 font-bold italic">Discover</h1>
+          <p className="text-base">
+            We start by chatting, what's your goal, who's your audience, and
+            what keeps you up at night?
+          </p>
         </div>
-      </div>
+        <div className="card card2 absolute mb-10 mr-10 h-[300px] w-[232px] rounded-2xl border border-white/30 bg-white/10 backdrop-blur-[2px] flex flex-col items-center justify-center p-4 text-white">
+          <p className="text-2xl font-bold">Step 2</p>
+          <h1 className="text-4xl pt-10 pb-5 font-bold italic">Ideate</h1>
+          <p className="text-base">
+            Then we brainstorm like crazy, throwing ideas around until we find
+            the perfect fit for you.
+          </p>
+        </div>
+        <div className="card card3 absolute mb-10 mr-10 h-[300px] w-[232px] rounded-2xl border border-white/30 bg-white/10 backdrop-blur-[2px] flex flex-col items-center justify-center p-4 text-white">
+          <p className="text-2xl font-bold">Step 3</p>
+          <h1 className="text-4xl pt-10 pb-5 font-bold italic">Create</h1>
+          <p className="text-base">
+            Time to roll up our sleeves and build it with creativity and care.
+          </p>
+        </div>
+        <div className="card card4 absolute mb-10 mr-10 h-[300px] w-[232px] rounded-2xl border border-white/30 bg-white/10 backdrop-blur-[2px] flex flex-col items-center justify-center p-4 text-white">
+          <p className="text-2xl font-bold">Step 4</p>
+          <h1 className="text-4xl pt-10 pb-5 font-bold italic">Refine</h1>
+          <p className="text-base">
+            We loop you in for feedback - your input makes it shine!
+          </p>
+        </div>
+        <div className="card card5 absolute mb-10 mr-10 h-[300px] w-[232px] rounded-2xl border border-white/30 bg-white/10 backdrop-blur-[2px] flex flex-col items-center justify-center p-4 text-white">
+          <p className="text-2xl font-bold">Step 5</p>
+          <h1 className="text-4xl pt-10 pb-5 font-bold italic">Launch</h1>
+          <p className="text-base">
+            Boom! We deliver, celebrate, and watch the magic unfold.
+          </p>
+        </div>
+      </section>
     </div>
   );
 }

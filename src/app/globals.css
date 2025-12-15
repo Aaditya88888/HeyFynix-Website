@@ -26,6 +26,9 @@ body {
 
 @import "tailwindcss";
 
+
+@custom-variant dark (&:is(.dark *));
+
 body {
   background: transparent !important;
   color: var(--foreground);
