@@ -1,29 +1,3 @@
-/* @import "tailwindcss";
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-neuehaas), sans-serif;
-}
-
-* {
-  font-family: var(--font-inter), sans-serif;
-} */
-
-/* @import "tailwindcss";
-
-/* Make body transparent so the stars canvas becomes visible */
-/* body {
-  background: transparent !important;
-  color: var(--foreground);
-  font-family: var(--font-neuehaas), sans-serif;
-}
-
-/* Keep your font override */
-/* * {
-  font-family: var(--font-inter), sans-serif;
-}   */
-
 @import "tailwindcss";
 
 body {
@@ -50,3 +24,39 @@ body {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+.loading-overlay-gsap {
+  position: fixed;
+  inset: 0;
+  background: #000000; /* 🖤 PURE BLACK */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  pointer-events: all;
+}
+
+.gsap-spinner {
+  filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.35));
+}
+
+/* ONE-TIME STROKE DRAW */
+.loader-circle {
+  animation: draw-circle 1.4s ease-in-out forwards;
+}
+
+@keyframes draw-circle {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.loader-text {
+  margin-top: 26px;
+  font-size: 0.95rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
