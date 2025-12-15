@@ -1,0 +1,62 @@
+:root {
+  --font-inter: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --bg: #000;
+  --text: #ffffff;
+  --shadow: #bfbfbf;
+}
+.creative-page {
+  position: relative;
+  min-height: 80vh;
+  font-family: var(--font-inter) !important;
+  background: black;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: hidden;
+  padding-top: 40vh; /* Tu adjust kar sakta hai */
+}
+
+.stars-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.creative-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 0 2rem;
+  width: 100%;
+}
+
+.creative-title {
+  margin: 0;
+  font-style: italic;
+  letter-spacing: 1.5px;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.creative-title.line-1 {
+  font-size: clamp(2.5rem, 7vw, 7rem);
+  font-weight: 900;
+  color: white;
+  margin-bottom: 0.1em;
+}
+
+.creative-title.line-2 {
+  font-size: clamp(1.4rem, 4vw, 3.5rem);
+  font-weight: 500;
+  color: white;
+  opacity: 0.9;
+}
+
+.letter {
+  display: inline-block;
+  will-change: transform, opacity;
+}
