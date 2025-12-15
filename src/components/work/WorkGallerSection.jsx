@@ -838,12 +838,14 @@ const HorizontalGallery = ({ images }) => {
   const scrollContainerRef = useRef(null);
   const itemRefs = useRef([]);
   const animationRef = useRef(null);
+  const [isCircleComplete, setIsCircleComplete] = useState(false);
   const [isCloseHovered, setIsCloseHovered] = useState(false);
   const [isHovered, setIsHovered] = useState(null); // 'left' | 'right' | null
   const [hoveredImageIndex, setHoveredImageIndex] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null); // Now holds the full image object
   const duplicatedImages = [...images, ...images, ...images];
   const SCROLL_SPEED = 3;
+  
 
   // const updateCenterImage = () => {
   //   if (!scrollContainerRef.current || itemRefs.current.length === 0) return;
@@ -1008,7 +1010,7 @@ const HorizontalGallery = ({ images }) => {
           style={{ overflowX: 'hidden', scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           className="hide-scrollbar"
         >
-          <div style={{ display: 'flex', gap: '2.3rem', padding: '1rem 0', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '2.26rem', padding: '1rem 0', alignItems: 'center' }}>
             {duplicatedImages.map((img, idx) => {
               const originalIndex = idx % images.length;
               const isHoveredImage = hoveredImageIndex === idx;
@@ -1101,7 +1103,7 @@ const HorizontalGallery = ({ images }) => {
 
 <div
   style={{
-    width: '450px',
+    width: '448px',
     height: '310px',
     overflow: 'hidden',
     position: 'relative',
@@ -1111,8 +1113,16 @@ const HorizontalGallery = ({ images }) => {
   }}
   onClick={() => isHoveredImage && setSelectedItem(img)}
   // Add these if not already present
-  onMouseEnter={() => setIsHoveredImage(true)}
-  onMouseLeave={() => setIsHoveredImage(false)}
+  onMouseEnter={() => {
+    setIsHovered(true);
+    setTimeout(() => {
+      setIsCircleComplete(true);
+    }, 1000); // Slightly less than the animation time to ensure smooth transition
+  }}
+  onMouseLeave={() => {
+    setIsHovered(false);
+    setIsCircleComplete(false);
+  }}
 >
   <div style={{ position: 'relative', width: '100%', height: '100%', }}>
     {/* Clipped Image with Animated Circular Border via box-shadow */}
@@ -1124,11 +1134,11 @@ const HorizontalGallery = ({ images }) => {
         transition: 'clip-path 1.2s cubic-bezier(0.4, 0.0, 0.2, 1)',
         position: 'relative',
         // This creates the circular white border that grows with the circle
-      boxShadow: isHoveredImage 
-          ? 'inset 50px 50px 50px 88px rgba(247, 245, 245, 0.95)' 
-          : 'inset 0px 0px 0px 10px rgba(253, 252, 252, 0.97)',
-        transition: 'box-shadow 1.2s cubic-bezier(0.4, 0.0, 0.2, 1), clip-path 1.2s cubic-bezier(0.4, 0.0, 0.2, 1)',
-        pointerEvents: 'none',
+    boxShadow: isHoveredImage
+      ? 'inset 0 0 0 125px white'  // Thick, bold white inner border
+      : 'inset 0 0 0 60px rgba(255, 255, 255, 0.85)',  // Subtle frame when full size
+    transition: 'box-shadow 1.2s cubic-bezier(0.4, 0.0, 0.2, 1), clip-path 1.2s cubic-bezier(0.4, 0.0, 0.2, 1)',
+    pointerEvents: 'none',
       }}
     >
       <Image
@@ -1142,13 +1152,14 @@ const HorizontalGallery = ({ images }) => {
           objectFit: 'cover',
           objectPosition: 'center',
           transition: 'filter 0.8s ease',
+          border:isHoveredImage?'none':'1px solid rgba(60, 60, 60, 0.5)',
           filter: isHoveredImage ? 'grayscale(100%) brightness(1.1)' : 'brightness(1.1)',
         }}
       />
     </div>
 
     {/* Text overlay on hover */}
-    {isHoveredImage && img.leftText && (
+    {isHoveredImage && isCircleComplete && img.leftText && (
       <div
         style={{
           position: 'absolute',
@@ -1171,7 +1182,9 @@ const HorizontalGallery = ({ images }) => {
           zIndex: 10,
           backgroundColor: 'rgba(0, 0, 0, 0.7)',
           backdropFilter: 'blur(4px)',
+          transition: 'all 0.5s ease',
         }}
+
       >
         {img.leftText}
       </div>
@@ -1223,88 +1236,88 @@ const HorizontalGallery = ({ images }) => {
       </div>
 
       {/* Full-screen Popup Modal */}
-      {selectedItem && (
-        <div
+    {selectedItem && (
+  <div
+    style={{
+      position: 'fixed',
+      inset: 0,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 999,
+      backdropFilter: 'brightness(0.4)',
+      cursor: 'pointer',
+    }}
+    // Click anywhere on the overlay (outside the media) to close
+    onClick={() => setSelectedItem(null)}
+  >
+    <div
+      style={{ position: 'relative', maxWidth: '95vw', maxHeight: '95vh' }}
+      // Prevent clicks on the media container from closing the popup
+      onClick={(e) => e.stopPropagation()}
+    >
+      {selectedItem.videoSrc ? (
+        <video
+          src={selectedItem.videoSrc}
+          controls
+          autoPlay
           style={{
-            position: 'fixed',
-            inset: 0,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 999,
-            backdropFilter:'brightness(0.4)',
-            cursor: 'pointer',
-          
+            border: '1px solid white',
+            maxWidth: '75vw',
+            maxHeight: '75vh',
+            borderRadius: '46px',
           }}
-          // onClick={() => setSelectedItem(null)}
-        >
-          <div style={{ position: 'relative', maxWidth: '95vw', maxHeight: '95vh' }}>
-           {selectedItem.videoSrc ? (
-              <video
-                src={selectedItem.videoSrc}
-                controls
-                autoPlay
-                style={{
-                border:'1px solid white',
-                  maxWidth: '75vw',
-                  maxHeight: '75vh',
-                  borderRadius: '46px',
-                 
-                }}
-              />
-            ) : (
-              <Image
-                src={selectedItem.src}
-                alt={selectedItem.alt || 'Full view'}
-                width={1400}
-                height={1000}
-                style={{
-                  maxWidth: '75vw',
-                  maxHeight: '75vh',
-                  width: 'auto',
-                  height: 'auto',
-                  objectFit: 'contain',
-                  borderRadius: '26px',
-                  boxShadow: '0 20px 60px rgba(0,0,0,0.8)',
-                }}
-              />
-            )}
-
-
-            {/* Close button */}
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setSelectedItem(null);
-              }}
-              onMouseEnter={() => setIsCloseHovered(true)}
-  onMouseLeave={() => setIsCloseHovered(false)}
- 
-              style={{
-                position: 'absolute',
-                top: '-40px',
-                right: '0px',
-                border: 'none',
-    color: isCloseHovered ? 'white' : 'gray',
-                fontSize: '2rem',
-                width: '30px',
-                height: '30px',
-                borderRadius: '50%',
-                cursor: 'pointer',
-                backdropFilter: 'blur(10px)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                    transition: 'color 0.2s ease',
-
-              }}
-
-            >
-              ×
-            </button>
-          </div>
-        </div>
+        />
+      ) : (
+        <Image
+          src={selectedItem.src}
+          alt={selectedItem.alt || 'Full view'}
+          width={1400}
+          height={1000}
+          style={{
+            maxWidth: '75vw',
+            maxHeight: '75vh',
+            width: 'auto',
+            height: 'auto',
+            objectFit: 'contain',
+            borderRadius: '26px',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.8)',
+          }}
+        />
       )}
+
+      {/* Close button */}
+      <button
+        onClick={(e) => {
+          e.stopPropagation(); // Prevent triggering the overlay click
+          setSelectedItem(null);
+        }}
+        onMouseEnter={() => setIsCloseHovered(true)}
+        onMouseLeave={() => setIsCloseHovered(false)}
+        style={{
+          position: 'absolute',
+          top: '-40px',
+          right: '0px',
+          border: 'none',
+          color: isCloseHovered ? 'white' : 'gray',
+          fontSize: '2rem',
+          width: '30px',
+          height: '30px',
+          borderRadius: '50%',
+          cursor: 'pointer',
+          backdropFilter: 'blur(10px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          transition: 'color 0.2s ease',
+          background: 'rgba(0,0,0,0.3)', // Optional: subtle background for better visibility
+        }}
+      >
+        ×
+      </button>
+    </div>
+  </div>
+)}
     </>
   );
 };
