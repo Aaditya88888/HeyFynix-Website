@@ -25,8 +25,11 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${inter.variable} ${montserrat.variable}`}>
-      <body className="font-sans antialiased" suppressHydrationWarning>
+    <html lang="en">
+      <body
+        className={`${inter.variable} ${montserrat.variable} font-sans antialiased`}
+        suppressHydrationWarning
+      >
         <StarsBackground />
         <CursorEffect />
         <ClientParallaxProvider>{children}</ClientParallaxProvider>
