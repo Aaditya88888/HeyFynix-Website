@@ -1,8 +1,6 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import CursorEffect from "@/components/CursorEffect/CursorEffect";
-import StarsBackground from "@/components/StarsBackground/StarsBackground";
-import ClientParallaxProvider from "./ParallaxProvider";
+import ClientOnlyProviders from "./ClientOnlyProviders";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -22,9 +20,9 @@ export default function RootLayout({ children }) {
         className={`${inter.variable} font-sans antialiased`}
         suppressHydrationWarning
       >
-        <StarsBackground />
-        <CursorEffect />
-        <ClientParallaxProvider>{children}</ClientParallaxProvider>
+        <ClientOnlyProviders>
+          {children}
+        </ClientOnlyProviders>
       </body>
     </html>
   );
