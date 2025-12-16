@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion"; // ← Yeh import confirm kar lena
+import { AnimatePresence, motion } from "framer-motion"; 
 
 import { usePathname, useRouter } from "next/navigation";
 import LoadingOverlay from "@/components/LoadingOverlay";
