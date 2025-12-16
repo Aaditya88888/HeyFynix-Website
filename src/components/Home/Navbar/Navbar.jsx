@@ -190,7 +190,7 @@ export default function LusionNavbar() {
           }}
           exit={{ opacity: 0, scale: 0.95, y: -20 }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed right-10 top-24 z-40 w-72 bg-amber-800 backdrop-blur-2xl rounded-3xl shadow-2xl overflow-hidden pointer-events-none"
+          className="fixed right-10 top-24 z-40 w-72 bg-[rgb(96,94,94)] backdrop-blur-2xl rounded-3xl shadow-2xl overflow-hidden pointer-events-none"
           style={{ transformOrigin: "top right" }}
         >
           {/* Backdrop - only interactive when menu open */}
@@ -257,7 +257,7 @@ export default function LusionNavbar() {
                               {item.name}
                             </motion.span>
                             <motion.span
-                              className="absolute inset-0 flex items-center text-amber-300 leading-none"
+                              className="absolute inset-0 flex items-center text-[rgb(192,180,180)] leading-none"
                               variants={{
                                 initial: { y: 36, opacity: 0 },
                                 hover: { y: 0, opacity: 1 },
