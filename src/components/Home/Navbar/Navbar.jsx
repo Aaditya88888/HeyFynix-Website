@@ -2,25 +2,17 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion"; // ← Yeh import confirm kar lena
-
+import { AnimatePresence, motion } from "framer-motion";
 import { usePathname, useRouter } from "next/navigation";
 import LoadingOverlay from "@/components/LoadingOverlay";
 
 export default function LusionNavbar() {
   const [soundOn, setSoundOn] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [loading, setLoading] = useState(false); // loader state
+  const [loading, setLoading] = useState(false);
   const audioRef = useRef(null);
   const pathname = usePathname();
   const router = useRouter();
-  // Top pe yeh add karo (existing imports ke saath)
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -56,26 +48,22 @@ export default function LusionNavbar() {
     { name: "Contact", path: "/contact" },
   ];
 
-  // Handle Link click with loader
   const handleLinkClick = (path) => {
     if (pathname === path) return;
     setLoading(true);
     setMenuOpen(false);
     setTimeout(() => {
       router.push(path);
-    }, 1600); // 1.6s loader animation duration
+    }, 1600);
   };
 
   return (
     <>
       {loading && <LoadingOverlay />}
 
-      {/* LEFT SIDE LOGO */}
+      {/* LEFT SIDE LOGO - Fixed: style hata diya, class se font apply */}
       <div className="fixed left-16 top-12 z-50">
-        <h3
-          className="text-white text-2xl font-semibold italic leading-none"
-          style={{ fontFamily: "'Montserrat', sans-serif" }}
-        >
+        <h3 className="text-white text-2xl font-semibold italic leading-none font-montserrat">
           HEYFYNIX
         </h3>
       </div>
@@ -171,9 +159,7 @@ export default function LusionNavbar() {
         </button>
       </div>
 
-      {/* MENU PANEL */}
-
-      {/* MENU PANEL - No hydration error + zero space when closed */}
+      {/* MENU PANEL - bilkul same as before */}
       <AnimatePresence>
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: -20 }}
@@ -181,14 +167,13 @@ export default function LusionNavbar() {
             opacity: menuOpen ? 1 : 0,
             scale: menuOpen ? 1 : 0.95,
             y: menuOpen ? 0 : -20,
-            display: menuOpen ? "block" : "none", // ← Important: hide from layout when closed
+            display: menuOpen ? "block" : "none",
           }}
           exit={{ opacity: 0, scale: 0.95, y: -20 }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="fixed right-10 top-24 z-40 w-72 bg-[rgb(96,94,94)] backdrop-blur-2xl rounded-3xl shadow-2xl overflow-hidden pointer-events-none"
           style={{ transformOrigin: "top right" }}
         >
-          {/* Backdrop - only interactive when menu open */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: menuOpen ? 0.7 : 0 }}
@@ -198,7 +183,6 @@ export default function LusionNavbar() {
             onClick={closeMenu}
           />
 
-          {/* Content - pointer events only when open */}
           <div
             className={`relative py-4 px-10 ${
               menuOpen ? "pointer-events-auto" : "pointer-events-none"
