@@ -22,11 +22,8 @@ export default function RootLayout({ children }) {
         className={`${inter.variable} font-sans antialiased`}
         suppressHydrationWarning
       >
-        {/* Backgrounds */}
         <StarsBackground />
         <CursorEffect />
-
-        {/* Main Content */}
         <ClientParallaxProvider>{children}</ClientParallaxProvider>
       </body>
     </html>
