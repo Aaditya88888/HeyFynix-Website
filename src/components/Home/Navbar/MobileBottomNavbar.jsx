@@ -36,7 +36,6 @@ const MobileBottomNavbar = () => {
               transition={{ delay: 0.05 * index }}
               className="flex-1 text-center"
             >
-              {/* ✅ Correct Next.js 13 Link usage */}
               <Link
                 href={item.path}
                 className={`text-[11px] transition-all block py-1 px-2 rounded-md ${
