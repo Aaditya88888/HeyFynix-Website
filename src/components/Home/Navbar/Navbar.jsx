@@ -37,7 +37,12 @@ export default function LusionNavbar() {
     }
   }, [soundOn]);
 
-  const closeMenu = () => setMenuOpen(false);
+  const handleLinkClick = (path) => {
+    if (pathname === path) return;
+    setLoading(true);
+    setMenuOpen(false);
+    setTimeout(() => router.push(path), 1600);
+  };
 
   const menuItems = [
     { name: "Home", path: "/" },
@@ -48,20 +53,11 @@ export default function LusionNavbar() {
     { name: "Contact", path: "/contact" },
   ];
 
-  const handleLinkClick = (path) => {
-    if (pathname === path) return;
-    setLoading(true);
-    setMenuOpen(false);
-    setTimeout(() => {
-      router.push(path);
-    }, 1600);
-  };
-
   return (
     <>
       {loading && <LoadingOverlay />}
 
-      {/* LEFT SIDE LOGO - Fixed: style hata diya, class se font apply */}
+      {/* LEFT SIDE LOGO */}
       <div className="fixed left-16 top-12 z-50">
         <h3 className="text-white text-2xl font-semibold italic leading-none font-montserrat">
           HEYFYNIX
@@ -121,7 +117,7 @@ export default function LusionNavbar() {
           )}
         </button>
 
-        {/* LET'S TALK */}
+        {/* LET'S TALK & MENU BUTTON – same as your original */}
         <button className="group flex items-center justify-center px-3 py-3 rounded-full bg-white/20 backdrop-blur-md text-white font-semibold text-sm tracking-tighter hover:bg-[#F23737] transition-all duration-300 min-w-[120px] overflow-hidden">
           <div className="w-4 h-4 flex items-center justify-center">
             <Image
@@ -135,10 +131,9 @@ export default function LusionNavbar() {
           <span className="transition-transform duration-300 -translate-x-2 group-hover:translate-x-2.5">
             LET'S TALK
           </span>
-          <span className="w-1 h-1 rounded-full bg-white transition-all duration-300 opacity-100 group-hover:opacity-0 scale-100 group-hover:scale-0 ml-2 -translate-x-1 group-hover:translate-x-0" />
+          <span className="w-1 h-1 rounded-full bg-white transition-all duration-300 opacity-100 group-hover:opacity-0 scale-100 group-hover:scale-0 ml-2" />
         </button>
 
-        {/* MENU BUTTON */}
         <button
           onClick={() => setMenuOpen((prev) => !prev)}
           className={`group relative px-2 py-2 rounded-full bg-gray-200 backdrop-blur-md border border-white text-black font-semibold tracking-tighter flex items-center justify-center gap-2 transition-all duration-200 ${
@@ -153,13 +148,13 @@ export default function LusionNavbar() {
               menuOpen ? "rotate-90" : "rotate-0"
             }`}
           >
-            <span className="w-1 h-1 bg-black rounded-full transition-all duration-200"></span>
-            <span className="w-1 h-1 bg-black rounded-full transition-all duration-200"></span>
+            <span className="w-1 h-1 bg-black rounded-full"></span>
+            <span className="w-1 h-1 bg-black rounded-full"></span>
           </span>
         </button>
       </div>
 
-      {/* MENU PANEL - bilkul same as before */}
+      {/* MENU PANEL – exactly same as your original */}
       <AnimatePresence>
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: -20 }}
@@ -180,9 +175,8 @@ export default function LusionNavbar() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4 }}
             className="absolute inset-0 -left-full -right-full -top-full -bottom-full bg-black/70 cursor-pointer"
-            onClick={closeMenu}
+            onClick={() => setMenuOpen(false)}
           />
-
           <div
             className={`relative py-4 px-10 ${
               menuOpen ? "pointer-events-auto" : "pointer-events-none"
@@ -191,7 +185,6 @@ export default function LusionNavbar() {
             <nav>
               {menuItems.map((item) => {
                 const isActive = pathname === item.path;
-
                 return (
                   <motion.div
                     key={item.name}
@@ -204,7 +197,6 @@ export default function LusionNavbar() {
                     {!isActive && (
                       <div className="absolute inset-0 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-400 rounded-2xl" />
                     )}
-
                     <motion.div
                       className="relative z-10"
                       initial="initial"
@@ -252,7 +244,6 @@ export default function LusionNavbar() {
                         </div>
                       )}
                     </motion.div>
-
                     {isActive ? (
                       <span className="absolute right-6 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-white opacity-70 z-10" />
                     ) : (
