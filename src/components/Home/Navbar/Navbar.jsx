@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion"; 
+import { AnimatePresence, motion } from "framer-motion"; // ← Yeh import confirm kar lena
 
 import { usePathname, useRouter } from "next/navigation";
 import LoadingOverlay from "@/components/LoadingOverlay";
@@ -69,11 +69,6 @@ export default function LusionNavbar() {
   return (
     <>
       {loading && <LoadingOverlay />}
-
-      <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Montserrat:ital,wght@1,800&display=swap"
-        rel="stylesheet"
-      />
 
       {/* LEFT SIDE LOGO */}
       <div className="fixed left-16 top-12 z-50">
