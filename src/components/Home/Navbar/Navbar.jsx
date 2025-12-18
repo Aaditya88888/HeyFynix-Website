@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { usePathname, useRouter } from "next/navigation";
-import LoadingOverlay from "@/components/LoadingOverlay";
 
 export default function LusionNavbar() {
   const [soundOn, setSoundOn] = useState(false);
