@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 const navItems = [
   { name: "Home", path: "/home" },
   { name: "About", path: "/about" },
+  { name: "Work", path: "/work" },
   { name: "Services", path: "/services" },
   { name: "Projects", path: "/projects" },
   { name: "Contact", path: "/contact" },
@@ -35,7 +36,6 @@ const MobileBottomNavbar = () => {
               transition={{ delay: 0.05 * index }}
               className="flex-1 text-center"
             >
-              {/* ✅ Correct Next.js 13 Link usage */}
               <Link
                 href={item.path}
                 className={`text-[11px] transition-all block py-1 px-2 rounded-md ${

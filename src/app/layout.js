@@ -25,7 +25,6 @@ export default function RootLayout({ children }) {
         <StarsBackground />
         <CursorEffect />
 
-      
         {/* Main Content */}
         <ClientParallaxProvider>{children}</ClientParallaxProvider>
       </body>
