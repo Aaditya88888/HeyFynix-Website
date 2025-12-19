@@ -174,12 +174,12 @@ export default function MusicVideoSection() {
           {/* "We Create" - Left-aligned only on large screens */}
           <p
             style={{
-              fontSize: "clamp(1.8rem, 4vw, 5rem)",
+              fontSize: "clamp(1.2rem, 3.5vw, 5rem)",
               fontWeight: 700,
               margin: 0,
               letterSpacing: "-0.02em",
               textAlign: window.innerWidth<768  ? "left" : "left",
-            marginBottom: window.innerWidth<768  ? "0.5rem" : "0.8rem",
+            marginBottom: window.innerWidth<768  ? "0.3rem" : "0.8rem",
               paddingLeft: window.innerWidth<768  ? "1rem" : "10rem",
               transition: "all 0.3s ease",
             }}
@@ -190,7 +190,7 @@ export default function MusicVideoSection() {
           {/* Main Title "MUSIC VIDEOS" */}
           <h1
             style={{
-              fontSize: window.innerWidth<768 ?"clamp(3.5rem, 8vw, 12rem)":"clamp(5.5rem, 12vw, 12rem)", // Much better range for mobile
+              fontSize: window.innerWidth<768 ?"clamp(3.1rem, 7vw, 12rem)":"clamp(5.5rem, 12vw, 12rem)", // Much better range for mobile
               fontWeight: 900,
               margin: "0.4rem 0",
               lineHeight: "0.39",

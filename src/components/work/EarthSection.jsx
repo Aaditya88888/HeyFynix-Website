@@ -966,10 +966,10 @@ const onResize = () => {
         style={{
           position: 'absolute',
           top: '20%',
-          left: isMobile?'50%':'30%',
+          left: isMobile?'50%':'31%',
           transform: 'translateX(-50%)',
           color: 'white',
-    fontSize: isMobile ? 'clamp(1.1rem, 3vw, 2.5rem)' : 'clamp(1.8rem, 6vw, 5rem)',
+    fontSize: isMobile ? 'clamp(1.1rem, 3vw, 2.5rem)' : 'clamp(1.8rem, 5vw, 5rem)',
           fontWeight:'bolder',
           textAlign: 'center',
           pointerEvents: 'none',
