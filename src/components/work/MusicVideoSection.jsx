@@ -180,7 +180,7 @@ export default function MusicVideoSection() {
               letterSpacing: "-0.02em",
               textAlign: window.innerWidth<768  ? "left" : "left",
             marginBottom: window.innerWidth<768  ? "0.3rem" : "0.8rem",
-              paddingLeft: window.innerWidth<768  ? "1rem" : "10rem",
+              paddingLeft: window.innerWidth<768  ? "3rem" : "10rem",
               transition: "all 0.3s ease",
             }}
           >
@@ -190,7 +190,7 @@ export default function MusicVideoSection() {
           {/* Main Title "MUSIC VIDEOS" */}
           <h1
             style={{
-              fontSize: window.innerWidth<768 ?"clamp(3.1rem, 7vw, 12rem)":"clamp(5.5rem, 12vw, 12rem)", // Much better range for mobile
+              fontSize: window.innerWidth<768 ?"clamp(2.9rem, 7vw, 12rem)":"clamp(5.5rem, 12vw, 12rem)", // Much better range for mobile
               fontWeight: 900,
               margin: "0.4rem 0",
               lineHeight: "0.39",
@@ -219,9 +219,10 @@ export default function MusicVideoSection() {
                fontSize: "clamp(0.4rem, 3vw, 4rem)",
               fontWeight: 600,
               margin: "1rem 0 0 0",
+              marginTop:window.innerWidth<768?"0.1rem":"1rem",
               letterSpacing: "-0.02em",
               textAlign: window.innerWidth <768 ? "right" : "right",
-              paddingRight: window.innerWidth<768 ? "1rem" : "8rem",
+              paddingRight: window.innerWidth<768 ? "2rem" : "8rem",
               transition: "all 0.3s ease",
             }}
           >

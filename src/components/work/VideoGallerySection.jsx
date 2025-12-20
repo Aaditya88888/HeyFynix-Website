@@ -211,8 +211,6 @@
 
 import React, { useEffect, useRef, useState } from "react";
 
-
-// Your VideoCard component (unchanged – perfect)
 const VideoCard = ({ video, index }) => {
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -226,14 +224,13 @@ const VideoCard = ({ video, index }) => {
   }, [index]);
 
   return (
-    // ONLY THIS DIV CHANGED
     <div style={{
       width: "100%",
       maxWidth: "100%",
       display: "flex",
       flexDirection: "column",
       gap: "0.5rem",
-      padding: "0 8px",           // remove this line completely if you want zero gap
+      padding: "0 8px",           
       boxSizing: "border-box"
     }}>
       <div
@@ -279,7 +276,6 @@ const VideoCard = ({ video, index }) => {
     </div>
   );
 };
-// YOUR EXACT LISA CAMBOURS CAROUSEL (using local posters)
 const LisaCamboursCarousel = () => {
   const items = [
     { id: "video6", title: "RENDEZVOUS", image: "/videos/video6Poster.png" },
@@ -341,9 +337,6 @@ const LisaCamboursCarousel = () => {
     </div>
   );
 };
-
-// MAIN SECTION – Now with View More → Carousel
-// ... (VideoCard and LisaCamboursCarousel remain unchanged)
 
 export default function VideoGallerySection() {
   const [showCarousel, setShowCarousel] = useState(false);
@@ -407,14 +400,7 @@ export default function VideoGallerySection() {
         <div style={{ maxWidth: "1600px", margin: "0 auto" }}>
           {/* First row – always 2 videos */}
           <div
-            className="video-grid-first"
-            style={{
-              display: "grid",
-              gap: "0",
-              gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))",
-              padding: "0 3rem",
-            }}
-          >
+            className="grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-1 mb-6 px-2 md:px-10 md:mx-2 ">
             {allVideos.slice(0, 2).map((v, i) => (
               <VideoCard key={v.id} video={v} index={i} />
             ))}
@@ -422,7 +408,7 @@ export default function VideoGallerySection() {
 
           {/* Second row – always 3 videos (unless screen is extremely small) */}
           <div
-           className="grid grid-cols-3 gap-1 md:gap-1 mb-6 md:px-10 md:mx-2 md:mt-2 "
+           className="grid grid-cols-1 md:grid-cols-3 gap-1 md:gap-1 mb-6 px-2 md:px-10 md:mx-2 md:mt-2 "
           >
             {allVideos.slice(2, 5).map((v, i) => (
               <VideoCard key={v.id} video={v} index={i + 2} />
@@ -431,12 +417,12 @@ export default function VideoGallerySection() {
 
           {/* View More Button */}
           {!showCarousel && (
-            <div style={{ textAlign: "center", marginTop: window.innerWidth<768?"2rem": "6rem" }}>
+            <div style={{ textAlign: "center", marginTop: window.innerWidth<768?"1rem": "6rem" }}>
               <button
                 onClick={() => setShowCarousel(true)}
                 style={{
-                  padding: window.innerWidth<768?"0.3rem 0.6rem":"0.5rem 1.5rem",
-                  fontSize:  window.innerWidth<768?"0.9rem":"1.2rem",
+                  padding: window.innerWidth<768?"0.3rem 0.5rem":"0.5rem 1.5rem",
+                  fontSize:  window.innerWidth<768?"0.8rem":"1.2rem",
                   fontWeight: 700,
                   color: "white",
                   background: "transparent",
