@@ -3,7 +3,6 @@ import "./globals.css";
 import CursorEffect from "@/components/CursorEffect/CursorEffect";
 import StarsBackground from "@/components/StarsBackground/StarsBackground";
 import ClientParallaxProvider from "./ParallaxProvider";
-import LoadingOverlay from "@/components/LoadingOverlay";
 const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
@@ -25,9 +24,6 @@ export default function RootLayout({ children }) {
         {/* Backgrounds */}
         <StarsBackground />
         <CursorEffect />
-
-        {/* Loading Overlay */}
-        <LoadingOverlay />
 
         {/* Main Content */}
         <ClientParallaxProvider>{children}</ClientParallaxProvider>

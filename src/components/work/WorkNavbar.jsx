@@ -2,7 +2,7 @@ import React from 'react'
 
 const WorkNavbar = () => {
   return (
-    <div style={{color:'white',backgroundColor:'black',height:'50px',marginBottom:'150px',marginTop:'100px'}}>
+    <div style={{color:'white',backgroundColor:'black',height:'50px',marginBottom:window.innerWidth<768?'0px':'150px',marginTop:'100px'}}>
       {/* Top navigation with buttons: left, center, right */}
       <nav style={{
         position: 'absolute',
@@ -11,19 +11,19 @@ const WorkNavbar = () => {
         right: 0,
         zIndex: 20,
         display: 'flex',
-        gap:'20px',
+        gap:window.innerWidth<768?'4px':'20px',
         width: '100%',
-        padding: '1.5rem 1rem'
+        padding: window.innerWidth<768?'0.1rem':'1.5rem 1rem'
       }}>
         <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-start' }}>
           <button style={{
             color: 'white',
-            fontSize: '1.25rem',
+            fontSize:window.innerWidth<768?'0.8rem':'1.25rem',
             lineHeight: '1.75rem',
             fontWeight: 'bold',
             cursor: 'pointer',
             borderRadius:'24px',
-            padding:'5px 20px',
+            padding:window.innerWidth<768?'2px 10px':'5px 20px',
             backgroundColor:'black',
              border:'2px solid white',
              marginLeft:'30%'
@@ -34,12 +34,12 @@ const WorkNavbar = () => {
         <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
           <button style={{
             color: 'white',
-            fontSize: '1.25rem',
+            fontSize:window.innerWidth<768?'0.8rem':'1.25rem',
             lineHeight: '1.75rem',
             fontWeight: 'bold',
             cursor: 'pointer',
              borderRadius:'24px',
-            padding:'5px 20px',
+            padding:window.innerWidth<768?'2px 10px':'5px 20px',
             backgroundColor:'black',
              border:'2px solid white',
           }}>
@@ -49,12 +49,12 @@ const WorkNavbar = () => {
         <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
           <button style={{
             color: 'white',
-            fontSize: '1.25rem',
+            fontSize:window.innerWidth<768?'0.8rem':'1.25rem',
             lineHeight: '1.75rem',
             fontWeight: 'bold',
             cursor: 'pointer',
              borderRadius:'24px',
-            padding:'5px 20px',
+            padding:window.innerWidth<768?'2px 10px':'5px 20px',
             backgroundColor:'black',
              border:'2px solid white',
              marginRight:'30%'

@@ -211,8 +211,6 @@
 
 import React, { useEffect, useRef, useState } from "react";
 
-
-// Your VideoCard component (unchanged – perfect)
 const VideoCard = ({ video, index }) => {
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -226,14 +224,13 @@ const VideoCard = ({ video, index }) => {
   }, [index]);
 
   return (
-    // ONLY THIS DIV CHANGED
     <div style={{
       width: "100%",
       maxWidth: "100%",
       display: "flex",
       flexDirection: "column",
       gap: "0.5rem",
-      padding: "0 8px",           // remove this line completely if you want zero gap
+      padding: "0 8px",           
       boxSizing: "border-box"
     }}>
       <div
@@ -271,15 +268,14 @@ const VideoCard = ({ video, index }) => {
       </div>
 
       <div style={{ padding: "0 0.5rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <h3 style={{ color: "white", fontWeight: 700, fontSize: "1.025rem", margin: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", flex: 1 }}>
+        <h3 style={{ color: "white", fontWeight:window.innerWidth<768?100: 700, fontSize:window.innerWidth<768?"0.002rem": "1.025rem", margin: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", flex: 1 }}>
           {video.title}
         </h3>
-        <p style={{ color: "#a1a1aa", fontSize: "0.875rem", margin: 0, marginLeft: "1rem" }}>{video.artist}</p>
+        <p style={{ color: "#a1a1aa", fontSize:window.innerWidth<768?"0.001rem": "0.875rem", margin: 0, marginLeft: "1rem" }}>{video.artist}</p>
       </div>
     </div>
   );
 };
-// YOUR EXACT LISA CAMBOURS CAROUSEL (using local posters)
 const LisaCamboursCarousel = () => {
   const items = [
     { id: "video6", title: "RENDEZVOUS", image: "/videos/video6Poster.png" },
@@ -342,7 +338,6 @@ const LisaCamboursCarousel = () => {
   );
 };
 
-// MAIN SECTION – Now with View More → Carousel
 export default function VideoGallerySection() {
   const [showCarousel, setShowCarousel] = useState(false);
 
@@ -352,50 +347,106 @@ export default function VideoGallerySection() {
     { id: "3", src: "/videos/video.mp4", poster: "/videos/video3Poster.png", title: "Humsafar", artist: "Vylom" },
     { id: "4", src: "/videos/video.mp4", poster: "/videos/video4Poster.png", title: "Tum Mere", artist: "Fukra Insaan" },
     { id: "5", src: "/videos/video.mp4", poster: "/videos/video5Poster.png", title: "Munde Farrar", artist: "Sahib" },
-    // ... rest of your videos
   ];
 
   return (
     <>
-      <section style={{  padding: "8rem 0" }}>
+      <style jsx>{`
+        /* Force 2 + 3 column layout on all screens except very small phones */
+        @media (max-width: 1024px) {
+          .video-grid-first {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 1.5rem !important;
+            padding: 0 2rem !important;
+          }
+          .video-grid-second {
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 1.5rem !important;
+            padding: 0 2rem !important;
+          }
+        }
+
+        /* On very small screens (≤ 640px), keep 2 + 3 but make cards smaller */
+        @media (max-width: 640px) {
+        .video-grid-first {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 1rem !important;
+            padding: 0 1rem !important;
+          }
+          .video-grid-second {
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 0.5rem !important;
+            padding: 0 0.5rem !important;
+          }  
         
+        }
+
+        /* Optional: only on extremely small screens (≤ 480px), collapse second row to 2 columns */
+        @media (max-width: 480px) {
+          .video-grid-first {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 0.2rem !important;
+            padding: 0 0.2rem !important;
+          }
+          .video-grid-second {
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 1px !important;
+            padding: 0 1px !important;
+          }
+        }
+      `}</style>
+
+      <section style={{ padding: "6rem 0" }}>
         <div style={{ maxWidth: "1600px", margin: "0 auto" }}>
-          {/* Your existing grid */}
-          <div style={{ display: "grid", gap: "0", gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))", padding: "0 3rem" }}>
-            {allVideos.slice(0, 2).map((v, i) => <VideoCard key={v.id} video={v} index={i} />)}
+          {/* First row – always 2 videos */}
+          <div
+            className="grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-1 mb-6 px-2 md:px-10 md:mx-2 ">
+            {allVideos.slice(0, 2).map((v, i) => (
+              <VideoCard key={v.id} video={v} index={i} />
+            ))}
           </div>
-          <div style={{ display: "grid", gap: "0", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", padding: "0 3rem", margin: "1.5rem 0" }}>
-            {allVideos.slice(2, 5).map((v, i) => <VideoCard key={v.id} video={v} index={i + 2} />)}
+
+          {/* Second row – always 3 videos (unless screen is extremely small) */}
+          <div
+           className="grid grid-cols-1 md:grid-cols-3 gap-1 md:gap-1 mb-6 px-2 md:px-10 md:mx-2 md:mt-2 "
+          >
+            {allVideos.slice(2, 5).map((v, i) => (
+              <VideoCard key={v.id} video={v} index={i + 2} />
+            ))}
           </div>
 
           {/* View More Button */}
-       {/* View More Button - Only show when carousel is not visible */}
-{!showCarousel && (
-  <div style={{ textAlign: "center", marginTop: "6rem" }}>
-    <button
-      onClick={() => setShowCarousel(true)}
-      style={{
-        padding: "0.3rem 0.5rem",
-        fontSize: "1.1rem",
-        fontWeight: 700,
-        color: "white",
-        background: "transparent",
-        border: "3px solid white",
-        borderRadius: "9999px",
-        cursor: "pointer",
-        transition: "all 0.4s ease",
-      }}
-      onMouseEnter={(e) => { e.target.style.background = "white"; e.target.style.color = "black"; }}
-      onMouseLeave={(e) => { e.target.style.background = "transparent"; e.target.style.color = "white"; }}
-    >
-      View More →
-    </button>
-  </div>
-)}
+          {!showCarousel && (
+            <div style={{ textAlign: "center", marginTop: window.innerWidth<768?"1rem": "6rem" }}>
+              <button
+                onClick={() => setShowCarousel(true)}
+                style={{
+                  padding: window.innerWidth<768?"0.3rem 0.5rem":"0.5rem 1.5rem",
+                  fontSize:  window.innerWidth<768?"0.8rem":"1.2rem",
+                  fontWeight: 700,
+                  color: "white",
+                  background: "transparent",
+                  border: window.innerWidth<768?"1px solid white": "3px solid white",
+                  borderRadius: "9999px",
+                  cursor: "pointer",
+                  transition: "all 0.4s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = "white";
+                  e.target.style.color = "black";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = "transparent";
+                  e.target.style.color = "white";
+                }}
+              >
+                View More →
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
-      {/* LISA CAMBOURS CAROUSEL ON CLICK */}
       {showCarousel && <LisaCamboursCarousel />}
     </>
   );
